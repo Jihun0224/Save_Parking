@@ -76,7 +76,13 @@ import com.android.build.OutputFile
  *   extraPackagerArgs: []
  * ]
  */
-
+allprojects {
+    repositories {
+        google()
+         jcenter()
+         maven { url 'https://naver.jfrog.io/artifactory/maven/' }
+    }
+}
 project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
 ]

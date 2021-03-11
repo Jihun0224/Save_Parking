@@ -8,6 +8,8 @@ target 'SaveParking' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'react-native-nmap', :path => '../node_modules/react-native-nmap'
+
   target 'SaveParkingTests' do
     inherit! :complete
     # Pods for testing
