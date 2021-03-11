@@ -10,6 +10,8 @@ target 'SaveParking' do
 
   pod 'react-native-nmap', :path => '../node_modules/react-native-nmap'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'SaveParkingTests' do
     inherit! :complete
     # Pods for testing

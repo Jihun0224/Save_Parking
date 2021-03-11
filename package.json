@@ -12,8 +12,10 @@
   "dependencies": {
     "react": "16.13.1",
     "react-native": "0.63.4",
+    "react-native-elements": "3.3.0",
     "react-native-geolocation-service": "5.2.0",
-    "react-native-nmap": "0.0.59"
+    "react-native-nmap": "0.0.59",
+    "react-native-vector-icons": "8.1.0"
   },
   "devDependencies": {
     "@babel/core": "7.13.10",
