@@ -3,7 +3,7 @@ import {PermissionsAndroid} from 'react-native';
 import Main from "./main";
 import Geolocation from 'react-native-geolocation-service';
 import Loading from './loading';
-import Test from './bottomsheet';
+import Test from './test';
 export default class App extends Component{
  
     constructor(){
