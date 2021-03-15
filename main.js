@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import NaverMapView, {Circle, Marker, Path, Polyline, Polygon} from "react-native-nmap";
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -21,7 +21,7 @@ export default class Main extends Component{
   render(){
     const currPos = {latitude: this.props.currPos.latitude, longitude: this.props.currPos.longitude};
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
             
             <SearchBar style={styles.textinput} 
                       platform="android"
@@ -42,7 +42,7 @@ export default class Main extends Component{
 
             </NaverMapView>
             </View>
-      </View>
+      </SafeAreaView>
     )}
 }
 const styles = StyleSheet.create({

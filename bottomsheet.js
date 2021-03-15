@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
+
 import BottomSheet from 'react-native-bottomsheet-reanimated';
 
 const Screen = {
@@ -16,46 +17,19 @@ const Screen = {
 const snapPoints = [0, Screen.height / 2, '70%', '100%'];
 
 
-class Test extends Component {
-  onOpenBottomSheetHandler = (index) => {
-    this.refs.BottomSheet.snapTo(index);
-  };
-
+class Test extends React.Component {
   render() {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.boxWrapper}>
-          <TouchableOpacity onPress={() => this.onOpenBottomSheetHandler(0)}>
-            <View style={styles.box}>
-              <Text>1</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.onOpenBottomSheetHandler(1)}>
-            <View style={styles.box}>
-              <Text>2</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.onOpenBottomSheetHandler(2)}>
-            <View style={styles.box}>
-              <Text>3</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.onOpenBottomSheetHandler(3)}>
-            <View style={styles.box}>
-              <Text>4</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
+      <View style={styles.container}>
         <BottomSheet
           bottomSheerColor="#FFFFFF"
-          // backDropColor="red"
           ref="BottomSheet"
-          initialPosition={'50%'}
-          snapPoints={snapPoints}
+          initialPosition={'50%'} //200, 300
+          snapPoints={['50%', '100%']}
           isBackDrop={true}
           isBackDropDismissByPress={true}
           isRoundBorderWithTipHeader={true}
+          // backDropColor="red"
           // isModal
           // containerStyle={{backgroundColor:"red"}}
           // tipStyle={{backgroundColor:"red"}}
@@ -72,7 +46,7 @@ class Test extends Component {
             </View>
           }
         />
-      </SafeAreaView>
+      </View>
     );
   }
 }
