@@ -3,7 +3,6 @@ import {PermissionsAndroid} from 'react-native';
 import Main from "./main";
 import Geolocation from 'react-native-geolocation-service';
 import Loading from './loading';
-import Test from './test';
 export default class App extends Component{
  
     constructor(){
@@ -20,7 +19,7 @@ export default class App extends Component{
         return(
           this.state.isLoading ?
           <Loading/>
-            :<Test/>
+            :<Main currPos={this.state.currPos}/>
         );         
     }
 

@@ -3,19 +3,26 @@ import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import NaverMapView, {Circle, Marker, Path, Polyline, Polygon} from "react-native-nmap";
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import Bottomsheet from './bottomsheet';
 export default class Main extends Component{
   constructor(){
     super();
     this.state={
         search:'',
+        showComponent: false,
     }
+    this._onButtonClick = this._onButtonClick.bind(this);
   }
 
   searchTextInputChanged(text) {
     this.setState({ searchedText: text })
   }
-  
+  _onButtonClick() {
+    this.setState({
+      showComponent: true,
+    });
+  }
+
 
 
   render(){
@@ -41,6 +48,11 @@ export default class Main extends Component{
 
 
             </NaverMapView>
+            <Marker coordinate={{ latitude: 128.6402609, longitude:35.2538433 }} onClick={this._onButtonClick}/>
+            {this.state.showComponent ?
+           <Bottomsheet /> :
+           null
+        }
             </View>
       </SafeAreaView>
     )}
