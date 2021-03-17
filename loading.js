@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View,ActivityIndicator } from 'react-native';
 
 export default function Loading() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>SaveParking</Text>
+      <ActivityIndicator size="small" color="#00ff00" />
     </View>
   );
 }
