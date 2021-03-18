@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, ScrollView, Dimensions, Animated } from 'react-native';
+import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import NaverMapView, {Circle, Marker, Path, Polyline, Polygon} from "react-native-nmap";
 import Icon from 'react-native-vector-icons/Ionicons';
-import SlidingUpPanel from 'rn-sliding-up-panel'
+import SlidingUpPanel from 'rn-sliding-up-panel';
+import MarkerDisplay from './MarkerDisplay';
 window = Dimensions.get('window');
 
 
@@ -43,26 +44,17 @@ export default class Main extends Component{
             </NaverMapView>
 
         <SlidingUpPanel ref={c => (this._panel = c)}
+        backdropOpacity={0}
          snappingPoints={[
          window.height * 0.4,
          window.height * 0.7,
          window.height * 0.85,]}
          
          >
-          {dragHandler => (
             <View style={styles.container}>
-              <View style={styles.dragHandler} {...dragHandler}>
-
-            {/* <Icon tyle={styles.naviIcon} name="navigate-circle-sharp" size={24} color="blue"/> */}
-                <Text>주차장 이름</Text>
-              </View>
-              <ScrollView>
-                
-                <Text>여기 내용</Text>
-
-              </ScrollView>
-            </View>
-          )}
+              {/* 여기 마커데이터 전달*/}
+            <MarkerDisplay />
+            </View>         
         </SlidingUpPanel>
             </View>
             
@@ -77,20 +69,6 @@ const styles = StyleSheet.create({
     },
     map:{
       flex:1,
-    },
-    dragHandler: {
-      height: 64,
-      backgroundColor: '#BCBCBC',
-    },
-    naviIcon: {
-      alignItems: "center",
-      justifyContent: "center",
-      position: "absolute",
-      top: -24,
-      right: 18,
-      width: 48,
-      height: 48,
-      zIndex: 1
     },
 
   });
