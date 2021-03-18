@@ -2,6 +2,8 @@ import React,{Component} from 'react'
 import {SafeAreaView,View, Text, ScrollView,Linking, Button} from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcons from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 class MarkerDisplay extends Component {
@@ -44,12 +46,101 @@ class MarkerDisplay extends Component {
 
           </View>
         
-          <ScrollView style={styles.markerData}>
-            
-            <Text style={{fontSize:20, paddingLeft:10,paddingTop:10}}>데이터</Text>
+        <ScrollView style={styles.markerData}>
+          <View style={styles.info_box}>
+            <Text style={styles.info_box_first_text}>
+              <Ionicons name="location-outline" size={24} color="gray"/>
+              주소
+            </Text>
+            <Text style={styles.info_box_text}>
+              <MaterialIcons name="payment" size={24} color="gray"/>
+              주차요금
+            </Text>
+            <Text style={styles.info_box_text}>
+              <Ionicons name="time-outline" size={24} color="gray"/>
+              운영시간
+            </Text>
+            <Text style={styles.info_box_text}>
+              <Ionicons name="call-outline" size={24} color="gray"/>
+              전화번호
+            </Text>
+          </View>
+          
+          {/* //이거 참고해서 양쪽 정렬
+          <View style={styles.elem}>
+            <View style={styles.userInfo}>
+              <Text>윾또막</Text>
+            </View>
+              <Text>대화명을 입력하세요</Text>
+          </View> */}
 
-          </ScrollView>
-        </SafeAreaView>
+              <Text style={styles.info_box_title}>
+                시간 요금
+              </Text>
+              <View style={styles.info_box}>
+                    
+                    <Text style={styles.info_box_text}>
+                      기본요금<Text style={styles.info_box_data}>data</Text>
+                    </Text>
+               
+
+                  <Text style={styles.info_box_text}>
+                    추가요금<Text style={styles.info_box_data}>data</Text>
+                  </Text>
+              </View>
+
+            <Text style={styles.info_box_title}>
+                일주차 요금
+              </Text>
+            <View style={styles.info_box}>
+              <Text style={styles.info_box_first_text}>
+                기본<Text style={styles.info_box_data}>data</Text>
+              </Text>
+              <Text style={styles.info_box_text}>
+                적용시간<Text style={styles.info_box_data}>data</Text>
+              </Text>
+            </View>
+
+            <Text style={styles.info_box_title}>
+                월주차 요금
+              </Text>
+            <View style={styles.info_box}>
+              <Text style={styles.info_box_first_text}>
+                기본<Text style={styles.info_box_data}>data</Text>
+              </Text>
+            </View>
+            <Text style={styles.info_box_title}>
+                운영시간
+              </Text>
+            <View style={styles.info_box}>
+              <Text style={styles.info_box_first_text}>
+                평일<Text style={styles.info_box_data}>data</Text>
+              </Text>
+              <Text style={styles.info_box_text}>
+                토요일<Text style={styles.info_box_data}>data</Text>
+              </Text>
+              <Text style={styles.info_box_text}>
+                일요일<Text style={styles.info_box_data}>data</Text>
+              </Text>
+              <Text style={styles.info_box_text}>
+                공휴일<Text style={styles.info_box_data}>data</Text>
+              </Text>
+            </View>            
+            <Text style={styles.info_box_title}>
+              부제시행구분<Text style={styles.info_box_data}>data</Text>
+              </Text>
+            <View style={styles.info_box}>
+              <Text style={styles.info_box_first_text}>
+                O or X
+              </Text>
+            </View>
+              <Text style={styles.copyright_text}>
+              본 저작물은 공공데이터활용지원센터에서 15년 작성하여 개방한 
+              전국주차장정보표준데이터을 이용하였으며, 해당 저작물은 공공데이터활용지원센터에서 
+              무료로 내려받으실 수 있습니다.
+              </Text>
+        </ScrollView>
+      </SafeAreaView>
 
     )
   }
@@ -106,9 +197,63 @@ const styles = {
 
   },
   markerData:{
-    alignSelf:'flex-start',
-    paddingLeft:5
-  }
+    width:'100%',
+    paddingLeft:20,
+    paddingRight:20,
+    paddingTop:10,
+    backgroundColor:'#dddfdf',
+  },
+  info_box_text:{
+    fontSize:20,
+    paddingBottom:15,
+    paddingLeft:10 ,
+    paddingTop:10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#dee2e6",
+  },
+  info_box_first_text:{
+    fontSize:20,
+    paddingBottom:10,
+    paddingTop:10,
+    paddingLeft:10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#dee2e6",
+  },
+  info_box_title:{
+    fontSize:20,
+    color:'#002166',
+    paddingTop:20, 
+    paddingBottom:10, 
+    paddingLeft:15
+  },
+  info_box:{
+    backgroundColor:'white',
+    borderRadius:10
+  },
+  copyright_text:{
+    paddingTop:50,
+    paddingBottom:60
+  },
+  info_box_data:{
+    textAlign:'right',
+  },
+  info_box_:{
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  // elem: {
+  //   width: '100%',
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   justifyContent: 'space-between',
+  //   borderColor:'#eee',
+  //   borderBottomWidth:0.5,
+  //   padding: 5,
+  // },
+  // userInfo: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  // },
 }
 
 export default MarkerDisplay;

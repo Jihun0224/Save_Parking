@@ -39,14 +39,14 @@ export default class Main extends Component{
                           center={{...currPos, zoom: 16}}
                           >
             
-              <Marker coordinate={currPos} onClick={() => this._panel.show(window.height * 0.4)}/>
+              <Marker coordinate={currPos} onClick={() => this._panel.show(window.height * 0.38)}/>
 
             </NaverMapView>
 
         <SlidingUpPanel ref={c => (this._panel = c)}
         backdropOpacity={0}
          snappingPoints={[
-         window.height * 0.4,
+         window.height * 0.38,
          window.height * 0.7,
          window.height * 0.85,]}
          
