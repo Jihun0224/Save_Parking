@@ -48,89 +48,136 @@ class MarkerDisplay extends Component {
         
         <ScrollView style={styles.markerData}>
           <View style={styles.info_box}>
-            <Text style={styles.info_box_first_text}>
+            <Text style={styles.main_info_box_text}>
               <Ionicons name="location-outline" size={24} color="gray"/>
               주소
             </Text>
-            <Text style={styles.info_box_text}>
+            <Text style={styles.main_info_box_text}>
               <MaterialIcons name="payment" size={24} color="gray"/>
               주차요금
             </Text>
-            <Text style={styles.info_box_text}>
+            <Text style={styles.main_info_box_text}>
               <Ionicons name="time-outline" size={24} color="gray"/>
               운영시간
             </Text>
-            <Text style={styles.info_box_text}>
+            <Text style={styles.main_info_box_text}>
               <Ionicons name="call-outline" size={24} color="gray"/>
               전화번호
             </Text>
           </View>
-          
-          {/* //이거 참고해서 양쪽 정렬
-          <View style={styles.elem}>
-            <View style={styles.userInfo}>
-              <Text>윾또막</Text>
-            </View>
-              <Text>대화명을 입력하세요</Text>
-          </View> */}
 
               <Text style={styles.info_box_title}>
                 시간 요금
               </Text>
-              <View style={styles.info_box}>
-                    
-                    <Text style={styles.info_box_text}>
-                      기본요금<Text style={styles.info_box_data}>data</Text>
-                    </Text>
-               
 
-                  <Text style={styles.info_box_text}>
-                    추가요금<Text style={styles.info_box_data}>data</Text>
-                  </Text>
+              <View style={styles.info_box}>
+                <View style={styles.info_box_contents}>
+                    <Text style={styles.info_box_text}>
+                      기본요금
+                    </Text>
+                    <Text style={styles.info_box_data}>
+                      data
+                    </Text>
+                </View>
+                <View style={styles.info_box}>
+                  <View style={styles.info_box_contents}>
+                    <Text style={styles.info_box_text}>
+                      추가요금
+                    </Text>
+                    <Text style={styles.info_box_data}>
+                      data
+                    </Text>
+                  </View>
+                </View>
               </View>
 
             <Text style={styles.info_box_title}>
                 일주차 요금
               </Text>
-            <View style={styles.info_box}>
-              <Text style={styles.info_box_first_text}>
-                기본<Text style={styles.info_box_data}>data</Text>
-              </Text>
-              <Text style={styles.info_box_text}>
-                적용시간<Text style={styles.info_box_data}>data</Text>
-              </Text>
-            </View>
+              <View style={styles.info_box}>
+                <View style={styles.info_box_contents}>
+                    <Text style={styles.info_box_first_text}>
+                      기본
+                    </Text>
+                    <Text style={styles.info_box_data}>
+                      data
+                    </Text>
+                </View>
+                <View style={styles.info_box}>
+                  <View style={styles.info_box_contents}>
+                    <Text style={styles.info_box_text}>
+                      적용시간
+                    </Text>
+                    <Text style={styles.info_box_data}>
+                      data
+                    </Text>
+                  </View>
+                </View>
+              </View>
 
             <Text style={styles.info_box_title}>
                 월주차 요금
               </Text>
-            <View style={styles.info_box}>
-              <Text style={styles.info_box_first_text}>
-                기본<Text style={styles.info_box_data}>data</Text>
-              </Text>
-            </View>
+              <View style={styles.info_box}>
+                <View style={styles.info_box_contents}>
+                    <Text style={styles.info_box_first_text}>
+                      기본
+                    </Text>
+                    <Text style={styles.info_box_data}>
+                      data
+                    </Text>
+                </View>
+              </View>
+
             <Text style={styles.info_box_title}>
                 운영시간
               </Text>
-            <View style={styles.info_box}>
-              <Text style={styles.info_box_first_text}>
-                평일<Text style={styles.info_box_data}>data</Text>
-              </Text>
-              <Text style={styles.info_box_text}>
-                토요일<Text style={styles.info_box_data}>data</Text>
-              </Text>
-              <Text style={styles.info_box_text}>
-                일요일<Text style={styles.info_box_data}>data</Text>
-              </Text>
-              <Text style={styles.info_box_text}>
-                공휴일<Text style={styles.info_box_data}>data</Text>
-              </Text>
-            </View>            
+              <View style={styles.info_box}>
+                <View style={styles.info_box_contents}>
+                    <Text style={styles.info_box_first_text}>
+                      평일
+                    </Text>
+                    <Text style={styles.info_box_data}>
+                      data
+                    </Text>
+                </View>
+                <View style={styles.info_box}>
+                  <View style={styles.info_box_contents}>
+                    <Text style={styles.info_box_text}>
+                      토요일
+                    </Text>
+                    <Text style={styles.info_box_data}>
+                      data
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.info_box}>
+                  <View style={styles.info_box_contents}>
+                    <Text style={styles.info_box_text}>
+                      일요일
+                    </Text>
+                    <Text style={styles.info_box_data}>
+                      data
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.info_box}>
+                  <View style={styles.info_box_contents}>
+                    <Text style={styles.info_box_text}>
+                      공휴일
+                    </Text>
+                    <Text style={styles.info_box_data}>
+                      data
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
             <Text style={styles.info_box_title}>
               부제시행구분<Text style={styles.info_box_data}>data</Text>
               </Text>
             <View style={styles.info_box}>
-              <Text style={styles.info_box_first_text}>
+              <Text style={styles.info_box_text}>
                 O or X
               </Text>
             </View>
@@ -194,7 +241,6 @@ const styles = {
     top: -10,
     right:5,
     alignSelf: 'flex-end',
-
   },
   markerData:{
     width:'100%',
@@ -203,21 +249,18 @@ const styles = {
     paddingTop:10,
     backgroundColor:'#dddfdf',
   },
-  info_box_text:{
-    fontSize:20,
-    paddingBottom:15,
-    paddingLeft:10 ,
-    paddingTop:10,
+  info_box:{
+    backgroundColor:'white',
+    borderRadius:10
+  },
+  main_info_box_text:{
+    width:'100%',
     borderBottomWidth: 1,
     borderBottomColor: "#dee2e6",
-  },
-  info_box_first_text:{
     fontSize:20,
     paddingBottom:10,
+    paddingLeft:10 ,
     paddingTop:10,
-    paddingLeft:10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#dee2e6",
   },
   info_box_title:{
     fontSize:20,
@@ -226,34 +269,38 @@ const styles = {
     paddingBottom:10, 
     paddingLeft:15
   },
+  info_box_text:{
+    fontSize:20,
+    paddingBottom:15,
+    paddingLeft:10 ,
+    paddingTop:10,
+  },
+  info_box_first_text:{
+    fontSize:20,
+    paddingBottom:10,
+    paddingTop:10,
+    paddingLeft:10,
+  },
   info_box:{
     backgroundColor:'white',
     borderRadius:10
+  },
+  info_box_data:{
+    paddingRight:10,
+    fontSize:20,
+  },
+  info_box_contents: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: "#dee2e6",
   },
   copyright_text:{
     paddingTop:50,
     paddingBottom:60
   },
-  info_box_data:{
-    textAlign:'right',
-  },
-  info_box_:{
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  // elem: {
-  //   width: '100%',
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'space-between',
-  //   borderColor:'#eee',
-  //   borderBottomWidth:0.5,
-  //   padding: 5,
-  // },
-  // userInfo: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  // },
 }
 
 export default MarkerDisplay;
