@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions } from 'react-native';
 import { SearchBar } from 'react-native-elements';
-import NaverMapView, {Circle, Marker, Path, Polyline, Polygon} from "react-native-nmap";
+import NaverMapView, {Marker} from "react-native-nmap";
 import Icon from 'react-native-vector-icons/Ionicons';
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import MarkerDisplay from './MarkerDisplay';
 window = Dimensions.get('window');
+const API_KEY = process.env.REACT_APP_KAKAO_KEY;
 
 
 export default class Main extends Component{
@@ -13,11 +14,28 @@ export default class Main extends Component{
     super();
     this.state={
         search:'',
+        place_name:'',
     }
   }
 
   searchTextInputChanged(text) {
     this.setState({ searchedText: text })
+
+          fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?y=37.514322572335935&x=127.06283102249932&radius=20000&query=${text}`, {
+        headers: {
+          Authorization: `KakaoAK ${API_KEY}` 
+        }
+      })
+      .then(response => response.json())
+      .then(json => {
+
+        {json.documents.map((document)=>{
+            console.log(document.place_name)
+        })}
+
+
+      });
+
   }
   
 
