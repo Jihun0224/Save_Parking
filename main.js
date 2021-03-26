@@ -3,52 +3,70 @@ import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions } fro
 import NaverMapView, {Marker} from "react-native-nmap";
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import MarkerDisplay from './MarkerDisplay';
+import AnimatedHideView from 'react-native-animated-hide-view';
 import Search from './Search';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 window = Dimensions.get('window');
 
 
 export default class Main extends Component{
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state={
-
+      isChildVisible:false,
     }
   }
-
+  closeSearch(){
+    this.setState({isChildVisible:false});
+  }
   render(){
     const currPos = {latitude: this.props.currPos.latitude, longitude: this.props.currPos.longitude};
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.searchbar}>
-          <Search/>
-        </View>
-            
+        <View style={styles.map}>
+          <View style={styles.openSearch}>
+            <TouchableOpacity 
+              onPress={()=>{
+                this.setState({isChildVisible:true});
+              }}>
+              <Text style={styles.openSearchText}>
+                <Icon name="location" size={24} color="gray"/>
+                장소를 입력해주세요.
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-            <View style={styles.map}>
-              <NaverMapView style={{width: '100%', height: '100%'}}
-                            showsMyLocationButton={true}
-                            center={{...currPos, zoom: 16}}
-                            >
-              
-                <Marker coordinate={currPos} onClick={() => this._panel.show(window.height * 0.38)}/>
+          <AnimatedHideView
+            visible={this.state.isChildVisible}
+            style={styles.search_window}
+          >
+            <Search closeSearch={this.closeSearch.bind(this)}/>
+          </AnimatedHideView>
+          {!this.state.isChildVisible&&
+            <NaverMapView 
+              style={{width: '100%', height: '100%'}}
+              showsMyLocationButton={true}
+              center={{...currPos, zoom: 16}}
+            >
+              <Marker coordinate={currPos} onClick={() => this._panel.show(window.height * 0.38)}/>
+            </NaverMapView>
+          }
 
-              </NaverMapView>
-        
             <SlidingUpPanel 
-            ref={c => (this._panel = c)}
-            style={styles.panel}
-            backdropOpacity={0}
-            snappingPoints={[
-            window.height * 0.38,
-            window.height * 0.7,
-            window.height * 0.85,]}
+              ref={c => (this._panel = c)}
+              style={styles.panel}
+              backdropOpacity={0}
+              snappingPoints={[
+              window.height * 0.38,
+              window.height * 0.7,
+              window.height * 0.85,]}
             >              
-                  {/* 여기 마커데이터 전달*/}
-                <MarkerDisplay />
+                    {/* 여기 마커데이터 전달*/}
+              <MarkerDisplay />
             </SlidingUpPanel>
-
+  
         </View>
-            
       </SafeAreaView>
     )}
 }
@@ -59,17 +77,29 @@ const styles = StyleSheet.create({
       
     },
     map:{
-      flex:1,
+      flex: 1,
+      zIndex:1,
     },
-    searchbar:{
-      zIndex:3,
+    openSearch:{
+      zIndex:1,
       position:"absolute",
       top:10,
-      left:10,
-      width:window.width-20,
-      
+      width:window.width-30,
+      height:60,
+      backgroundColor:'#fff',
+      alignSelf:'center',
+      borderRadius:10,
+      borderWidth: 1,
+      borderColor:'gray'
     },
-    panel:{
-      zIndex:2,
+    openSearchText:{ 
+      fontSize:24,
+      color:'gray',
+      marginTop:10,
+      marginLeft:10
+    },
+    search_window:{
+      flex:1,
+      backgroundColor:"white"
     }
   });

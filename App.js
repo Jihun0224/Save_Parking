@@ -8,7 +8,7 @@ export default class App extends Component{
     constructor(){
         super();
         this.state={
-            currPos:{latitude: 128.6402609, longitude:35.2538433}, //최초 좌표객체[위도,경도]
+            currPos:{latitude:35.2538433 , longitude:128.6402609}, //최초 좌표객체[위도,경도]
             isLoading: true,
         }
     }
