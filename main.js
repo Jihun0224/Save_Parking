@@ -15,13 +15,20 @@ export default class Main extends Component{
     super(props);
     this.state={
       isChildVisible:false,
+      currPos:{
+        latitude:this.props.currPos.latitude,
+        longitude:this.props.currPos.longitude,
+      }
     }
   }
   closeSearch(){
     this.setState({isChildVisible:false});
   }
+  setSearchedPlace(searchedPlace){
+    this.setState({currPos:searchedPlace});
+  }
   render(){
-    const currPos = {latitude: this.props.currPos.latitude, longitude: this.props.currPos.longitude};
+    const ZoomPos = this.state.currPos;
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.map}>
@@ -41,15 +48,18 @@ export default class Main extends Component{
             visible={this.state.isChildVisible}
             style={styles.search_window}
           >
-            <Search closeSearch={this.closeSearch.bind(this)}/>
+            <Search 
+              closeSearch={this.closeSearch.bind(this)}
+              setSearchedPlace={this.setSearchedPlace.bind(this)}
+            />
           </AnimatedHideView>
           {!this.state.isChildVisible&&
             <NaverMapView 
               style={{width: '100%', height: '100%'}}
               showsMyLocationButton={true}
-              center={{...currPos, zoom: 16}}
+              center={{...ZoomPos, zoom: 16}}
             >
-              <Marker coordinate={currPos} onClick={() => this._panel.show(window.height * 0.38)}/>
+              <Marker coordinate={this.state.currPos} onClick={() => this._panel.show(window.height * 0.38)}/>
             </NaverMapView>
           }
 

@@ -13,7 +13,6 @@ class MarkerDisplay extends Component {
     const currPos ={latitude:128.6402609, longitude:35.2538433}
     const place_name = "창원대"
     const url = `geo:${currPos.latitude},${currPos.longitude}?q=${place_name}`
-    console.log(url);
     Linking.canOpenURL(url)
     .then(supported => {
       if (!supported) {

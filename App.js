@@ -5,8 +5,8 @@ import Geolocation from 'react-native-geolocation-service';
 import Loading from './loading';
 export default class App extends Component{
  
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
             currPos:{latitude:35.2538433 , longitude:128.6402609}, //최초 좌표객체[위도,경도]
             isLoading: true,
@@ -17,9 +17,9 @@ export default class App extends Component{
      }
     render(){
         return(
-          this.state.isLoading ?
-          <Loading/>
-            :<Main currPos={this.state.currPos}/>
+          this.state.isLoading 
+          ?<Loading/>
+          :<Main currPos={this.state.currPos}/>
         );         
     }
 
@@ -34,7 +34,6 @@ export default class App extends Component{
                     this.setState({currPos: position.coords});
                 }, 
                 (error)=>{
-
                     alert('error : '+error.message);
                 });
             }else{

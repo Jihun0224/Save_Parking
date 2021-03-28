@@ -19,7 +19,11 @@ export default class Search extends Component{
   constructor(props){
     super(props);
     this.state={
-      searchedText:'',
+        searchedText:'',
+        searchedPlace:{
+          longitude:0,
+          latitude:0,
+        },
         suggestion:[{
           name:'',
           id:'',
@@ -40,7 +44,7 @@ export default class Search extends Component{
       ],
     }
   }
- 
+
   searchTextInputChanged(text) {
     this.setState({ searchedText: text })
       //     fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?y=37.514322572335935&x=127.06283102249932&radius=20000&query=${text}`, {
@@ -55,7 +59,23 @@ export default class Search extends Component{
       //   })}
       // });
   }
-
+  _onSubmitEditing(){
+        
+        fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?y=35.2538433&x=128.6402609&radius=20000&query=${this.state.searchedText}`, {
+        headers: {
+          Authorization: `KakaoAK ${API_KEY}` 
+        }
+      })
+      .then(response => response.json())
+      .then(json => {
+        this.setState(
+          {searchedPlace:{longitude:json.documents[0].x, latitude:json.documents[0].y},
+          //history 추가
+        })
+      });
+    this.props.setSearchedPlace(this.state.searchedPlace);
+    this.props.closeSearch();
+  }
 
 
   renderHeader = () => {
@@ -72,10 +92,11 @@ export default class Search extends Component{
           />
         </TouchableOpacity>
           <Input
+            value={this.state.searchedText}
             inputContainerStyle={{borderBottomWidth:0, marginTop:5}}
+            onSubmitEditing={text => this._onSubmitEditing()}
             containerStyle={styles.input}
             onChangeText={text => this.searchTextInputChanged(text)}
-            value={this.state.searchedText}
             autoCorrect={false}
             autoCapitalize = "none"
             placeholder="장소를 입력해주세요."
@@ -115,7 +136,7 @@ export default class Search extends Component{
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                  onPress={()=>{console.log("x");}}
+                  onPress={()=>{console.log("history 삭제 추가");}}
                   style={styles.historyXIcon}
                 >
                   <FeatherIcon 
