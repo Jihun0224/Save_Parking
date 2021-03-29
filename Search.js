@@ -29,38 +29,25 @@ export default class Search extends Component{
           id:'',
           latitude:'',
           longitude:'',
+          address_name:'',
         }],
         history:[{
-          name:'1st',
-          id:'12',
-          latitude:'128',
-          longitude:'37',
-        },
-        {
-        name:'2nd',
-        id:'11',
-        latitude:'128',
-        longitude:'37',}
-      ],
+          name:'',
+          id:'0',
+          latitude:'',
+          longitude:'',
+          address_name:'',
+        }],
     }
+    this.searchTextInputChanged = this.searchTextInputChanged.bind(this);
+    this.HistoryOnpress = this.HistoryOnpress.bind(this);
+    this._onSubmitEditing = this._onSubmitEditing.bind(this);
   }
-
+  
   searchTextInputChanged(text) {
     this.setState({ searchedText: text })
-      //     fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?y=37.514322572335935&x=127.06283102249932&radius=20000&query=${text}`, {
-      //   headers: {
-      //     Authorization: `KakaoAK ${API_KEY}` 
-      //   }
-      // })
-      // .then(response => response.json())
-      // .then(json => {
-      //   {json.documents.map((document)=>{
-      //       console.log(document.place_name)
-      //   })}
-      // });
   }
   _onSubmitEditing(){
-        
         fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?y=35.2538433&x=128.6402609&radius=20000&query=${this.state.searchedText}`, {
         headers: {
           Authorization: `KakaoAK ${API_KEY}` 
@@ -69,15 +56,36 @@ export default class Search extends Component{
       .then(response => response.json())
       .then(json => {
         this.setState(
-          {searchedPlace:{longitude:json.documents[0].x, latitude:json.documents[0].y},
-          //history 추가
-        })
-      });
-    this.props.setSearchedPlace(this.state.searchedPlace);
-    this.props.closeSearch();
+          {searchedPlace:{longitude:parseFloat(json.documents[0].x), 
+                          latitude:parseFloat(json.documents[0].y)},
+          history:[...this.state.history,
+                  {name:json.documents[0].place_name, 
+                  id:json.documents[0].id,
+                  longitude:parseFloat(json.documents[0].x), 
+                  latitude:parseFloat(json.documents[0].y),
+                  address_name:json.documents[0].address_name}],
+          searchedText:'',
+        },()=>{
+          this.props.setSearchedPlace(this.state.searchedPlace);
+          this.props.closeSearch();
+        }
+        )});
   }
-
-
+  HistoryOnpress(place){
+    this.setState(
+      {searchedPlace:{longitude:place.longitude, latitude:place.latitude},
+      searchedText:'',
+    },()=>{
+      this.props.setSearchedPlace(this.state.searchedPlace);
+      this.props.closeSearch();
+    })
+  }
+  HistoryRemove= (id) => {
+    const nextKeyword = this.state.history.filter((history) => {
+      return history.id != id
+    })
+    this.setState({history:nextKeyword})
+  }
   renderHeader = () => {
     return (
       <View style={styles.searchHeader}>
@@ -94,7 +102,7 @@ export default class Search extends Component{
           <Input
             value={this.state.searchedText}
             inputContainerStyle={{borderBottomWidth:0, marginTop:5}}
-            onSubmitEditing={text => this._onSubmitEditing()}
+            onSubmitEditing={()=>this._onSubmitEditing()}
             containerStyle={styles.input}
             onChangeText={text => this.searchTextInputChanged(text)}
             autoCorrect={false}
@@ -119,33 +127,41 @@ export default class Search extends Component{
   };
 
   render(){
-    const History = ({ place_name }) => {
+    const History = ({ place }) => {
       if(this.state.history.length > 1){
         return (
-          <View style={styles.list}>
-            <View style={styles.placelist}>
-                <TouchableOpacity >
-                    <Text style={styles.place_name}>
-                        <IoniconsIcon 
-                          style={styles.historyClockIcon}
-                          name="time-outline" 
-                          size={24} 
-                          color="gray"
-                        />
-                        {place_name}
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  onPress={()=>{console.log("history 삭제 추가");}}
-                  style={styles.historyXIcon}
-                >
-                  <FeatherIcon 
-                    name="x" 
-                    size={24} 
-                    color="gray"
-                  />
-                </TouchableOpacity>             
-            </View>             
+          
+          <View>
+            {place.name !=''&&
+            <View style={styles.list}>
+                        <View style={styles.placelist}>
+                        <TouchableOpacity onPress={()=>this.HistoryOnpress(place)}>
+                            <Text style={styles.place_name}>
+                                <IoniconsIcon 
+                                  style={styles.historyClockIcon}
+                                  name="time-outline" 
+                                  size={24} 
+                                  color="gray"
+                                />
+                                {place.name}
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                          onPress={()=>this.HistoryRemove(place.id)}
+                          style={styles.historyXIcon}
+                        >
+                          <FeatherIcon 
+                            name="x" 
+                            size={24} 
+                            color="gray"
+                          />
+                        </TouchableOpacity>  
+                    </View>
+                    <Text style={styles.address_name}>
+                      {place.address_name}  
+                    </Text>      
+                  </View>
+            }  
           </View>
       )
     }
@@ -188,7 +204,7 @@ export default class Search extends Component{
   }
 }
   const renderHistory = ({ item }) => (
-    <History place_name={item.name} />
+    <History place={item} />
   );
   const renderSuggestion= ({ item }) => (
     <Suggestion place_name={item.name} />
@@ -264,5 +280,10 @@ const styles = StyleSheet.create({
   historyXIcon:{
     paddingEnd:15,
     paddingTop:15
+  },
+  address_name:{
+    color:"gray",
+    fontSize:15,
+    paddingLeft:15
   }
 });

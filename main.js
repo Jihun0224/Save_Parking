@@ -28,7 +28,6 @@ export default class Main extends Component{
     this.setState({currPos:searchedPlace});
   }
   render(){
-    const ZoomPos = this.state.currPos;
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.map}>
@@ -57,7 +56,7 @@ export default class Main extends Component{
             <NaverMapView 
               style={{width: '100%', height: '100%'}}
               showsMyLocationButton={true}
-              center={{...ZoomPos, zoom: 16}}
+              center={{...this.state.currPos, zoom: 16}}
             >
               <Marker coordinate={this.state.currPos} onClick={() => this._panel.show(window.height * 0.38)}/>
             </NaverMapView>
