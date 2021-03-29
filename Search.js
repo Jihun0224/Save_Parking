@@ -7,6 +7,7 @@ import {
   Text, 
   Dimensions,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import { Input } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -20,6 +21,7 @@ export default class Search extends Component{
     super(props);
     this.state={
         searchedText:'',
+        searchLoaing:false,
         searchedPlace:{
           longitude:0,
           latitude:0,
@@ -40,57 +42,98 @@ export default class Search extends Component{
         }],
     }
     this.searchTextInputChanged = this.searchTextInputChanged.bind(this);
-    this.HistoryOnpress = this.HistoryOnpress.bind(this);
-    this._onSubmitEditing = this._onSubmitEditing.bind(this);
+    this.PlaceOnpress = this.PlaceOnpress.bind(this);
+    this.Deduplication = this.Deduplication.bind(this);
+    this.GoBack = this.GoBack.bind(this);
   }
-  
+  Deduplication(value){
+    const newData = []
+    console.log(value);
+    value.forEach(element => {
+      const id = element.id;
+      let ExistenceStatus = value.findIndex(i=>i.id == id);
+      if(ExistenceStatus === -1){
+        newData.push(element);
+      }
+    });
+      return newData;
+  }
   searchTextInputChanged(text) {
-    this.setState({ searchedText: text })
-  }
-  _onSubmitEditing(){
-        fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?y=35.2538433&x=128.6402609&radius=20000&query=${this.state.searchedText}`, {
+    this.setState({ searchedText: text, searchLoaing:false },()=>{
+      if(this.state.searchedText != ''){
+              fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?y=35.2538433&x=128.6402609&radius=20000&query=${this.state.searchedText}`, {
         headers: {
           Authorization: `KakaoAK ${API_KEY}` 
         }
       })
       .then(response => response.json())
       .then(json => {
-        this.setState(
-          {searchedPlace:{longitude:parseFloat(json.documents[0].x), 
-                          latitude:parseFloat(json.documents[0].y)},
-          history:[...this.state.history,
-                  {name:json.documents[0].place_name, 
-                  id:json.documents[0].id,
-                  longitude:parseFloat(json.documents[0].x), 
-                  latitude:parseFloat(json.documents[0].y),
-                  address_name:json.documents[0].address_name}],
-          searchedText:'',
-        },()=>{
-          this.props.setSearchedPlace(this.state.searchedPlace);
-          this.props.closeSearch();
+        let j;
+        if(json.documents.length > 15){
+          j = 15;
         }
-        )});
+        else{
+          j = json.documents.length
+        }
+        for(let i = 0; i < j; i++){
+          this.setState({
+            suggestion:[...this.state.suggestion,
+            {name:json.documents[i].place_name, 
+            id:json.documents[i].id,
+            longitude:parseFloat(json.documents[i].x), 
+            latitude:parseFloat(json.documents[i].y),
+            address_name:json.documents[i].address_name}],
+          })}
+      })
+      .then(()=>{
+        const NewSuggestion = [];
+        for (let i = 0; i < this.state.suggestion.length; i++) {
+          if (this.state.suggestion[i].name.includes(this.state.searchedText)) {
+            NewSuggestion.push(this.state.suggestion[i]);
+          }
+        }
+        this.setState({suggestion:NewSuggestion});
+      })
+      .then(()=>{
+        this.setState({searchLoaing:false});
+      })}
+      else{
+        this.setState({suggestion:[]})
+      }
+    })
   }
-  HistoryOnpress(place){
+  GoBack(){
+    this.setState({searchedText:''},()=>{
+      this.props.closeSearch();
+    })
+  }
+  PlaceOnpress(place){
     this.setState(
-      {searchedPlace:{longitude:place.longitude, latitude:place.latitude},
-      searchedText:'',
+        {searchedPlace:{longitude:place.longitude, 
+                        latitude:place.latitude},
+        history:[...this.state.history,
+                {name:place.name, 
+                id:place.id,
+                longitude:place.longitude, 
+                latitude:place.latitude,
+                address_name:place.address_name}],
+        searchedText:'',
     },()=>{
       this.props.setSearchedPlace(this.state.searchedPlace);
       this.props.closeSearch();
     })
   }
   HistoryRemove= (id) => {
-    const nextKeyword = this.state.history.filter((history) => {
+    const newData = this.state.history.filter((history) => {
       return history.id != id
     })
-    this.setState({history:nextKeyword})
+    this.setState({history:newData})
   }
   renderHeader = () => {
     return (
       <View style={styles.searchHeader}>
         <TouchableOpacity 
-          onPress={this.props.closeSearch}
+          onPress={()=>this.GoBack()}
         >
           <FeatherIcon 
             style={styles.backIcon} 
@@ -102,7 +145,6 @@ export default class Search extends Component{
           <Input
             value={this.state.searchedText}
             inputContainerStyle={{borderBottomWidth:0, marginTop:5}}
-            onSubmitEditing={()=>this._onSubmitEditing()}
             containerStyle={styles.input}
             onChangeText={text => this.searchTextInputChanged(text)}
             autoCorrect={false}
@@ -130,12 +172,11 @@ export default class Search extends Component{
     const History = ({ place }) => {
       if(this.state.history.length > 1){
         return (
-          
           <View>
             {place.name !=''&&
             <View style={styles.list}>
                         <View style={styles.placelist}>
-                        <TouchableOpacity onPress={()=>this.HistoryOnpress(place)}>
+                        <TouchableOpacity onPress={()=>this.PlaceOnpress(place)}>
                             <Text style={styles.place_name}>
                                 <IoniconsIcon 
                                   style={styles.historyClockIcon}
@@ -169,36 +210,33 @@ export default class Search extends Component{
       return null
     }
   }
-  const Suggestion = ({place_name}) => {
+  const Suggestion = ({place}) => {
     if(this.state.suggestion.length > 1){
-    return (
-      <View style={styles.list}>
-        <View style={styles.placelist}>
-          <TouchableOpacity >
-              <Text style={styles.place_name}>
-                <IoniconsIcon 
-                  name="location" 
-                  size={24} 
-                  color="gray"
-                />
-                {place_name}      
-              </Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-          onPress={()=>{
-              this.setState({searchedText:place_name})
-          }}
-          style={styles.recallIcon}>
-            <FeatherIcon 
-              name="arrow-up-left" 
-              size={24} 
-              color="gray"
-            />
-          </TouchableOpacity>
-        </View>        
-      </View>
-    )
-  }
+      return (
+        <View>
+          {place.name !=''&& this.state.searchLoaing == false &&
+            <View style={styles.list}>
+              <View style={styles.placelist}>
+                <TouchableOpacity onPress={()=>this.PlaceOnpress(place)}>
+                  <Text style={styles.place_name}>
+                    <IoniconsIcon 
+                      name="location" 
+                      size={24} 
+                      color="gray"
+                    />
+                    {place.name}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.address_name}>
+                {place.address_name}  
+              </Text>      
+            </View>
+          }
+
+        </View>
+      )
+    }
   else{
     return null
   }
@@ -207,7 +245,7 @@ export default class Search extends Component{
     <History place={item} />
   );
   const renderSuggestion= ({ item }) => (
-    <Suggestion place_name={item.name} />
+    <Suggestion place={item} />
   );
     return (
       <SafeAreaView style={styles.container}>
@@ -235,7 +273,6 @@ const styles = StyleSheet.create({
     width:window.width,
     height:window.height,
     backgroundColor:'#fff',
-
   },
   searchHeader:{
     flex: 1,
@@ -264,9 +301,6 @@ const styles = StyleSheet.create({
     fontSize:24,
     paddingStart:15,
     paddingTop:15
-  },
-  recallIcon:{
-    paddingRight:10,
   },
   placelist: {
     width: '100%',
