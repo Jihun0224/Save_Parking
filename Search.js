@@ -7,21 +7,21 @@ import {
   Text, 
   Dimensions,
   FlatList,
-  ActivityIndicator,
 } from 'react-native';
+import { debounce } from 'lodash';
 import { Input } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 window = Dimensions.get('window');
 const API_KEY = "";
-
+const request = debounce(() => {}, 500);
 
 export default class Search extends Component{
   constructor(props){
     super(props);
     this.state={
         searchedText:'',
-        searchLoaing:false,
+        searchLoaing:true,
         searchedPlace:{
           longitude:0,
           latitude:0,
@@ -43,23 +43,15 @@ export default class Search extends Component{
     }
     this.searchTextInputChanged = this.searchTextInputChanged.bind(this);
     this.PlaceOnpress = this.PlaceOnpress.bind(this);
-    this.Deduplication = this.Deduplication.bind(this);
     this.GoBack = this.GoBack.bind(this);
   }
-  Deduplication(value){
-    const newData = []
-    console.log(value);
-    value.forEach(element => {
-      const id = element.id;
-      let ExistenceStatus = value.findIndex(i=>i.id == id);
-      if(ExistenceStatus === -1){
-        newData.push(element);
-      }
-    });
-      return newData;
+  debouceRequest = (value) =>{
+    request(value)
+    ,[]
   }
   searchTextInputChanged(text) {
-    this.setState({ searchedText: text, searchLoaing:false },()=>{
+    this.debouceRequest(text);
+    this.setState({ searchedText: text, searchLoaing:true },()=>{
       if(this.state.searchedText != ''){
               fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?y=35.2538433&x=128.6402609&radius=20000&query=${this.state.searchedText}`, {
         headers: {
@@ -92,7 +84,7 @@ export default class Search extends Component{
             NewSuggestion.push(this.state.suggestion[i]);
           }
         }
-        this.setState({suggestion:NewSuggestion});
+        this.setState({suggestion:[...new Set(NewSuggestion.map(JSON.stringify))].map(JSON.parse)});
       })
       .then(()=>{
         this.setState({searchLoaing:false});
@@ -108,7 +100,15 @@ export default class Search extends Component{
     })
   }
   PlaceOnpress(place){
-    this.setState(
+    var HistoryAdd = true;
+    for(let i=0; i<this.state.history.length; i++){
+          if(this.state.history[i].id == place.id){
+            HistoryAdd = false;
+            break;
+          }
+    }
+    if(HistoryAdd){
+      this.setState(
         {searchedPlace:{longitude:place.longitude, 
                         latitude:place.latitude},
         history:[...this.state.history,
@@ -122,6 +122,17 @@ export default class Search extends Component{
       this.props.setSearchedPlace(this.state.searchedPlace);
       this.props.closeSearch();
     })
+    }
+    else{
+      this.setState(
+        {searchedPlace:{longitude:place.longitude, 
+                        latitude:place.latitude},
+        searchedText:'',
+    },()=>{
+      this.props.setSearchedPlace(this.state.searchedPlace);
+      this.props.closeSearch();
+    })
+    }
   }
   HistoryRemove= (id) => {
     const newData = this.state.history.filter((history) => {
@@ -174,36 +185,36 @@ export default class Search extends Component{
         return (
           <View>
             {place.name !=''&&
-            <View style={styles.list}>
-                        <View style={styles.placelist}>
-                        <TouchableOpacity onPress={()=>this.PlaceOnpress(place)}>
-                            <Text style={styles.place_name}>
-                                <IoniconsIcon 
-                                  style={styles.historyClockIcon}
-                                  name="time-outline" 
-                                  size={24} 
-                                  color="gray"
-                                />
-                                {place.name}
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                          onPress={()=>this.HistoryRemove(place.id)}
-                          style={styles.historyXIcon}
-                        >
-                          <FeatherIcon 
-                            name="x" 
-                            size={24} 
-                            color="gray"
-                          />
-                        </TouchableOpacity>  
-                    </View>
-                    <Text style={styles.address_name}>
-                      {place.address_name}  
-                    </Text>      
-                  </View>
-            }  
+              <View style={styles.list}>
+                <View style={styles.placelist}>
+                <TouchableOpacity onPress={()=>this.PlaceOnpress(place)}>
+                    <Text style={styles.place_name}>
+                        <IoniconsIcon 
+                          style={styles.historyClockIcon}
+                          name="time-outline" 
+                          size={24} 
+                          color="gray"
+                        />
+                        {place.name}
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  onPress={()=>this.HistoryRemove(place.id)}
+                  style={styles.historyXIcon}
+                >
+                  <FeatherIcon 
+                    name="x" 
+                    size={24} 
+                    color="gray"
+                  />
+                </TouchableOpacity>  
+            </View>
+            <Text style={styles.address_name}>
+              {place.address_name}  
+            </Text>      
           </View>
+            }  
+      </View>
       )
     }
     else{
