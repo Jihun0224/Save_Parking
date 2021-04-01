@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {PermissionsAndroid} from 'react-native';
-import Main from "./main";
+import Main from "./src/main";
 import Geolocation from 'react-native-geolocation-service';
-import Loading from './loading';
+import Loading from './src/loading';
 export default class App extends Component{
  
     constructor(props){
@@ -26,7 +26,6 @@ export default class App extends Component{
     async requestLocationPermission(){
             
         try{
-            // 퍼미션 요청 다이얼로그 보이기
             const granted=await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
  
             if(granted== PermissionsAndroid.RESULTS.GRANTED){
