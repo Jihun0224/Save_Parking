@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions } from 'react-native';
-import NaverMapView, {Marker} from "react-native-nmap";
+import { Marker } from 'react-native-maps';
+import { ClusterMap } from 'react-native-cluster-map';
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import MarkerDisplay from './MarkerDisplay';
 import AnimatedHideView from 'react-native-animated-hide-view';
@@ -53,13 +54,18 @@ export default class Main extends Component{
             />
           </AnimatedHideView>
           {!this.state.isChildVisible&&
-            <NaverMapView 
-              style={{width: '100%', height: '100%'}}
-              showsMyLocationButton={true}
-              center={{...this.state.currPos, zoom: 16}}
-            >
-              <Marker coordinate={this.state.currPos} onClick={() => this._panel.show(window.height * 0.38)}/>
-            </NaverMapView>
+            <ClusterMap
+            style={StyleSheet.absoluteFillObject}
+            region={{
+              latitude: this.state.currPos.latitude,
+              longitude: this.state.currPos.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          >
+            <Marker coordinate={{ latitude: 35.2538433, longitude: 128.6402609 }} />
+
+          </ClusterMap>
           }
 
             <SlidingUpPanel 
