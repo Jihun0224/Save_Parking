@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions } from 'react-native';
-import { Marker } from 'react-native-maps';
+import { Marker,PROVIDER_GOOGLE } from 'react-native-maps';
 import { ClusterMap } from 'react-native-cluster-map';
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import MarkerDisplay from './MarkerDisplay';
 import AnimatedHideView from 'react-native-animated-hide-view';
 import Search from './Search';
 import Icon from 'react-native-vector-icons/Ionicons';
-
 window = Dimensions.get('window');
 
 
@@ -16,6 +15,7 @@ export default class Main extends Component{
     super(props);
     this.state={
       isChildVisible:false,
+      marginBottom:1,
       currPos:{
         latitude:this.props.currPos.latitude,
         longitude:this.props.currPos.longitude,
@@ -28,6 +28,8 @@ export default class Main extends Component{
   setSearchedPlace(searchedPlace){
     this.setState({currPos:searchedPlace});
   }
+  _onMapReady = () => this.setState({marginBottom: 0}) 
+
   render(){
     return (
       <SafeAreaView style={styles.container}>
@@ -54,8 +56,15 @@ export default class Main extends Component{
             />
           </AnimatedHideView>
           {!this.state.isChildVisible&&
+          <View style={StyleSheet.absoluteFillObject}>
+          
             <ClusterMap
-            style={StyleSheet.absoluteFillObject}
+            style={{flex:1, marginBottom: this.state.marginBottom}}
+            mapPadding={{ top: 100, right: 0, bottom: 0, left: 0 }}
+            onMapReady={this._onMapReady}
+            showsUserLocation={true}
+            provider={PROVIDER_GOOGLE}
+            showsMyLocationButton={true}
             region={{
               latitude: this.state.currPos.latitude,
               longitude: this.state.currPos.longitude,
@@ -63,9 +72,13 @@ export default class Main extends Component{
               longitudeDelta: 0.0421,
             }}
           >
-            <Marker coordinate={{ latitude: 35.2538433, longitude: 128.6402609 }} />
+            <Marker coordinate={{ latitude: this.props.currPos.latitude, longitude: this.props.currPos.longitude }} />
+            <Marker coordinate={{ latitude: this.props.currPos.latitude+0.0001, longitude: this.props.currPos.longitude+0.0001 }} />
+            <Marker coordinate={{ latitude: this.props.currPos.latitude+0.0003, longitude: this.props.currPos.longitude+0.0002 }} />
+
 
           </ClusterMap>
+          </View>
           }
 
             <SlidingUpPanel 
@@ -87,9 +100,7 @@ export default class Main extends Component{
 }
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: 'white',
-      
+      flex: 1,      
     },
     map:{
       flex: 1,
