@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions } from 'react-native';
 import { Marker,PROVIDER_GOOGLE } from 'react-native-maps';
-import { ClusterMap } from 'react-native-cluster-map';
+import MapView from "react-native-map-clustering";
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import MarkerDisplay from './MarkerDisplay';
 import AnimatedHideView from 'react-native-animated-hide-view';
 import Search from './Search';
 import Icon from 'react-native-vector-icons/Ionicons';
+import CustomMarker from './CustomMarker';
 window = Dimensions.get('window');
 
 
@@ -58,26 +59,31 @@ export default class Main extends Component{
           {!this.state.isChildVisible&&
           <View style={StyleSheet.absoluteFillObject}>
           
-            <ClusterMap
+            <MapView
             style={{flex:1, marginBottom: this.state.marginBottom}}
             mapPadding={{ top: 100, right: 0, bottom: 0, left: 0 }}
             onMapReady={this._onMapReady}
             showsUserLocation={true}
             provider={PROVIDER_GOOGLE}
             showsMyLocationButton={true}
-            region={{
+            minPoints={2}
+            minZoom={3}
+            clusterColor={"#002166"}
+            initialRegion={{
               latitude: this.state.currPos.latitude,
               longitude: this.state.currPos.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
+              latitudeDelta: 0.00522,
+              longitudeDelta: 0.00421,
             }}
           >
-            <Marker coordinate={{ latitude: this.props.currPos.latitude, longitude: this.props.currPos.longitude }} />
-            <Marker coordinate={{ latitude: this.props.currPos.latitude+0.0001, longitude: this.props.currPos.longitude+0.0001 }} />
-            <Marker coordinate={{ latitude: this.props.currPos.latitude+0.0003, longitude: this.props.currPos.longitude+0.0002 }} />
+            <Marker title="ddd" coordinate={{ latitude: this.props.currPos.latitude, longitude: this.props.currPos.longitude }}>
+              <CustomMarker/>
+            </Marker>
+            <Marker coordinate={{ latitude: this.props.currPos.latitude+0.0003, longitude: this.props.currPos.longitude+0.0032 }}>
+            <CustomMarker/>
+            </Marker>
 
-
-          </ClusterMap>
+          </MapView>
           </View>
           }
 
