@@ -8,6 +8,8 @@ import AnimatedHideView from 'react-native-animated-hide-view';
 import Search from './Search';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CustomMarker from './CustomMarker';
+import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Filter from './Filter';
 window = Dimensions.get('window');
 
 
@@ -15,7 +17,13 @@ export default class Main extends Component{
   constructor(props){
     super(props);
     this.state={
-      isChildVisible:false,
+      isSearchVisible:false,
+      isFilterVisible:false,
+      searchedPlace:false,
+      searchedPlaceData:{
+        latitude:0,
+        longitude:0,
+      },
       marginBottom:1,
       currPos:{
         latitude:this.props.currPos.latitude,
@@ -61,10 +69,28 @@ export default class Main extends Component{
     this.map.animateToRegion(this.region, 100);
   }
   closeSearch(){
-    this.setState({isChildVisible:false});
+    this.setState({isSearchVisible:false});
   }
   setSearchedPlace(searchedPlace){
-    this.setState({currPos:searchedPlace});
+    this.region = {
+      latitude: searchedPlace.latitude,
+      longitude: searchedPlace.longitude,
+      latitudeDelta: this.state.currPos.latitudeDelta,
+      longitudeDelta: this.state.currPos.longitudeDelta
+    }
+    this.setState({
+      currPos: {
+        latitudeDelta: this.region.latitudeDelta,
+        longitudeDelta: this.region.longitudeDelta,
+        latitude: this.region.latitude,
+        longitude: this.region.longitude
+      },
+      searchedPlace:true,
+      searchedPlaceData: {
+        latitude: this.region.latitude,
+        longitude: this.region.longitude
+      }
+    })
   }
   _onMapReady = () => this.setState({marginBottom: 0}) 
   onRegionChange(region) {
@@ -74,10 +100,11 @@ export default class Main extends Component{
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.map}>
+        {!this.state.isSearchVisible&&!this.state.isFilterVisible&&
           <View style={styles.openSearch}>
             <TouchableOpacity 
               onPress={()=>{
-                this.setState({isChildVisible:true});
+                this.setState({isSearchVisible:true});
               }}>
               <Text style={styles.openSearchText}>
                 <Icon name="location" size={24} color="gray"/>
@@ -85,9 +112,9 @@ export default class Main extends Component{
               </Text>
             </TouchableOpacity>
           </View>
-
+          }
           <AnimatedHideView
-            visible={this.state.isChildVisible}
+            visible={this.state.isSearchVisible}
             style={styles.search_window}
           >
             <Search 
@@ -95,7 +122,7 @@ export default class Main extends Component{
               setSearchedPlace={this.setSearchedPlace.bind(this)}
             />
           </AnimatedHideView>
-          {!this.state.isChildVisible&&
+          {!this.state.isSearchVisible&&!this.state.isFilterVisible&&
             <View style={StyleSheet.absoluteFillObject}>
               <MapView
                 initialRegion={this.state.currPos}
@@ -119,7 +146,22 @@ export default class Main extends Component{
               <Marker coordinate={{ latitude: this.props.currPos.latitude+0.0003, longitude: this.props.currPos.longitude+0.0032 }}>
               <CustomMarker/>
               </Marker>
+              {this.state.searchedPlace&&
+                <Marker coordinate={{ latitude: this.state.searchedPlaceData.latitude, longitude:  this.state.searchedPlaceData.longitude}}/>
+              }
             </MapView>
+              <TouchableOpacity
+                onPress={()=>{
+                  this.setState({isFilterVisible:true});
+                }}
+                style={styles.filter}
+                >
+                  <MaterialIcons
+                    name="filter-outline"
+                    style={{...styles.icon,backgroundColor: 'rgba(255, 255, 255, 0.6)',color: 'rgba(0, 0, 0, 0.8)'}}
+                    size={25}
+                  />
+              </TouchableOpacity>
               <TouchableOpacity
               style={styles.zoomin}
               onPress={() => { this.onPressZoomIn() }}
@@ -142,7 +184,16 @@ export default class Main extends Component{
               </TouchableOpacity>
             </View>
           }
-
+            {/* 필터 부분 추가 예정
+            <AnimatedHideView
+              visible={this.state.isFilterVisible}
+              style={styles.filter_window}
+          >
+            <Filter 
+              closeSearch={this.closeSearch.bind(this)}
+              setSearchedPlace={this.setSearchedPlace.bind(this)}
+            />
+          </AnimatedHideView> */}
             <SlidingUpPanel 
               ref={c => (this._panel = c)}
               style={styles.panel}
@@ -191,17 +242,23 @@ const styles = StyleSheet.create({
       backgroundColor:"white"
     },
     icon:{
-      width:35,
-      height:35,
-      paddingLeft:4,
-      paddingTop:4
+      width:38,
+      height:38,
+      paddingLeft:6,
+      paddingTop:6,
+      borderRadius:5
+    },
+    filter:{
+      position:'absolute',
+      top:150,
+      zIndex:2,
+      left:window.width-50,
     },
     zoomin:{
       position:'absolute',
       top:300,
       zIndex:2,
       left:window.width-50,
-      alignSelf:'center'
 
     },
     zoomout:{
@@ -209,6 +266,10 @@ const styles = StyleSheet.create({
       top:335,
       zIndex:2,
       left:window.width-50
-
+    },
+    filter_window:{
+      backgroundColor:'white',
+      width:'100%',
+      height:'90%'
     }
   });
