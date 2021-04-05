@@ -4,20 +4,210 @@ import {
   SafeAreaView,
   View, 
   TouchableOpacity, 
-  Text, 
+  Text,
+  ScrollView,
   Dimensions,
 } from 'react-native';
-import { Input } from 'react-native-elements';
-import IoniconsIcon from 'react-native-vector-icons/Ionicons';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import ToggleSwitch from 'toggle-switch-react-native';
 window = Dimensions.get('window');
 
 export default class Filter extends Component{
+  constructor(props){
+    super(props);
+    this.state={
+        all:true,
+        public:true,
+        private:true,
+        free:true,
+        }
 
+    }
+    allcheck(){
+      console.log(this.state.all);
+      if(this.state.public && this.state.private && this.state.free){
+        this.setState({all:true});
+      }
+      if(!this.state.public || !this.state.private || !this.state.free){
+        this.setState({all:false});
+      }
+    }
+    allOnChenage(){
+      if(this.state.all == true){
+        this.setState({all:false, public:false, private:false, free:false})
+      }
+      else{
+        this.setState({all:true, public:true, private:true, free:true})
+      }
+    }
+  publicOnChenage(){
+    if(this.state.public == true){
+      this.setState({public:false},()=>{
+        this.allcheck();
+      })
+    }
+    else{
+      this.setState({public:true},()=>{
+        this.allcheck();
+      })
+    }
+  }
+  privateOnChenage(){
+    if(this.state.private == true){
+      this.setState({private:false},()=>{
+        this.allcheck();
+      })
+    }
+    else{
+      this.setState({private:true},()=>{
+        this.allcheck();
+      })
+    }
+  }
+  freeOnChenage(){
+    if(this.state.free == true){
+      this.setState({free:false},()=>{
+        this.allcheck();
+      })
+    }
+    else{
+      this.setState({free:true},()=>{
+        this.allcheck();
+      })
+    }
+  }
   render(){
 
     return (
       <SafeAreaView style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity 
+                onPress={()=>{this.props.closeFilter()}}
+              >
+                <FeatherIcon 
+                  style={styles.xIcon} 
+                  name='x' 
+                  size={30} 
+                  color='gray'
+                />
+            </TouchableOpacity> 
+            <Text style={styles.headerText}>필터</Text>
+          </View>
 
+        <ScrollView style={styles.filterWindow}>
+          <Text style={styles.titleText}>
+            주차장
+          </Text>
+
+          <View style={styles.filterBox}>
+            <View style={styles.filterBoxContents}>
+                <Text style={styles.filterDivision}>
+                  전체
+                </Text>
+                <ToggleSwitch
+                style={styles.filterSwitch}
+                isOn={this.state.all}
+                onColor='#002166'
+                offColor='gray'
+                onToggle={()=>this.allOnChenage()}
+                />
+              </View>
+            <View style={styles.filterBoxContents}>
+              <Text style={styles.filterDivision}>
+                공영
+              </Text>
+              <ToggleSwitch
+                style={styles.filterSwitch}
+                isOn={this.state.public}
+                onColor='#002166'
+                offColor='gray'
+                onToggle={()=>this.publicOnChenage()}
+              />
+            </View>
+            <View style={styles.filterBoxContents}>
+                <Text style={styles.filterDivision}>
+                  민영
+                </Text>
+                <ToggleSwitch
+                style={styles.filterSwitch}
+                isOn={this.state.private}
+                onColor='#002166'
+                offColor='gray'
+                onToggle={()=>this.privateOnChenage()}
+                />
+              </View>
+              <View style={styles.filterBoxContents}>
+                <Text style={styles.filterDivision}>
+                  무료?
+                </Text>
+                <ToggleSwitch
+                style={styles.filterSwitch}
+                isOn={this.state.free}
+                onColor='#002166'
+                offColor='gray'
+                onToggle={()=>this.freeOnChenage()}
+                />
+              </View>
+          </View>
+
+          <Text style={styles.titleText}>
+            불법주차구역
+          </Text>
+          <View style={styles.filterBox}>
+            <View style={styles.filterBoxContents}>
+                <Text style={styles.filterDivision}>
+                  전체
+                </Text>
+                <ToggleSwitch
+                style={styles.filterSwitch}
+                isOn={this.state.all}
+                onColor='#002166'
+                offColor='gray'
+                onToggle={()=>this.allOnChenage()}
+                />
+              </View>
+            <View style={styles.filterBoxContents}>
+              <Text style={styles.filterDivision}>
+                단속차량
+              </Text>
+              <ToggleSwitch
+                style={styles.filterSwitch}
+                isOn={this.state.public}
+                onColor='#002166'
+                offColor='gray'
+                onToggle={()=>this.publicOnChenage()}
+              />
+            </View>
+            <View style={styles.filterBoxContents}>
+                <Text style={styles.filterDivision}>
+                  CCTV
+                </Text>
+                <ToggleSwitch
+                style={styles.filterSwitch}
+                isOn={this.state.private}
+                onColor='#002166'
+                offColor='gray'
+                onToggle={()=>this.privateOnChenage()}
+                />
+              </View>
+          </View>
+          <Text style={styles.titleText}>
+              가격
+          </Text>
+          <View style={styles.filterBox}>
+            <Text>
+              가격 설정 범위 추가 예정
+            </Text>
+          </View>
+        </ScrollView>
+
+        <View style={styles.applyButton}>
+          <TouchableOpacity>
+            <Text style={styles.applyButtonText}>
+              검색 필터 적용
+            </Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     )}
 }
@@ -27,5 +217,63 @@ const styles = StyleSheet.create({
     width:window.width,
     height:window.height,
     backgroundColor:'#fff',
+  },
+  header: {
+    height: 70,
+    width:'100%',
+    borderBottomWidth: 1,
+    borderBottomColor: '#dee2e6',
+    paddingLeft:20,
+    paddingTop:20
+  },
+  headerText:{
+    fontSize:25,
+    position:'absolute',
+    alignSelf:'center',
+    top:20,
+  },
+  filterWindow:{
+    width:'100%',
+    paddingLeft:20,
+    paddingRight:20,
+    paddingTop:10,
+    backgroundColor:'#e2e2e2',
+  },
+  titleText:{
+    color:'gray',
+    alignSelf:'center',
+    fontSize:25,
+    paddingTop:10
+  },
+  filterBox:{
+    width:'100%',
+    backgroundColor:'white',
+    marginTop:10,
+    borderRadius:10,
+  },
+  applyButton:{
+    backgroundColor:'#002166',
+    height:50
+  },
+  applyButtonText:{
+    color:'#fff',
+    alignSelf:'center',
+    fontSize:25,
+    paddingTop:8
+  },
+  filterBoxContents:{
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  filterDivision:{
+    fontSize:20,
+    paddingBottom:15,
+    paddingLeft:10 ,
+    paddingTop:10,
+  },
+  filterSwitch:{
+    paddingRight:15,
   },
 });

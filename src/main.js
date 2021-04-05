@@ -13,7 +13,7 @@ import Filter from './Filter';
 import PathDisplay from './PathDisplay';
 window = Dimensions.get('window');
 
-
+//AnimatedHideView 두번 쓰면 하나는 동작 X -> 0406 해결할 것
 export default class Main extends Component{
   constructor(props){
     super(props);
@@ -72,6 +72,9 @@ export default class Main extends Component{
   }
   closeSearch(){
     this.setState({isSearchVisible:false});
+  }
+  closeFilter(){
+    this.setState({isFilterVisible:false});
   }
   setSearchedPlace(searchedPlace){
     this.region = {
@@ -153,7 +156,7 @@ export default class Main extends Component{
                 <CustomMarker/>
               </Marker>
               <Marker coordinate={{ latitude: this.props.currPos.latitude+0.0003, longitude: this.props.currPos.longitude+0.0032 }}>
-              <CustomMarker/>
+                <CustomMarker/>
               </Marker>
               <Marker coordinate={{latitude: 35.2538633, longitude: 128.6402609}} onClick={this.toggleModal.bind(this)}/>
               {this.state.searchedPlace&&
@@ -168,7 +171,7 @@ export default class Main extends Component{
                 >
                   <MaterialIcons
                     name="filter-outline"
-                    style={{...styles.icon,backgroundColor: 'rgba(255, 255, 255, 0.6)',color: 'rgba(0, 0, 0, 0.8)'}}
+                    style={{...styles.icon,backgroundColor: 'rgba(255, 255, 255, 0.6)',color: 'rgba(0, 0, 0, 0.6)'}}
                     size={25}
                   />
               </TouchableOpacity>
@@ -194,18 +197,15 @@ export default class Main extends Component{
               </TouchableOpacity>
             </View>
           }
-            {/* 필터 부분 추가 예정
-            <AnimatedHideView
+            {/* <AnimatedHideView
               visible={this.state.isFilterVisible}
               style={styles.filter_window}
-          >
+            >
             <Filter 
-              closeSearch={this.closeSearch.bind(this)}
-              setSearchedPlace={this.setSearchedPlace.bind(this)}
+              closeFilter={this.closeFilter.bind(this)}
             />
           </AnimatedHideView> */}
-
-            <PathDisplay ModalVisible={this.state.ModalVisible}/>          
+          <PathDisplay ModalVisible={this.state.ModalVisible}/>
             <SlidingUpPanel 
               ref={c => (this._panel = c)}
               style={styles.panel}
@@ -250,8 +250,14 @@ const styles = StyleSheet.create({
       marginLeft:10
     },
     search_window:{
-      flex:1,
-      backgroundColor:"white"
+      backgroundColor:'#fff',
+      width:'100%',
+      height:'100%'
+    },
+    filter_window:{
+      backgroundColor:'#fff',
+      width:'100%',
+      height:'100%'
     },
     icon:{
       width:38,
@@ -271,17 +277,11 @@ const styles = StyleSheet.create({
       top:300,
       zIndex:2,
       left:window.width-50,
-
     },
     zoomout:{
       position:'absolute',
-      top:335,
+      top:340,
       zIndex:2,
       left:window.width-50
     },
-    filter_window:{
-      backgroundColor:'white',
-      width:'100%',
-      height:'90%'
-    }
   });
