@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import CustomMarker from './CustomMarker';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Filter from './Filter';
+import PathDisplay from './PathDisplay';
 window = Dimensions.get('window');
 
 
@@ -20,6 +21,7 @@ export default class Main extends Component{
       isSearchVisible:false,
       isFilterVisible:false,
       searchedPlace:false,
+      ModalVisible: false,
       searchedPlaceData:{
         latitude:0,
         longitude:0,
@@ -96,6 +98,13 @@ export default class Main extends Component{
   onRegionChange(region) {
     this.setState({ currPos:region });
   }
+
+  toggleModal(){
+    this.setState({
+      ModalVisible:true,
+    });
+  }
+
   render(){
     return (
       <SafeAreaView style={styles.container}>
@@ -146,6 +155,7 @@ export default class Main extends Component{
               <Marker coordinate={{ latitude: this.props.currPos.latitude+0.0003, longitude: this.props.currPos.longitude+0.0032 }}>
               <CustomMarker/>
               </Marker>
+              <Marker coordinate={{latitude: 35.2538633, longitude: 128.6402609}} onClick={this.toggleModal.bind(this)}/>
               {this.state.searchedPlace&&
                 <Marker coordinate={{ latitude: this.state.searchedPlaceData.latitude, longitude:  this.state.searchedPlaceData.longitude}}/>
               }
@@ -194,6 +204,8 @@ export default class Main extends Component{
               setSearchedPlace={this.setSearchedPlace.bind(this)}
             />
           </AnimatedHideView> */}
+
+            <PathDisplay ModalVisible={this.state.ModalVisible}/>          
             <SlidingUpPanel 
               ref={c => (this._panel = c)}
               style={styles.panel}
