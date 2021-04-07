@@ -20,10 +20,6 @@ export default class Filter extends Component{
         public:true,
         private:true,
         free:true,
-        price:{
-          max:0,
-          min:10000,
-        },
         areaAll:true,
         cctv:true,
         vehicle:true,

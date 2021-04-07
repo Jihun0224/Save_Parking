@@ -30,15 +30,18 @@ export default class App extends Component{
  
             if(granted== PermissionsAndroid.RESULTS.GRANTED){
                 Geolocation.getCurrentPosition( (position)=>{
-                    this.setState({currPos: position.coords});
+                    this.setState({currPos: position.coords},()=>{
+                        this.setState({isLoading:false});
+                    });
                 }, 
                 (error)=>{
                     alert('error : '+error.message);
                 });
             }else{
                 alert('위치정보 사용을 거부하셨습니다.\n앱의 기능사용이 제한됩니다.');
+                this.setState({isLoading:false});
+
             }
-            this.setState({isLoading:false});
         }catch(err){alert('퍼미션 작업 에러');}
     }
 }

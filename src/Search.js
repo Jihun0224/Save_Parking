@@ -9,6 +9,7 @@ import {
   FlatList,
 } from 'react-native';
 import { debounce } from 'lodash';
+import AnimatedHideView from 'react-native-animated-hide-view';
 import { Input } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
@@ -260,6 +261,10 @@ export default class Search extends Component{
   );
     return (
       <SafeAreaView style={styles.container}>
+        <AnimatedHideView
+          visible={this.props.isSearchVisible}
+          style={styles.search_window}
+          >
         {this.state.searchedText == ''
         ?
           <FlatList
@@ -275,12 +280,12 @@ export default class Search extends Component{
             ListHeaderComponent={this.renderHeader}
           />
         }
+        </AnimatedHideView>
       </SafeAreaView>
     )}
 }
 const styles = StyleSheet.create({
   container:{
-    flex:1,
     width:window.width,
     height:window.height,
     backgroundColor:'#fff',

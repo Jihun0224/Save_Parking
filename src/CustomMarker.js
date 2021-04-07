@@ -12,7 +12,7 @@ export default class CustomMarker extends Component{
                 style={styles.imageBackground}
                 imageStyle={{tintColor:"#002166"}}>
         <Text style={{color:'white', bottom:5}}>
-            data원
+            {this.props.price}원
         </Text>
       </ImageBackground>
       </View>

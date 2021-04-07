@@ -10,9 +10,8 @@ class MarkerDisplay extends Component {
 
   handlePress(){
     
-    const currPos ={latitude:128.6402609, longitude:35.2538433}
-    const place_name = "창원대"
-    const url = `geo:${currPos.latitude},${currPos.longitude}?q=${place_name}`
+    const currPos ={latitude:parseFloat(this.props.parking.latitude), longitude:parseFloat(this.props.parking.longitude)}
+    const url = `geo:${currPos.latitude},${currPos.longitude}?q=${this.props.parking.prkplceNm}`
     Linking.canOpenURL(url)
     .then(supported => {
       if (!supported) {
@@ -26,12 +25,16 @@ class MarkerDisplay extends Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-            <FeatherIcons style={styles.minusicon} name="minus" size={35} color="#dee2e6"/>
+        <FeatherIcons style={styles.minusicon} name="minus" size={35} color="#dee2e6"/>
           <View style={styles.header}>
             <View style={styles.division_border}>
-              <Text style={styles.division}>구분</Text>
+              <Text style={styles.division}>
+                {this.props.parking.prkplceSe}
+              </Text>
             </View>
-            <Text style={styles.header_text}>주차장 이름</Text>
+            <Text style={styles.header_text}>
+              {this.props.parking.prkplceNm}
+            </Text>
               <View style={styles.naviIcon}>
 
                 <TouchableOpacity onPress={() => this.handlePress()}>
@@ -49,21 +52,43 @@ class MarkerDisplay extends Component {
           <View style={styles.info_box}>
             <Text style={styles.main_info_box_text}>
               <Ionicons name="location-outline" size={24} color="gray"/>
-              주소
+              {this.props.parking.rdnmadr !=""
+              ?this.props.parking.rdnmadr
+              :this.props.parking.lnmadr
+              }
             </Text>
             <Text style={styles.main_info_box_text}>
               <MaterialIcons name="payment" size={24} color="gray"/>
-              주차요금
+              {this.props.parking.basicTime ==''
+              ?"정보없음"
+              :this.props.parking.basicTime+"분/"+this.props.parking.basicCharge+"원"
+              }
             </Text>
             <Text style={styles.main_info_box_text}>
               <Ionicons name="time-outline" size={24} color="gray"/>
-              운영시간
+              {this.props.parking.weekdayOperOpenHhmm}~{this.props.parking.weekdayOperColseHhmm}
             </Text>
             <Text style={styles.main_info_box_text}>
               <Ionicons name="call-outline" size={24} color="gray"/>
-              전화번호
+              {this.props.parking.phoneNumber}
             </Text>
           </View>
+          <Text style={styles.info_box_title}>
+                결제가능수단
+              </Text>
+
+              <View style={styles.info_box}>
+                <View style={styles.info_box_contents}>
+                    <Text style={styles.info_box_text}/>
+                    
+                    <Text style={styles.info_box_data}>
+                      {this.props.parking.metpay ==''
+                      ?"정보없음"
+                      :this.props.parking.metpay
+                      }
+                    </Text>
+                </View>
+              </View>
 
               <Text style={styles.info_box_title}>
                 시간 요금
@@ -75,7 +100,10 @@ class MarkerDisplay extends Component {
                       기본요금
                     </Text>
                     <Text style={styles.info_box_data}>
-                      data
+                      {this.props.parking.basicTime ==''
+                      ?"정보없음"
+                      :this.props.parking.basicTime+"분/"+this.props.parking.basicCharge+"원"
+                      }
                     </Text>
                 </View>
                 <View style={styles.info_box}>
@@ -84,7 +112,10 @@ class MarkerDisplay extends Component {
                       추가요금
                     </Text>
                     <Text style={styles.info_box_data}>
-                      data
+                    {this.props.parking.addUnitTime ==''
+                      ?"정보없음"
+                      :this.props.parking.addUnitTime+"분당"+this.props.parking.addUnitCharge+"원"
+                      }
                     </Text>
                   </View>
                 </View>
@@ -99,7 +130,7 @@ class MarkerDisplay extends Component {
                       기본
                     </Text>
                     <Text style={styles.info_box_data}>
-                      data
+                    {this.props.parking.dayCmmtkt}원
                     </Text>
                 </View>
                 <View style={styles.info_box}>
@@ -108,7 +139,7 @@ class MarkerDisplay extends Component {
                       적용시간
                     </Text>
                     <Text style={styles.info_box_data}>
-                      data
+                    {this.props.parking.dayCmmtktAdjTime}분
                     </Text>
                   </View>
                 </View>
@@ -123,7 +154,7 @@ class MarkerDisplay extends Component {
                       기본
                     </Text>
                     <Text style={styles.info_box_data}>
-                      data
+                      {this.props.parking.monthCmmtkt}원
                     </Text>
                 </View>
               </View>
@@ -137,7 +168,7 @@ class MarkerDisplay extends Component {
                       평일
                     </Text>
                     <Text style={styles.info_box_data}>
-                      data
+                    {this.props.parking.weekdayOperOpenHhmm}~{this.props.parking.weekdayOperColseHhmm}
                     </Text>
                 </View>
                 <View style={styles.info_box}>
@@ -146,17 +177,7 @@ class MarkerDisplay extends Component {
                       토요일
                     </Text>
                     <Text style={styles.info_box_data}>
-                      data
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.info_box}>
-                  <View style={styles.info_box_contents}>
-                    <Text style={styles.info_box_text}>
-                      일요일
-                    </Text>
-                    <Text style={styles.info_box_data}>
-                      data
+                    {this.props.parking.satOperOperOpenHhmm}~{this.props.parking.satOperCloseHhmm}
                     </Text>
                   </View>
                 </View>
@@ -166,20 +187,24 @@ class MarkerDisplay extends Component {
                       공휴일
                     </Text>
                     <Text style={styles.info_box_data}>
-                      data
+                    {this.props.parking.holidayOperOpenHhmm}~{this.props.parking.holidayCloseOpenHhmm}
                     </Text>
                   </View>
                 </View>
               </View>
 
             <Text style={styles.info_box_title}>
-              부제시행구분<Text style={styles.info_box_data}>data</Text>
+              부제시행
               </Text>
-            <View style={styles.info_box}>
-              <Text style={styles.info_box_text}>
-                O or X
-              </Text>
-            </View>
+              <View style={styles.info_box}>
+                <View style={styles.info_box_contents}>
+                    <Text style={styles.info_box_text}/>
+                    
+                    <Text style={styles.info_box_data}>
+                      {this.props.parking.enforceSe}
+                    </Text>
+                </View>
+              </View>
               <Text style={styles.copyright_text}>
               본 저작물은 공공데이터활용지원센터에서 15년 작성하여 개방한 
               전국주차장정보표준데이터을 이용하였으며, 해당 저작물은 공공데이터활용지원센터에서 

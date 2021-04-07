@@ -7,11 +7,18 @@ import MarkerDisplay from './MarkerDisplay';
 import AnimatedHideView from 'react-native-animated-hide-view';
 import Search from './Search';
 import Icon from 'react-native-vector-icons/Ionicons';
-import CustomMarker from './CustomMarker';
+import MarkerRender from './MarkerRender';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Filter from './Filter';
 import PathDisplay from './PathDisplay';
 window = Dimensions.get('window');
+
+//0407 추가사항
+//맵 아이콘 css 수정 필요 zindex관련
+//필터 페이지 조건 맵이랑 연동 필요
+//현위치 버튼 AnimatedHideView열고 닫으면 없어지는 문제해결 필요
+//콜백함수 동기화 필요 
+//공영&민영 주차장 마커 색구분 할지
 
 export default class Main extends Component{
   constructor(props){
@@ -31,7 +38,8 @@ export default class Main extends Component{
         longitude:this.props.currPos.longitude,
         latitudeDelta: 0.00522,
         longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.00522
-      }
+      },
+      selectedParking:{},
     }
   }
   onPressZoomOut() {
@@ -106,7 +114,12 @@ export default class Main extends Component{
       ModalVisible:true,
     });
   }
-
+  setSelectedParking(parking){
+    this.setState({selectedParking:parking},()=>{
+      this._panel.show(window.height * 0.38);
+    }
+      )
+  }
   render(){
     return (
       <SafeAreaView style={styles.container}>
@@ -124,15 +137,13 @@ export default class Main extends Component{
             </TouchableOpacity>
           </View>
           }
-          <AnimatedHideView
-            visible={this.state.isSearchVisible}
-            style={styles.search_window}
-          >
+          {this.state.isSearchVisible&&
             <Search 
               closeSearch={this.closeSearch.bind(this)}
               setSearchedPlace={this.setSearchedPlace.bind(this)}
+              isSearchVisible={this.state.isSearchVisible}
             />
-          </AnimatedHideView>
+          }
           {!this.state.isSearchVisible&&!this.state.isFilterVisible&&
             <View style={StyleSheet.absoluteFillObject}>
               <MapView
@@ -151,12 +162,10 @@ export default class Main extends Component{
                 mapRef={ref => this.map = ref}
                 onRegionChange={(initialRegion)=>{this.onRegionChange(initialRegion)}}
             >
-              <Marker coordinate={{ latitude: this.props.currPos.latitude, longitude: this.props.currPos.longitude }}>
-                <CustomMarker/>
-              </Marker>
-              <Marker coordinate={{ latitude: this.props.currPos.latitude+0.0003, longitude: this.props.currPos.longitude+0.0032 }}>
-                <CustomMarker/>
-              </Marker>
+
+              <MarkerRender 
+              setSelectedParking={this.setSelectedParking.bind(this)}
+              />
               <Marker coordinate={{latitude: 35.2538633, longitude: 128.6402609}} onClick={this.toggleModal.bind(this)}/>
               {this.state.searchedPlace&&
                 <Marker coordinate={{ latitude: this.state.searchedPlaceData.latitude, longitude:  this.state.searchedPlaceData.longitude}}/>
@@ -175,8 +184,8 @@ export default class Main extends Component{
                   />
               </TouchableOpacity>
               <TouchableOpacity
-              style={styles.zoomin}
-              onPress={() => { this.onPressZoomIn() }}
+                style={styles.zoomin}
+                onPress={() => { this.onPressZoomIn() }}
               >
                 <Icon
                   name="add"
@@ -196,14 +205,14 @@ export default class Main extends Component{
               </TouchableOpacity>
             </View>
           }
-            {/* <AnimatedHideView
+            <AnimatedHideView
               visible={this.state.isFilterVisible}
               style={styles.filter_window}
             >
             <Filter 
               closeFilter={this.closeFilter.bind(this)}
             />
-          </AnimatedHideView> */}
+          </AnimatedHideView>
           <PathDisplay ModalVisible={this.state.ModalVisible}/>
             <SlidingUpPanel 
               ref={c => (this._panel = c)}
@@ -214,10 +223,12 @@ export default class Main extends Component{
               window.height * 0.7,
               window.height * 0.85,]}
             >              
-                    {/* 여기 마커데이터 전달*/}
-              <MarkerDisplay />
+
+              <MarkerDisplay 
+                parking={this.state.selectedParking}
+              />
             </SlidingUpPanel>
-  
+             
         </View>
       </SafeAreaView>
     )}
@@ -247,11 +258,6 @@ const styles = StyleSheet.create({
       color:'gray',
       marginTop:10,
       marginLeft:10
-    },
-    search_window:{
-      backgroundColor:'#fff',
-      width:'100%',
-      height:'100%'
     },
     filter_window:{
       backgroundColor:'#fff',
