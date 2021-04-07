@@ -16,63 +16,108 @@ export default class Filter extends Component{
   constructor(props){
     super(props);
     this.state={
-        all:true,
+        parkingAll:true,
         public:true,
         private:true,
         free:true,
-        }
-
+        price:{
+          max:0,
+          min:10000,
+        },
+        areaAll:true,
+        cctv:true,
+        vehicle:true,
+      }
     }
-    allcheck(){
-      console.log(this.state.all);
+    parkingAllCheck(){
       if(this.state.public && this.state.private && this.state.free){
-        this.setState({all:true});
+        this.setState({parkingAll:true});
       }
       if(!this.state.public || !this.state.private || !this.state.free){
-        this.setState({all:false});
+        this.setState({parkingAll:false});
       }
     }
-    allOnChenage(){
-      if(this.state.all == true){
-        this.setState({all:false, public:false, private:false, free:false})
+    parkingAllOnChenage(){
+      if(this.state.parkingAll == true){
+        this.setState({parkingAll:false, public:false, private:false, free:false})
       }
       else{
-        this.setState({all:true, public:true, private:true, free:true})
+        this.setState({parkingAll:true, public:true, private:true, free:true})
       }
     }
   publicOnChenage(){
     if(this.state.public == true){
       this.setState({public:false},()=>{
-        this.allcheck();
+        this.parkingAllCheck();
       })
     }
     else{
       this.setState({public:true},()=>{
-        this.allcheck();
+        this.parkingAllCheck();
       })
     }
   }
   privateOnChenage(){
     if(this.state.private == true){
       this.setState({private:false},()=>{
-        this.allcheck();
+        this.parkingAllCheck();
       })
     }
     else{
       this.setState({private:true},()=>{
-        this.allcheck();
+        this.parkingAllCheck();
       })
     }
   }
   freeOnChenage(){
     if(this.state.free == true){
       this.setState({free:false},()=>{
-        this.allcheck();
+        this.parkingAllCheck();
       })
     }
     else{
       this.setState({free:true},()=>{
-        this.allcheck();
+        this.parkingAllCheck();
+      })
+    }
+  }
+  areaAllCheck(){
+    if(this.state.cctv && this.state.vehicle){
+      this.setState({areaAll:true});
+    }
+    if(!this.state.cctv || !this.state.vehicle){
+      this.setState({areaAll:false});
+    }
+  }
+  areaAllOnChenage(){
+    if(this.state.areaAll == true){
+      this.setState({areaAll:false, cctv:false, vehicle:false})
+    }
+    else{
+      this.setState({areaAll:true, cctv:true, vehicle:true})
+    }
+  }
+  cctvOnChenage(){
+    if(this.state.cctv == true){
+      this.setState({cctv:false},()=>{
+        this.areaAllCheck();
+      })
+    }
+    else{
+      this.setState({cctv:true},()=>{
+        this.areaAllCheck();
+      })
+    }
+  }
+  vehicleOnChenage(){
+    if(this.state.vehicle == true){
+      this.setState({vehicle:false},()=>{
+        this.areaAllCheck();
+      })
+    }
+    else{
+      this.setState({vehicle:true},()=>{
+        this.areaAllCheck();
       })
     }
   }
@@ -106,10 +151,10 @@ export default class Filter extends Component{
                 </Text>
                 <ToggleSwitch
                 style={styles.filterSwitch}
-                isOn={this.state.all}
+                isOn={this.state.parkingAll}
                 onColor='#002166'
                 offColor='gray'
-                onToggle={()=>this.allOnChenage()}
+                onToggle={()=>this.parkingAllOnChenage()}
                 />
               </View>
             <View style={styles.filterBoxContents}>
@@ -138,7 +183,7 @@ export default class Filter extends Component{
               </View>
               <View style={styles.filterBoxContents}>
                 <Text style={styles.filterDivision}>
-                  무료?
+                  무료
                 </Text>
                 <ToggleSwitch
                 style={styles.filterSwitch}
@@ -149,7 +194,6 @@ export default class Filter extends Component{
                 />
               </View>
           </View>
-
           <Text style={styles.titleText}>
             불법주차구역
           </Text>
@@ -160,10 +204,10 @@ export default class Filter extends Component{
                 </Text>
                 <ToggleSwitch
                 style={styles.filterSwitch}
-                isOn={this.state.all}
+                isOn={this.state.areaAll}
                 onColor='#002166'
                 offColor='gray'
-                onToggle={()=>this.allOnChenage()}
+                onToggle={()=>this.areaAllOnChenage()}
                 />
               </View>
             <View style={styles.filterBoxContents}>
@@ -172,10 +216,10 @@ export default class Filter extends Component{
               </Text>
               <ToggleSwitch
                 style={styles.filterSwitch}
-                isOn={this.state.public}
+                isOn={this.state.vehicle}
                 onColor='#002166'
                 offColor='gray'
-                onToggle={()=>this.publicOnChenage()}
+                onToggle={()=>this.vehicleOnChenage()}
               />
             </View>
             <View style={styles.filterBoxContents}>
@@ -184,20 +228,12 @@ export default class Filter extends Component{
                 </Text>
                 <ToggleSwitch
                 style={styles.filterSwitch}
-                isOn={this.state.private}
+                isOn={this.state.cctv}
                 onColor='#002166'
                 offColor='gray'
-                onToggle={()=>this.privateOnChenage()}
+                onToggle={()=>this.cctvOnChenage()}
                 />
               </View>
-          </View>
-          <Text style={styles.titleText}>
-              가격
-          </Text>
-          <View style={styles.filterBox}>
-            <Text>
-              가격 설정 범위 추가 예정
-            </Text>
           </View>
         </ScrollView>
 

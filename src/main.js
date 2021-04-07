@@ -13,7 +13,6 @@ import Filter from './Filter';
 import PathDisplay from './PathDisplay';
 window = Dimensions.get('window');
 
-//AnimatedHideView 두번 쓰면 하나는 동작 X -> 0406 해결할 것
 export default class Main extends Component{
   constructor(props){
     super(props);

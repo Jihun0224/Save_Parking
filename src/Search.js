@@ -13,7 +13,7 @@ import { Input } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 window = Dimensions.get('window');
-const API_KEY = "15a8140307ddfaab85f5e8d5cf7ac751";
+const API_KEY = "";
 const request = debounce(() => {}, 500);
 
 export default class Search extends Component{
