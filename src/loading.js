@@ -13,11 +13,18 @@ export default class Loading extends Component{
 componentDidMount(){
   axios.get('http://api.data.go.kr/openapi/tn_pubr_prkplce_info_api?serviceKey=YOUR_KEY&type=json&instt_code=3280000')
   .then((Response)=>{
-    this.props.setParkingData(Response);
+    return parseInt(Response.data.response.body.totalCount)
+  })
+  .then((totalCount)=>{
+    axios.get(`http://api.data.go.kr/openapi/tn_pubr_prkplce_info_api?serviceKey=YOUR_KEY&type=json&numOfRows=10&instt_code=3280000`)
+    .then((Response)=>{
+      this.props.setParkingData(Response);
+    })
   })
   .catch((Error)=>{
       console.log(Error)
   })
+
 }
 
   render(){

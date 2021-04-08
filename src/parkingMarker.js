@@ -2,8 +2,9 @@ import React,{Component} from 'react';
 import { StyleSheet, ImageBackground,Text,View,Image } from 'react-native';
 import Speech_Bubble from './speech-bubble.png';
 
-export default class CustomMarker extends Component{
+export default class ParkingMarker extends Component{
     render(){
+      let price = 60/this.props.basicTime * this.props.price
         return (
         <View  style={styles.marker}>
             <ImageBackground
@@ -12,7 +13,7 @@ export default class CustomMarker extends Component{
                 style={styles.imageBackground}
                 imageStyle={{tintColor:"#002166"}}>
         <Text style={{color:'white', bottom:5}}>
-            {this.props.price}원
+          ₩{price}
         </Text>
       </ImageBackground>
       </View>

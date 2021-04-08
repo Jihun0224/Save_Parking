@@ -16,13 +16,13 @@ export default class Filter extends Component{
   constructor(props){
     super(props);
     this.state={
-        parkingAll:true,
-        public:true,
-        private:true,
-        free:true,
-        areaAll:true,
-        cctv:true,
-        vehicle:true,
+        parkingAll:this.props.filterOption.parkingAll,
+        public:this.props.filterOption.public,
+        private:this.props.filterOption.private,
+        free:this.props.filterOption.free,
+        areaAll:this.props.filterOption.areaAll,
+        cctv:this.props.filterOption.cctv,
+        vehicle:this.props.filterOption.vehicle,
       }
     }
     parkingAllCheck(){
@@ -117,8 +117,19 @@ export default class Filter extends Component{
       })
     }
   }
+  saveFilterOption(){
+    this.filterOption = {
+      parkingAll:this.state.parkingAll,
+      public:this.state.public,
+      private:this.state.private,
+      free:this.state.free,
+      areaAll:this.state.areaAll,
+      cctv:this.state.cctv,
+      vehicle:this.state.vehicle,
+    }
+    this.props.saveFilterOption(this.filterOption);
+  }
   render(){
-
     return (
       <SafeAreaView style={styles.container}>
           <View style={styles.header}>
@@ -234,7 +245,9 @@ export default class Filter extends Component{
         </ScrollView>
 
         <View style={styles.applyButton}>
-          <TouchableOpacity>
+          <TouchableOpacity 
+            onPress={()=>{this.saveFilterOption()}}
+          >
             <Text style={styles.applyButtonText}>
               검색 필터 적용
             </Text>

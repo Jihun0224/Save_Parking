@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Filter from './Filter';
 import PathDisplay from './PathDisplay';
-import CustomMarker from './CustomMarker';
+import ParkingMarker from './parkingMarker';
 window = Dimensions.get('window');
 
 //0407 추가 필요 기록
@@ -28,7 +28,6 @@ export default class Main extends Component{
       searchedPlace:false,
       isListingSelected: false,
       ModalVisible: false,
-      panelVisible:false,
       selectedParking:{},
       searchedPlaceData:{
         latitude:0,
@@ -39,6 +38,22 @@ export default class Main extends Component{
         longitude:this.props.currPos.longitude,
         latitudeDelta: 0.00522,
         longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.00522
+      },
+      history:[{
+        name:'',
+        id:'0',
+        latitude:'',
+        longitude:'',
+        address_name:'',
+      }],
+      filterOption:{
+        parkingAll:true,
+        public:true,
+        private:true,
+        free:true,
+        areaAll:true,
+        cctv:true,
+        vehicle:true,
       },
     }
   }
@@ -80,8 +95,31 @@ export default class Main extends Component{
   closeSearch(){
     this.setState({isSearchVisible:false});
   }
+  addHistory(place){
+    this.setState(
+      {history:[...this.state.history,
+              {name:place.name, 
+              id:place.id,
+              longitude:place.longitude, 
+              latitude:place.latitude,
+              address_name:place.address_name}],
+    })
+  }
   closeFilter(){
     this.setState({isFilterVisible:false});
+  }
+  saveFilterOption(filterOption){
+    this.setState({
+      filterOption:{parkingAll:filterOption.parkingAll,
+                    public:filterOption.public,
+                    private:filterOption.private,
+                    free:filterOption.free,
+                    areaAll:filterOption.areaAll,
+                    cctv:filterOption.cctv,
+                    vehicle:filterOption.vehicle,
+    }},()=>{
+      this.closeFilter();
+    })
   }
   setSearchedPlace(searchedPlace){
     this.region = {
@@ -114,13 +152,10 @@ export default class Main extends Component{
   }
   setSelectedParking(parking){
     this.setState({selectedParking:parking},()=>{
-      this.setState({panelVisible:true},()=>{
         this._panel.show(window.height * 0.38,1000);
       });
-      
     }
-      )
-  }
+      
   getCurrentPosition(){
 
     this.map.animateToRegion(
@@ -134,9 +169,7 @@ export default class Main extends Component{
         )
     
   }
-  onBackButtonPress(){
-    this.setState({panelVisible:false})
-  }
+
   render(){
     return (
       <SafeAreaView style={styles.container}>
@@ -160,6 +193,8 @@ export default class Main extends Component{
               setSearchedPlace={this.setSearchedPlace.bind(this)}
               isSearchVisible={this.state.isSearchVisible}
               currPos={this.props.currPos}
+              history={this.state.history}
+              addHistory={this.addHistory.bind(this)}
             />
           }
           {!this.state.isSearchVisible&&!this.state.isFilterVisible&&
@@ -181,11 +216,14 @@ export default class Main extends Component{
                 onRegionChange={(initialRegion)=>{this.onRegionChange(initialRegion)}}
             >
 
-                    {this.props.parking.map((parking) => (
-                            <Marker key= {parking.prkplceNo} onPress={()=>{this.setSelectedParking(parking)}} coordinate={{ latitude: parseFloat(parking.latitude), longitude: parseFloat(parking.longitude) }}>
-                                <CustomMarker price={parking.basicCharge}/>
-                            </Marker> 
-                    ))}
+                {this.props.parking.map((parking) => (
+                        <Marker key= {parking.prkplceNo} onPress={()=>{this.setSelectedParking(parking)}} coordinate={{ latitude: parseFloat(parking.latitude), longitude: parseFloat(parking.longitude) }}>
+                            <ParkingMarker 
+                            price={parking.basicCharge}
+                            basicTime={parking.basicTime}
+                            />
+                        </Marker> 
+                ))}
               <Marker coordinate={{latitude: 35.2538633, longitude: 128.6402609}} onClick={this.toggleModal.bind(this)}/>
               {this.state.searchedPlace&&
                 <Marker coordinate={{ latitude: this.state.searchedPlaceData.latitude, longitude:  this.state.searchedPlaceData.longitude}}/>
@@ -243,15 +281,15 @@ export default class Main extends Component{
             >
             <Filter 
               closeFilter={this.closeFilter.bind(this)}
+              filterOption={this.state.filterOption}
+              saveFilterOption={this.saveFilterOption.bind(this)}
             />
           </AnimatedHideView>
           <PathDisplay ModalVisible={this.state.ModalVisible}/>
-            {this.state.panelVisible&&
               <SlidingUpPanel 
                 ref={c => (this._panel = c)}
                 style={styles.panel}
                 backdropOpacity={0}
-                onBackButtonPress={()=>{this.onBackButtonPress()}}
                 snappingPoints={[
                 window.height * 0.38,
                 window.height * 0.7,
@@ -260,10 +298,7 @@ export default class Main extends Component{
               <MarkerDisplay 
                 parking={this.state.selectedParking}
               />
-            </SlidingUpPanel>
-            }
-
-             
+            </SlidingUpPanel>                  
         </View>
       </SafeAreaView>
     )}

@@ -34,13 +34,7 @@ export default class Search extends Component{
           longitude:'',
           address_name:'',
         }],
-        history:[{
-          name:'',
-          id:'0',
-          latitude:'',
-          longitude:'',
-          address_name:'',
-        }],
+        history:this.props.history,
     }
     this.searchTextInputChanged = this.searchTextInputChanged.bind(this);
     this.PlaceOnpress = this.PlaceOnpress.bind(this);
@@ -112,14 +106,9 @@ export default class Search extends Component{
       this.setState(
         {searchedPlace:{longitude:place.longitude, 
                         latitude:place.latitude},
-        history:[...this.state.history,
-                {name:place.name, 
-                id:place.id,
-                longitude:place.longitude, 
-                latitude:place.latitude,
-                address_name:place.address_name}],
         searchedText:'',
     },()=>{
+      this.props.addHistory(place)
       this.props.setSearchedPlace(this.state.searchedPlace);
       this.props.closeSearch();
     })
