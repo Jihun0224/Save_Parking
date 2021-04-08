@@ -9,17 +9,34 @@ export default class App extends Component{
         super(props);
         this.state={
             currPos:{latitude:35.2538433 , longitude:128.6402609}, //최초 좌표객체[위도,경도]
-            isLoading: true,
+            isGetPositionLoading: true,
+            isParkingDataLoading:true,
+            parking:[],
+            Loading:true,
         }
+    }
+    setParkingData(Response){
+        for(let i =0; i<Response.data.response.body.items.length; i++){
+            this.setState({parking:[...this.state.parking,
+              Response.data.response.body.items[i]]
+            })
+        }
+        this.setState({isParkingDataLoading:false})
     }
     async componentDidMount(){
         await this.requestLocationPermission()
      }
+     
     render(){
         return(
-          this.state.isLoading 
-          ?<Loading/>
-          :<Main currPos={this.state.currPos}/>
+          this.state.isGetPositionLoading == false&&this.state.isParkingDataLoading == false
+          ?<Main 
+            parking={this.state.parking}
+            currPos={this.state.currPos}
+           />
+          :<Loading 
+            setParkingData={this.setParkingData.bind(this)}
+           />
         );         
     }
 
@@ -31,7 +48,7 @@ export default class App extends Component{
             if(granted== PermissionsAndroid.RESULTS.GRANTED){
                 Geolocation.getCurrentPosition( (position)=>{
                     this.setState({currPos: position.coords},()=>{
-                        this.setState({isLoading:false});
+                        this.setState({isGetPositionLoading:false});
                     });
                 }, 
                 (error)=>{
@@ -39,7 +56,7 @@ export default class App extends Component{
                 });
             }else{
                 alert('위치정보 사용을 거부하셨습니다.\n앱의 기능사용이 제한됩니다.');
-                this.setState({isLoading:false});
+                this.setState({isGetPositionLoading:false});
 
             }
         }catch(err){alert('퍼미션 작업 에러');}

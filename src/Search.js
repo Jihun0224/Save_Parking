@@ -54,7 +54,7 @@ export default class Search extends Component{
     this.debouceRequest(text);
     this.setState({ searchedText: text, searchLoaing:true },()=>{
       if(this.state.searchedText != ''){
-              fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?y=35.2538433&x=128.6402609&radius=20000&query=${this.state.searchedText}`, {
+              fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?y=${parseFloat(this.props.currPos.latitude)}&x=${parseFloat(this.props.currPos.longitude)}&radius=20000&query=${this.state.searchedText}`, {
         headers: {
           Authorization: `KakaoAK ${API_KEY}` 
         }

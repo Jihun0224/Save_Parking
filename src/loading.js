@@ -1,13 +1,39 @@
-import React from 'react';
-import { StyleSheet, Text, View,ActivityIndicator } from 'react-native';
+import React,{Component} from 'react';
+import { StyleSheet, Text, View,ActivityIndicator, Dimensions } from 'react-native';
+import axios from 'axios';
+window = Dimensions.get('window');
 
-export default function Loading() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>SaveParking</Text>
-      <ActivityIndicator size="small" color="#00ff00" />
-    </View>
-  );
+export default class Loading extends Component{
+  constructor(props){
+    super(props);
+    this.state={
+        parking:[],
+    }
+  }
+componentDidMount(){
+  axios.get('http://api.data.go.kr/openapi/tn_pubr_prkplce_info_api?serviceKey=YOUR_KEY&type=json&instt_code=3280000')
+  .then((Response)=>{
+    this.props.setParkingData(Response);
+  })
+  .catch((Error)=>{
+      console.log(Error)
+  })
+}
+
+  render(){
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>
+          거기 멈춰
+        </Text>
+        <ActivityIndicator 
+          style={styles.indicator}
+          size="large" 
+          color="#fff" 
+        />
+      </View>
+    );
+}
 }
 const styles = StyleSheet.create({
     container: {
@@ -15,12 +41,16 @@ const styles = StyleSheet.create({
       justifyContent:"flex-start",
       paddingHorizontal:30,
       paddingVertical:100,
-      backgroundColor: "#FDF6AA",
+      backgroundColor: "#002166",
 
     },
     text:{
-        color:"#2c2c2c",
+        color:"#fff",
         fontSize: 30,
-
+    },
+    indicator:{
+      position:'absolute',
+      top:window.height/2,
+      left:window.width/2
     }
   });

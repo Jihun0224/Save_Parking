@@ -7,16 +7,15 @@ import MarkerDisplay from './MarkerDisplay';
 import AnimatedHideView from 'react-native-animated-hide-view';
 import Search from './Search';
 import Icon from 'react-native-vector-icons/Ionicons';
-import MarkerRender from './MarkerRender';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Filter from './Filter';
 import PathDisplay from './PathDisplay';
+import CustomMarker from './CustomMarker';
 window = Dimensions.get('window');
 
-//0407 추가사항
+//0407 추가 필요 기록
 //맵 아이콘 css 수정 필요 zindex관련
 //필터 페이지 조건 맵이랑 연동 필요
-//현위치 버튼 AnimatedHideView열고 닫으면 없어지는 문제해결 필요
 //콜백함수 동기화 필요 
 //공영&민영 주차장 마커 색구분 할지
 
@@ -27,19 +26,20 @@ export default class Main extends Component{
       isSearchVisible:false,
       isFilterVisible:false,
       searchedPlace:false,
+      isListingSelected: false,
       ModalVisible: false,
+      panelVisible:false,
+      selectedParking:{},
       searchedPlaceData:{
         latitude:0,
         longitude:0,
       },
-      marginBottom:1,
       currPos:{
         latitude:this.props.currPos.latitude,
         longitude:this.props.currPos.longitude,
         latitudeDelta: 0.00522,
         longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.00522
       },
-      selectedParking:{},
     }
   }
   onPressZoomOut() {
@@ -104,11 +104,9 @@ export default class Main extends Component{
       }
     })
   }
-  _onMapReady = () => this.setState({marginBottom: 0}) 
   onRegionChange(region) {
     this.setState({ currPos:region });
   }
-
   toggleModal(){
     this.setState({
       ModalVisible:true,
@@ -116,9 +114,28 @@ export default class Main extends Component{
   }
   setSelectedParking(parking){
     this.setState({selectedParking:parking},()=>{
-      this._panel.show(window.height * 0.38);
+      this.setState({panelVisible:true},()=>{
+        this._panel.show(window.height * 0.38,1000);
+      });
+      
     }
       )
+  }
+  getCurrentPosition(){
+
+    this.map.animateToRegion(
+          {
+            latitude: this.props.currPos.latitude,
+            longitude: this.props.currPos.longitude,
+            latitudeDelta: 0.00522,
+            longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.00522
+          },
+          1000
+        )
+    
+  }
+  onBackButtonPress(){
+    this.setState({panelVisible:false})
   }
   render(){
     return (
@@ -142,20 +159,21 @@ export default class Main extends Component{
               closeSearch={this.closeSearch.bind(this)}
               setSearchedPlace={this.setSearchedPlace.bind(this)}
               isSearchVisible={this.state.isSearchVisible}
+              currPos={this.props.currPos}
             />
           }
           {!this.state.isSearchVisible&&!this.state.isFilterVisible&&
             <View style={StyleSheet.absoluteFillObject}>
               <MapView
                 initialRegion={this.state.currPos}
-                style={{flex:1, marginBottom: this.state.marginBottom}}
+                style={{flex:1}}
                 mapPadding={{ top: 100, right: 0, bottom: 0, left: 0 }}
                 onMapReady={this._onMapReady}
                 showsUserLocation={true}
                 provider={PROVIDER_GOOGLE}
                 showsMyLocationButton={true}
                 followUserLocation={true}
-                minPoints={2}
+                minPoints={5}
                 minZoom={3}
                 clusterColor={"#002166"}
                 zoomEnabled={true}
@@ -163,14 +181,28 @@ export default class Main extends Component{
                 onRegionChange={(initialRegion)=>{this.onRegionChange(initialRegion)}}
             >
 
-              <MarkerRender 
-              setSelectedParking={this.setSelectedParking.bind(this)}
-              />
+                    {this.props.parking.map((parking) => (
+                            <Marker key= {parking.prkplceNo} onPress={()=>{this.setSelectedParking(parking)}} coordinate={{ latitude: parseFloat(parking.latitude), longitude: parseFloat(parking.longitude) }}>
+                                <CustomMarker price={parking.basicCharge}/>
+                            </Marker> 
+                    ))}
               <Marker coordinate={{latitude: 35.2538633, longitude: 128.6402609}} onClick={this.toggleModal.bind(this)}/>
               {this.state.searchedPlace&&
                 <Marker coordinate={{ latitude: this.state.searchedPlaceData.latitude, longitude:  this.state.searchedPlaceData.longitude}}/>
               }
             </MapView>
+                  <TouchableOpacity
+                    style={styles.myLocation}
+                    onPress={() => {
+                      this.getCurrentPosition()
+                    }}
+                  >
+                <MaterialIcons 
+                  name='crosshairs-gps' 
+                  style={{...styles.icon,backgroundColor: 'rgba(255, 255, 255, 0.6)',color: 'rgba(0, 0, 0, 0.6)'}}
+                  size={25} 
+                />
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={()=>{
                   this.setState({isFilterVisible:true});
@@ -214,20 +246,23 @@ export default class Main extends Component{
             />
           </AnimatedHideView>
           <PathDisplay ModalVisible={this.state.ModalVisible}/>
-            <SlidingUpPanel 
-              ref={c => (this._panel = c)}
-              style={styles.panel}
-              backdropOpacity={0}
-              snappingPoints={[
-              window.height * 0.38,
-              window.height * 0.7,
-              window.height * 0.85,]}
-            >              
-
+            {this.state.panelVisible&&
+              <SlidingUpPanel 
+                ref={c => (this._panel = c)}
+                style={styles.panel}
+                backdropOpacity={0}
+                onBackButtonPress={()=>{this.onBackButtonPress()}}
+                snappingPoints={[
+                window.height * 0.38,
+                window.height * 0.7,
+                window.height * 0.85,]}
+              >              
               <MarkerDisplay 
                 parking={this.state.selectedParking}
               />
             </SlidingUpPanel>
+            }
+
              
         </View>
       </SafeAreaView>
@@ -289,4 +324,10 @@ const styles = StyleSheet.create({
       zIndex:2,
       left:window.width-50
     },
+    myLocation:{
+      position:'absolute',
+      top:110,
+      zIndex:2,
+      left:window.width-50,
+    }
   });
