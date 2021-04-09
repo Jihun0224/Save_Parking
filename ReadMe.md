@@ -12,7 +12,7 @@
 + OS: Android, Window OS
 + Framework: React Native
 + IDE: Visual Studio Code  
-+ DB: Mongodb
++ DB: Firebase Realtime Database
 + DEVICE: Android Emulator  
     >CPU/ABI: Google Play Intel Atom (x86)   
     Target: google_apis_playstore [Google Play] (API level 29)   
@@ -22,21 +22,23 @@
 + 카카오 장소 API  
 + 구글맵 API
 ## 사용 라이브러리
-+ axios: 0.21.1,
-+ lodash: 4.17.21,
-+ patch-package: 6.4.7,
-+ react: 16.13.1,
-+ react-native: 0.63.4,
-+ react-native-animated-hide-view: 1.0.0,
-+ react-native-elements: 3.3.0,
-+ react-native-geolocation-service: 5.2.0,
-+ react-native-gesture-handler: 1.10.3,
-+ react-native-map-clustering: 3.4.2,
-+ react-native-maps: 0.27.1,
-+ react-native-reanimated: 2.0.0,
-+ react-native-safe-area-context: 3.2.0,
-+ react-native-vector-icons: 8.1.0,
-+ rn-sliding-up-panel: 2.4.5,
++ @react-native-firebase/app: 11.2.0
++ @react-native-firebase/database: 11.2.0
++ axios: 0.21.1
++ lodash: 4.17.21
++ patch-package: 6.4.7
++ react: 16.13.1
++ react-native: 0.63.4
++ react-native-animated-hide-view: 1.0.0
++ react-native-elements: 3.3.0
++ react-native-geolocation-service: 5.2.0
++ react-native-gesture-handler: 1.10.3
++ react-native-map-clustering: 3.4.2
++ react-native-maps: 0.27.1
++ react-native-reanimated: 2.0.0
++ react-native-safe-area-context: 3.2.0
++ react-native-vector-icons: 8.1.0
++ rn-sliding-up-panel: 2.4.5
 + toggle-switch-react-native: 3.2.0
 ## Install
  -

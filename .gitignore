@@ -60,3 +60,6 @@ buck-out/
 
 #API KEY
 .env
+
+#google-services
+android\app\google-services.json

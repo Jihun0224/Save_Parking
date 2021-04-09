@@ -13,7 +13,7 @@ import PathDisplay from './PathDisplay';
 import ParkingMarker from './parkingMarker';
 window = Dimensions.get('window');
 
-//0407 추가 필요 기록
+//추가 필요 기록
 //맵 아이콘 css 수정 필요 zindex관련
 //필터 페이지 조건 맵이랑 연동 필요
 //콜백함수 동기화 필요 

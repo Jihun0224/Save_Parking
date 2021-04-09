@@ -3,6 +3,8 @@ import {PermissionsAndroid} from 'react-native';
 import Main from "./src/main";
 import Geolocation from 'react-native-geolocation-service';
 import Loading from './src/loading';
+import database from '@react-native-firebase/database';
+ 
 export default class App extends Component{
  
     constructor(props){
@@ -13,8 +15,19 @@ export default class App extends Component{
             isParkingDataLoading:true,
             parking:[],
             Loading:true,
+            data:[],
         }
     }
+    //DB 연동 Test
+    getData = () => {
+        database()
+        .ref(`/`)
+        .once('value', function(snapshot) {  snapshot.forEach(function(userSnapshot) {
+                const id = userSnrapshot.key;
+                const userData = userSnapshot.val();
+            console.log(userData.name);
+});});
+      }
     setParkingData(Response){
         for(let i =0; i<Response.data.response.body.items.length; i++){
             this.setState({parking:[...this.state.parking,
@@ -24,6 +37,7 @@ export default class App extends Component{
         this.setState({isParkingDataLoading:false})
     }
     async componentDidMount(){
+        this.getData()
         await this.requestLocationPermission()
      }
      

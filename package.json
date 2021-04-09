@@ -11,7 +11,8 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@ptomasroos/react-native-multi-slider": "2.2.2",
+    "@react-native-firebase/app": "11.2.0",
+    "@react-native-firebase/database": "11.2.0",
     "axios": "0.21.1",
     "lodash": "4.17.21",
     "patch-package": "6.4.7",

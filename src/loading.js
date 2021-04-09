@@ -17,12 +17,12 @@ export default class Loading extends Component{
     }
   }
 componentDidMount(){
-  axios.get('http://api.data.go.kr/openapi/tn_pubr_prkplce_info_api?serviceKey=EFoCqYt%2BLkiQlVlyq5YnUJ85Rlw80roqfZCNNS4sMikQ4aL4vFP3kDp7wxo9WD1O17l1SHxG3Wq45XyxMZLLFA%3D%3D&type=json&instt_code=3280000')
+  axios.get('http://api.data.go.kr/openapi/tn_pubr_prkplce_info_api?serviceKey=YOUR_KEY&type=json&instt_code=3280000')
   .then((Response)=>{
     return parseInt(Response.data.response.body.totalCount)
   })
   .then((totalCount)=>{
-    axios.get(`http://api.data.go.kr/openapi/tn_pubr_prkplce_info_api?serviceKey=EFoCqYt%2BLkiQlVlyq5YnUJ85Rlw80roqfZCNNS4sMikQ4aL4vFP3kDp7wxo9WD1O17l1SHxG3Wq45XyxMZLLFA%3D%3D&type=json&numOfRows=10&instt_code=3280000`)
+    axios.get(`http://api.data.go.kr/openapi/tn_pubr_prkplce_info_api?serviceKey=YOUR_KEY&type=json&numOfRows=10&instt_code=3280000`)
     .then((Response)=>{
       this.props.setParkingData(Response);
     })

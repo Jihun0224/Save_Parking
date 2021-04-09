@@ -17,6 +17,10 @@ target 'SaveParking' do
 
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
+  pod 'RNFBDatabase', :path => '../node_modules/@react-native-firebase/database'
+
   target 'SaveParkingTests' do
     inherit! :complete
     # Pods for testing
