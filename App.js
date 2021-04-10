@@ -22,11 +22,13 @@ export default class App extends Component{
     getData = () => {
         database()
         .ref(`/`)
-        .once('value', function(snapshot) {  snapshot.forEach(function(userSnapshot) {
-                const id = userSnrapshot.key;
+        .once('value', function(snapshot) {  
+            snapshot.forEach(function(userSnapshot) {
+                const id = userSnapshot.key;
                 const userData = userSnapshot.val();
             console.log(userData.name);
-});});
+    });
+});
       }
     setParkingData(Response){
         for(let i =0; i<Response.data.response.body.items.length; i++){

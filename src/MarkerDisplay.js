@@ -68,10 +68,12 @@ class MarkerDisplay extends Component {
               <Ionicons name="time-outline" size={24} color="gray"/>
               {this.props.parking.weekdayOperOpenHhmm}~{this.props.parking.weekdayOperColseHhmm}
             </Text>
-            <Text style={styles.main_info_box_text}>
-              <Ionicons name="call-outline" size={24} color="gray"/>
-              {this.props.parking.phoneNumber}
-            </Text>
+            <TouchableOpacity onPress={()=>Linking.openURL(`tel:${this.props.parking.phoneNumber}`)}>
+              <Text style={styles.phoneNumber}>
+                <Ionicons name="call-outline" size={24} color="gray"/>
+                {this.props.parking.phoneNumber}
+              </Text>
+            </TouchableOpacity>
           </View>
           <Text style={styles.info_box_title}>
                 결제가능수단
@@ -325,6 +327,16 @@ const styles = {
     paddingTop:50,
     paddingBottom:60
   },
+  phoneNumber:{
+    width:'100%',
+    borderBottomWidth: 1,
+    borderBottomColor: "#dee2e6",
+    fontSize:20,
+    paddingBottom:10,
+    paddingLeft:10 ,
+    paddingTop:10,
+    color:'#002166'
+  }
 }
 
 export default MarkerDisplay;
