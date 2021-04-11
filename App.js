@@ -26,7 +26,7 @@ export default class App extends Component{
             snapshot.forEach(function(userSnapshot) {
                 const id = userSnapshot.key;
                 const userData = userSnapshot.val();
-            console.log(userData.name);
+            console.log(userData.records);
     });
 });
       }

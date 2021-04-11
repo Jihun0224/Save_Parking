@@ -21,6 +21,8 @@ target 'SaveParking' do
 
   pod 'RNFBDatabase', :path => '../node_modules/@react-native-firebase/database'
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
   target 'SaveParkingTests' do
     inherit! :complete
     # Pods for testing
