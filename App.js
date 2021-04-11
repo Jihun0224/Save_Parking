@@ -16,34 +16,26 @@ export default class App extends Component{
             isParkingDataLoading:true,
             parking:[],
             Loading:true,
-            data:[],
         }
     }
     //DB 연동 Test
     getData = () => {
         database()
         .ref(`/`)
-        .once('value', function(snapshot) {  
-            snapshot.forEach(function(userSnapshot) {
-                const id = userSnapshot.key;
-                const userData = userSnapshot.val();
-            console.log(userData.records);
-    });
-});
-      }
-    setParkingData(Response){
-        for(let i =0; i<Response.data.response.body.items.length; i++){
-            this.setState({parking:[...this.state.parking,
-              Response.data.response.body.items[i]]
+        .on('value', (snapshot) => {
+            this.setState({
+                parking: snapshot.val()
+            },()=>{
+                this.setState({isParkingDataLoading:false},()=>{
+                    SplashScreen.hide();
+                })
             })
-        }
-        this.setState({isParkingDataLoading:false},()=>{
-            SplashScreen.hide();
-        })
-    }
+          });
+}
+
     async componentDidMount(){
-        this.getData()
         await this.requestLocationPermission()
+        this.getData()
      }
      
     render(){
@@ -53,9 +45,7 @@ export default class App extends Component{
             parking={this.state.parking}
             currPos={this.state.currPos}
            />
-          :<Loading 
-            setParkingData={this.setParkingData.bind(this)}
-           />
+          :<Loading/>
         );         
     }
 
