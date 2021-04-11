@@ -4,7 +4,8 @@ import Main from "./src/main";
 import Geolocation from 'react-native-geolocation-service';
 import Loading from './src/loading';
 import database from '@react-native-firebase/database';
- 
+import SplashScreen from 'react-native-splash-screen'
+
 export default class App extends Component{
  
     constructor(props){
@@ -36,7 +37,9 @@ export default class App extends Component{
               Response.data.response.body.items[i]]
             })
         }
-        this.setState({isParkingDataLoading:false})
+        this.setState({isParkingDataLoading:false},()=>{
+            SplashScreen.hide();
+        })
     }
     async componentDidMount(){
         this.getData()

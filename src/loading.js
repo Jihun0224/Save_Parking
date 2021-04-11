@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
       justifyContent:"flex-start",
       paddingHorizontal:30,
       paddingVertical:100,
-      backgroundColor: "#002166",
+      backgroundColor: "#1a2c54",
 
     },
     text:{
