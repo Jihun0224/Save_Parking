@@ -32,7 +32,7 @@ export default class cctvMarker extends Component{
         alignItems: 'center',
     },
     CCTV: {
-      width: 30,
+      width: 28,
       height: 30,
       justifyContent: 'center',
       alignItems: 'center',

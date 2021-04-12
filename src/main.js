@@ -11,6 +11,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Filter from './Filter';
 import PathDisplay from './PathDisplay';
 import ParkingMarker from './parkingMarker';
+import Parking from './ParkingControlArea.json';
+import CctvMarker from './cctvMarker';
 window = Dimensions.get('window');
 
 //추가 필요 기록
@@ -23,6 +25,7 @@ export default class Main extends Component{
   constructor(props){
     super(props);
     this.state={
+      indexNumber:0,
       isSearchVisible:false,
       isFilterVisible:false,
       searchedPlace:false,
@@ -56,6 +59,8 @@ export default class Main extends Component{
         vehicle:true,
       },
     }
+    
+    this.toggleModal = this.toggleModal.bind(this)
   }
   onPressZoomOut() {
     this.region = {
@@ -150,6 +155,12 @@ export default class Main extends Component{
       ModalVisible:true,
     });
   }
+  settoggleModal(index){
+    this.setState({
+      ModalVisible:true,
+      indexNumber:index,
+    });
+  }
   setSelectedParking(parking){
     this.setState({selectedParking:parking},()=>{
         this._panel.show(window.height * 0.38,1000);
@@ -224,7 +235,15 @@ export default class Main extends Component{
                             />
                         </Marker> 
                 ))}
-              <Marker coordinate={{latitude: 35.2538633, longitude: 128.6402609}} onClick={this.toggleModal.bind(this)}/>
+
+                {Parking.getIlglWkstInfo.item.map((item, index) => 
+                <Marker 
+                key={index} coordinate={{latitude: parseFloat(item.gpsY), longitude: parseFloat(item.gpsX)}}
+                onPress={this.settoggleModal.bind(this,index)}
+                >
+                  <CctvMarker/>
+                </Marker>
+                )}
               {this.state.searchedPlace&&
                 <Marker coordinate={{ latitude: this.state.searchedPlaceData.latitude, longitude:  this.state.searchedPlaceData.longitude}}/>
               }
@@ -285,7 +304,7 @@ export default class Main extends Component{
               saveFilterOption={this.saveFilterOption.bind(this)}
             />
           </AnimatedHideView>
-          <PathDisplay ModalVisible={this.state.ModalVisible}/>
+          <PathDisplay ModalVisible={this.state.ModalVisible} setVisible={this.toggleModal} indexNumber={this.state.indexNumber}/>
               <SlidingUpPanel 
                 ref={c => (this._panel = c)}
                 style={styles.panel}

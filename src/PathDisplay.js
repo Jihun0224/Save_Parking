@@ -1,9 +1,8 @@
 import React,{Component} from 'react';
 import { TouchableOpacity } from 'react-native';
-import {SafeAreaView, View, Text, Modal, Button} from 'react-native';
-import { colors } from 'react-native-elements';
+import {SafeAreaView, View, Text, Modal} from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-
+import Parking from './ParkingControlArea.json';
 
 class PathDisplay extends Component {
     constructor(props){
@@ -21,27 +20,27 @@ class PathDisplay extends Component {
             <Modal 
             animationType='slide'
             transparent={true}
-            visible={this.state.ModalVisible}
+            visible={this.props.ModalVisible}
             >
                 <View style={styles.modalView}>
                     <View style={styles.close_button}>
-                        <TouchableOpacity onPress={() => this.setState({ModalVisible:false})}>
+                        <TouchableOpacity onPress={this.props.setVisible}>
                             <Text>
                                  <FeatherIcon style={styles.backIcon} name="arrow-left" size={24} color="gray"/>
                             </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.cctv}>
-                        <Text style={styles.cctv_text}>CCTV</Text>
+                        <Text style={styles.cctv_text}>{Parking.getIlglWkstInfo.item[this.props.indexNumber].ctlType}</Text>
                     </View>
                     <View style={styles.time}>
-                        <Text style={styles.time_text}>단속시간 07:15</Text>
+                        <Text style={styles.time_text}>최근 단속시간 {Parking.getIlglWkstInfo.item[this.props.indexNumber].violTm}</Text>
                     </View>
                     <View style={styles.numbersoftime}>
                         <Text style={styles.numbersoftime_text}>다수</Text>
                     </View>
                     <View style={styles.address}>
-                        <Text style={styles.address_text}>경상남도 창원시 의창구 사림동 8-15</Text>
+                        <Text style={styles.address_text}>{Parking.getIlglWkstInfo.item[this.props.indexNumber].violPlcNm}</Text>
                     </View>
                 </View>
             </Modal>     
@@ -71,10 +70,10 @@ const styles = {
         position: 'absolute',
         width: '50%',
         left: 50,
-        top: 25,
+        top: 35,
     },
     cctv_text:{
-        fontSize: 30,
+        fontSize: 23,
         fontWeight: 'bold',
         color: 'blue',
     },
@@ -91,8 +90,8 @@ const styles = {
     },
     time:{
         width:'50%',
-        top: 35,
-        left: 160,
+        top: 40,
+        left: 240,
     },
     time_text:{
         fontSize: 17,
