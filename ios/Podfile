@@ -15,13 +15,14 @@ target 'SaveParking' do
 
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
-  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
   pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
 
   pod 'RNFBDatabase', :path => '../node_modules/@react-native-firebase/database'
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
+  pod 'react-native-nmap', :path => '../node_modules/react-native-nmap'
 
   target 'SaveParkingTests' do
     inherit! :complete

@@ -20,11 +20,10 @@
     SD Card: 512M
 ## 사용 API
 + 카카오 장소 API  
-+ 구글맵 API
++ 네이버맵 API
 ## 사용 라이브러리
 + @react-native-firebase/app: 11.2.0
 + @react-native-firebase/database: 11.2.0
-+ axios: 0.21.1
 + lodash: 4.17.21
 + patch-package: 6.4.7
 + react: 16.13.1
@@ -33,8 +32,7 @@
 + react-native-elements: 3.3.0
 + react-native-geolocation-service: 5.2.0
 + react-native-gesture-handler: 1.10.3
-+ react-native-map-clustering: 3.4.2
-+ react-native-maps: 0.27.1
++ react-native-nmap: 0.59
 + react-native-reanimated: 2.0.0
 + react-native-safe-area-context: 3.2.0
 + react-native-vector-icons: 8.1.0

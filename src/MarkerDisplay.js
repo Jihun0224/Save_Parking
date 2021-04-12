@@ -116,7 +116,7 @@ class MarkerDisplay extends Component {
                     <Text style={styles.info_box_data}>
                     {this.props.parking.addUnitTime ==''
                       ?"정보없음"
-                      :this.props.parking.addUnitTime+"분당"+this.props.parking.addUnitCharge+"원"
+                      :this.props.parking.addUnitTime+"분/"+this.props.parking.addUnitCharge+"원"
                       }
                     </Text>
                   </View>

@@ -3,6 +3,7 @@ import { StyleSheet, ImageBackground,Text,View,Image } from 'react-native';
 import Speech_Bubble from './images//speech-bubble.png';
 
 export default class ParkingMarker extends Component{
+
     render(){
       let price = 60/this.props.basicTime * this.props.price
         return (

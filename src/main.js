@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions } from 'react-native';
-import { Marker,PROVIDER_GOOGLE } from 'react-native-maps';
-import MapView from "react-native-map-clustering";
+import NaverMapView, {Circle, Marker, Path, Polyline, Polygon} from "react-native-nmap";
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import MarkerDisplay from './MarkerDisplay';
 import AnimatedHideView from 'react-native-animated-hide-view';
@@ -20,7 +19,10 @@ window = Dimensions.get('window');
 //필터 페이지 조건 맵이랑 연동 필요
 //콜백함수 동기화 필요 
 //공영&민영 주차장 마커 색구분 할지
-
+const mapView = React.createRef();
+const P0 = {latitude: 37.564362, longitude: 126.977011};
+const P1 = {latitude: 37.565051, longitude: 126.978567};
+const P2 = {latitude: 37.565383, longitude: 126.976292};
 export default class Main extends Component{
   constructor(props){
     super(props);
@@ -59,44 +61,9 @@ export default class Main extends Component{
         vehicle:true,
       },
     }
-    
     this.toggleModal = this.toggleModal.bind(this)
   }
-  onPressZoomOut() {
-    this.region = {
-      latitude: this.state.currPos.latitude,
-      longitude: this.state.currPos.longitude,
-      latitudeDelta: this.state.currPos.latitudeDelta * 10,
-      longitudeDelta: this.state.currPos.longitudeDelta * 10
-    }
 
-    this.setState({
-      currPos: {
-        latitudeDelta: this.region.latitudeDelta,
-        longitudeDelta: this.region.longitudeDelta,
-        latitude: this.region.latitude,
-        longitude: this.region.longitude
-      }
-    })
-    this.map.animateToRegion(this.region, 100);
-  }
-  onPressZoomIn() {
-    this.region = {
-      latitude: this.state.currPos.latitude,
-      longitude: this.state.currPos.longitude,
-      latitudeDelta: this.state.currPos.latitudeDelta / 10,
-      longitudeDelta: this.state.currPos.longitudeDelta / 10
-    }
-    this.setState({
-      currPos: {
-        latitudeDelta: this.region.latitudeDelta,
-        longitudeDelta: this.region.longitudeDelta,
-        latitude: this.region.latitude,
-        longitude: this.region.longitude
-      }
-    })
-    this.map.animateToRegion(this.region, 100);
-  }
   closeSearch(){
     this.setState({isSearchVisible:false});
   }
@@ -172,12 +139,10 @@ export default class Main extends Component{
       
   getCurrentPosition(){
 
-    this.map.animateToRegion(
+    mapView.current.animateToRegion(
           {
             latitude: this.props.currPos.latitude,
             longitude: this.props.currPos.longitude,
-            latitudeDelta: 0.00522,
-            longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.00522
           },
           1000
         )
@@ -214,25 +179,21 @@ export default class Main extends Component{
           }
           {!this.state.isSearchVisible&&!this.state.isFilterVisible&&
             <View style={StyleSheet.absoluteFillObject}>
-              <MapView
-                initialRegion={this.state.currPos}
-                style={{flex:1}}
-                mapPadding={{ top: 100, right: 0, bottom: 0, left: 0 }}
-                onMapReady={this._onMapReady}
-                showsUserLocation={true}
-                provider={PROVIDER_GOOGLE}
+              <NaverMapView
+                style={{width: '100%', height: '100%'}}
                 showsMyLocationButton={true}
-                followUserLocation={true}
-                minPoints={5}
-                minZoom={3}
-                clusterColor={"#002166"}
-                zoomEnabled={true}
-                mapRef={ref => this.map = ref}
-                onRegionChange={(initialRegion)=>{this.onRegionChange(initialRegion)}}
-            >
+                center={{...P0, zoom: 16}}
+                ref={mapView}
+                >
+            
 
                 {this.props.parking.map((parking) => (
-                        <Marker key= {parking.prkplceNo} onPress={()=>{this.setSelectedParking(parking)}} coordinate={{ latitude: parseFloat(parking.latitude), longitude: parseFloat(parking.longitude) }}>
+                        <Marker 
+                          key= {parking.prkplceNo} 
+                          onClick={()=>{this.setSelectedParking(parking)}} 
+                          coordinate={{ latitude: parseFloat(parking.latitude), longitude: parseFloat(parking.longitude) }}
+                          width={96} height={96}
+                        >
                             <ParkingMarker 
                             price={parking.basicCharge}
                             basicTime={parking.basicTime}
@@ -240,18 +201,18 @@ export default class Main extends Component{
                         </Marker> 
                 ))}
 
-                {Parking.getIlglWkstInfo.item.map((item, index) => 
+                {/* {Parking.getIlglWkstInfo.item.map((item, index) => 
                 <Marker 
                 key={index} coordinate={{latitude: parseFloat(item.gpsY), longitude: parseFloat(item.gpsX)}}
                 onPress={this.settoggleModal.bind(this,index)}
                 >
                   <CctvMarker/>
                 </Marker>
-                )}
+                )} */}
               {this.state.searchedPlace&&
                 <Marker coordinate={{ latitude: this.state.searchedPlaceData.latitude, longitude:  this.state.searchedPlaceData.longitude}}/>
               }
-            </MapView>
+            </NaverMapView>
                   <TouchableOpacity
                     style={styles.myLocation}
                     onPress={() => {
@@ -276,26 +237,7 @@ export default class Main extends Component{
                     size={25}
                   />
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.zoomin}
-                onPress={() => { this.onPressZoomIn() }}
-              >
-                <Icon
-                  name="add"
-                  style={{...styles.icon,backgroundColor: 'rgba(255, 255, 255, 0.6)',color: 'rgba(0, 0, 0, 0.8)'}}
-                  size={25}
-                />
-            </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.zoomout}
-                onPress={() => { this.onPressZoomOut() }}
-              >
-                <Icon
-                  name="remove"
-                  style={{...styles.icon,backgroundColor: 'rgba(255, 255, 255, 0.6)',color: 'rgba(0, 0, 0, 0.8)'}}
-                  size={25}
-                />
-              </TouchableOpacity>
+              
             </View>
           }
             <AnimatedHideView
@@ -369,18 +311,6 @@ const styles = StyleSheet.create({
       top:150,
       zIndex:2,
       left:window.width-50,
-    },
-    zoomin:{
-      position:'absolute',
-      top:300,
-      zIndex:2,
-      left:window.width-50,
-    },
-    zoomout:{
-      position:'absolute',
-      top:340,
-      zIndex:2,
-      left:window.width-50
     },
     myLocation:{
       position:'absolute',
