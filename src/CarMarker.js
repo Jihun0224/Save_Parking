@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import { StyleSheet, ImageBackground,Text,View } from 'react-native';
-import CCTV from './car.png';
+import CCTV from './images/car.png';
 
 export default class CarMarker extends Component{
     render(){

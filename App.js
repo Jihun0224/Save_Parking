@@ -18,7 +18,7 @@ export default class App extends Component{
             Loading:true,
         }
     }
-    //DB 연동 Test
+    //DB 연동 
     getData = () => {
         database()
         .ref(`/`)

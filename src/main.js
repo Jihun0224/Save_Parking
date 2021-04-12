@@ -126,12 +126,15 @@ export default class Main extends Component{
       this.closeFilter();
     })
   }
+  HistoryRemove(newData){
+    this.setState({history:newData})
+  }
   setSearchedPlace(searchedPlace){
     this.region = {
       latitude: searchedPlace.latitude,
       longitude: searchedPlace.longitude,
-      latitudeDelta: this.state.currPos.latitudeDelta,
-      longitudeDelta: this.state.currPos.longitudeDelta
+      latitudeDelta: 0.00522,
+      longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.00522
     }
     this.setState({
       currPos: {
@@ -206,6 +209,7 @@ export default class Main extends Component{
               currPos={this.props.currPos}
               history={this.state.history}
               addHistory={this.addHistory.bind(this)}
+              HistoryRemove={this.HistoryRemove.bind(this)}
             />
           }
           {!this.state.isSearchVisible&&!this.state.isFilterVisible&&

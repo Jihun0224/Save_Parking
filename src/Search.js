@@ -125,10 +125,11 @@ export default class Search extends Component{
     }
   }
   HistoryRemove= (id) => {
-    const newData = this.state.history.filter((history) => {
-      return history.id != id
-    })
-    this.setState({history:newData})
+      const newData = this.state.history.filter((history) => {
+        return history.id != id
+      })
+      this.setState({history:newData})
+      this.props.HistoryRemove(newData)
   }
   renderHeader = () => {
     return (
