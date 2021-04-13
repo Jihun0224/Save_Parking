@@ -239,7 +239,6 @@ const styles = {
     borderColor:"#dee2e6"
   },
   division:{
-
     fontSize:15,
     fontWeight: 'bold',
     position:"absolute",

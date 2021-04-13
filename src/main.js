@@ -8,25 +8,22 @@ import Search from './Search';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Filter from './Filter';
-import PathDisplay from './PathDisplay';
 import ParkingMarker from './parkingMarker';
-import Parking from './ParkingControlArea.json';
-import CctvMarker from './cctvMarker';
+import cctvMarker from './cctvMarker';
 import marker_png from './images/marker.png';
+import { Overlay } from 'react-native-elements';
+import AreaMarkerDisplay from './areaMarkerDisplay';
 window = Dimensions.get('window');
 
-//추가 필요 기록
-//공영&민영 주차장 마커 색구분 할지
 export default class Main extends Component{
   constructor(props){
     super(props);
     this.state={
-      indexNumber:0,
       isSearchVisible:false,
       isFilterVisible:false,
       searchedPlace:false,
       isListingSelected: false,
-      ModalVisible: false,
+      overlayVisible:false,
       selectedParking:{},
       searchedPlaceData:{
         latitude:0,
@@ -55,7 +52,6 @@ export default class Main extends Component{
         vehicle:true,
       },
     }
-    this.toggleModal = this.toggleModal.bind(this)
   }
 
   closeSearch(){
@@ -180,16 +176,9 @@ export default class Main extends Component{
       }
     })
   }
-  toggleModal(){
-    this.setState({
-      ModalVisible:true,
-    });
-  }
-  settoggleModal(index){
-    this.setState({
-      ModalVisible:true,
-      indexNumber:index,
-    });
+
+  closeOverlay(){
+    this.setState({overlayVisible:false})
   }
   setSelectedParking(parking){
     this.setState({zoom:17},()=>{
@@ -253,15 +242,17 @@ export default class Main extends Component{
                             />
                         </Marker> 
                 ))}
-
-                {/* {Parking.getIlglWkstInfo.item.map((item, index) => 
+                {/* OverlayTest */}
                 <Marker 
-                key={index} coordinate={{latitude: parseFloat(item.gpsY), longitude: parseFloat(item.gpsX)}}
-                onPress={this.settoggleModal.bind(this,index)}
+                  onClick={()=>{this.setState({overlayVisible:true})}} 
+                  coordinate={{ 
+                    latitude: this.props.currPos.latitude, 
+                    longitude: this.props.currPos.longitude+0.0005}}
+                  width={30} 
+                  height={40}
                 >
-                  <CctvMarker/>
-                </Marker>
-                )} */}
+                </Marker> 
+                {/* OverlayTest */}
               {this.state.searchedPlace&&
                 <Marker 
                 coordinate={{ 
@@ -339,7 +330,6 @@ export default class Main extends Component{
               saveFilterOption={this.saveFilterOption.bind(this)}
             />
           </AnimatedHideView>
-          <PathDisplay ModalVisible={this.state.ModalVisible} setVisible={this.toggleModal} indexNumber={this.state.indexNumber}/>
               <SlidingUpPanel 
                 ref={c => (this._panel = c)}
                 style={styles.panel}
@@ -352,7 +342,19 @@ export default class Main extends Component{
               <ParkingMarkerDisplay 
                 parking={this.state.selectedParking}
               />
-            </SlidingUpPanel>                  
+            </SlidingUpPanel>
+            <Overlay 
+              visible={this.state.overlayVisible}
+              overlayStyle={styles.overlay}
+              backdropStyle={styles.overlaybackdrop}
+              onBackdropPress={()=>{
+                this.closeOverlay()
+              }}
+            >
+              <AreaMarkerDisplay
+                closeOverlay={this.closeOverlay.bind(this)}
+              />
+            </Overlay>                  
         </View>
       </SafeAreaView>
     )}
@@ -416,7 +418,14 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
     },
-    currPosMarkerText:{
-      alignSelf:'center'
+    overlay:{
+      borderTopLeftRadius:20,
+      borderTopRightRadius:20,
+      paddingLeft:0,
+      paddingRight:0,
+      marginTop:window.height*0.2
+    },
+    overlaybackdrop:{
+      opacity:0.8
     }
   });

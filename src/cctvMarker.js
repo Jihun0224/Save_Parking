@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import { StyleSheet, ImageBackground,Text,View } from 'react-native';
-import CCTV from './images//cctv.png';
-import Marker from './images//marker.png';
+import CCTV from './images/cctv.png';
+import Marker from './images/marker.png';
 
 export default class cctvMarker extends Component{
     render(){
