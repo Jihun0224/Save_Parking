@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions,ImageBackground } from 'react-native';
 import NaverMapView, {Marker} from "react-native-nmap";
 import SlidingUpPanel from 'rn-sliding-up-panel';
-import MarkerDisplay from './MarkerDisplay';
+import ParkingMarkerDisplay from './parkingMarkerDisplay';
 import AnimatedHideView from 'react-native-animated-hide-view';
 import Search from './Search';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -37,7 +37,7 @@ export default class Main extends Component{
         longitude:this.props.currPos.longitude,
      },
      filterdParkingData:this.props.parking,
-     zoom:15,
+     zoom:17,
       history:[{
         name:'',
         id:'0',
@@ -232,17 +232,10 @@ export default class Main extends Component{
                   coordinate={{ 
                     latitude: this.props.currPos.latitude, 
                     longitude: this.props.currPos.longitude}}
-                  width={96} 
-                  height={96}
-                >
-                  <View>
-                    <ImageBackground
-                      resizeMode="contain"
-                      source={marker_png}
-                      style={styles.imageBackground}
-                      imageStyle={{tintColor:"#0067a3"}}/>
-                  </View>
-                </Marker> 
+                  width={30} 
+                  height={40}
+                  pinColor='blue'
+                />
 
                 {this.state.filterdParkingData.map((parking) => (
                         <Marker 
@@ -356,7 +349,7 @@ export default class Main extends Component{
                 window.height * 0.7,
                 window.height * 0.85,]}
               >              
-              <MarkerDisplay 
+              <ParkingMarkerDisplay 
                 parking={this.state.selectedParking}
               />
             </SlidingUpPanel>                  
@@ -422,5 +415,8 @@ const styles = StyleSheet.create({
       height:55,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    currPosMarkerText:{
+      alignSelf:'center'
     }
   });

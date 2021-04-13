@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-class MarkerDisplay extends Component {
+class ParkingMarkerDisplay extends Component {
 
   handlePress(){
     
@@ -339,4 +339,4 @@ const styles = {
   }
 }
 
-export default MarkerDisplay;
+export default ParkingMarkerDisplay;
