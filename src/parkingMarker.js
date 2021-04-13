@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { StyleSheet, ImageBackground,Text,View,Image } from 'react-native';
+import { StyleSheet, ImageBackground,Text,View } from 'react-native';
 import Speech_Bubble from './images//speech-bubble.png';
 
 export default class ParkingMarker extends Component{

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions } from 'react-native';
-import NaverMapView, {Circle, Marker, Path, Polyline, Polygon} from "react-native-nmap";
+import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions,ImageBackground } from 'react-native';
+import NaverMapView, {Marker} from "react-native-nmap";
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import MarkerDisplay from './MarkerDisplay';
 import AnimatedHideView from 'react-native-animated-hide-view';
@@ -12,17 +12,11 @@ import PathDisplay from './PathDisplay';
 import ParkingMarker from './parkingMarker';
 import Parking from './ParkingControlArea.json';
 import CctvMarker from './cctvMarker';
+import marker_png from './images/marker.png';
 window = Dimensions.get('window');
 
 //추가 필요 기록
-//맵 아이콘 css 수정 필요 zindex관련
-//필터 페이지 조건 맵이랑 연동 필요
-//콜백함수 동기화 필요 
 //공영&민영 주차장 마커 색구분 할지
-const mapView = React.createRef();
-const P0 = {latitude: 37.564362, longitude: 126.977011};
-const P1 = {latitude: 37.565051, longitude: 126.978567};
-const P2 = {latitude: 37.565383, longitude: 126.976292};
 export default class Main extends Component{
   constructor(props){
     super(props);
@@ -41,9 +35,9 @@ export default class Main extends Component{
       currPos:{
         latitude:this.props.currPos.latitude,
         longitude:this.props.currPos.longitude,
-        latitudeDelta: 0.00522,
-        longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.00522
-      },
+     },
+     filterdParkingData:this.props.parking,
+     zoom:15,
       history:[{
         name:'',
         id:'0',
@@ -90,6 +84,78 @@ export default class Main extends Component{
                     cctv:filterOption.cctv,
                     vehicle:filterOption.vehicle,
     }},()=>{
+      if(filterOption.parkingAll == true){
+        this.setState({filterdParkingData:this.props.parking})
+      }
+      else if(filterOption.public == true && filterOption.private == false && filterOption.free == false){
+        let NewParking = [];
+        for (let i = 0; i < this.props.parking.length; i++) {
+          if (this.props.parking[i].prkplceSe == '공영') {
+            NewParking.push(this.props.parking[i]);
+          }
+        }
+        this.setState({filterdParkingData:NewParking})
+      }
+      else if(filterOption.public == true && filterOption.private == true && filterOption.free == false){
+        let NewParking = [];
+        for (let i = 0; i < this.props.parking.length; i++) {
+          if (this.props.parking[i].parkingchrgeInfo != '무료') {
+            NewParking.push(this.props.parking[i]);
+          }
+        }
+        this.setState({filterdParkingData:NewParking})
+      }
+      else if(filterOption.public == true && filterOption.private == false && filterOption.free == true){
+        let NewParking = [];
+        let NewParking2 = [];
+        for (let i = 0; i < this.props.parking.length; i++) {
+          if (this.props.parking[i].parkingchrgeInfo == '무료') {
+            NewParking.push(this.props.parking[i]);
+          }
+        }
+        for (let i = 0; i < NewParking.length; i++) {
+          if (NewParking[i].prkplceSe == '공영') {
+            NewParking2.push(NewParking[i]);
+          }
+        }
+        this.setState({filterdParkingData:NewParking2})
+      }
+      else if(filterOption.public == false && filterOption.private == true && filterOption.free == false){
+        let NewParking = [];
+        for (let i = 0; i < this.props.parking.length; i++) {
+          if (this.props.parking[i].prkplceSe != '공영') {
+            NewParking.push(this.props.parking[i]);
+          }
+        }
+        this.setState({filterdParkingData:NewParking})
+      }
+      else if(filterOption.public == false && filterOption.private == true && filterOption.free == true){
+        let NewParking = [];
+        let NewParking2 = [];
+        for (let i = 0; i < this.props.parking.length; i++) {
+          if (this.props.parking[i].parkingchrgeInfo == '무료') {
+            NewParking.push(this.props.parking[i]);
+          }
+        }
+        for (let i = 0; i < NewParking.length; i++) {
+          if (NewParking[i].prkplceSe != '공영') {
+            NewParking2.push(NewParking[i]);
+          }
+        }
+        this.setState({filterdParkingData:NewParking2})
+      }
+      else if(filterOption.public == false && filterOption.private == false && filterOption.free == true){
+        let NewParking = [];
+        for (let i = 0; i < this.props.parking.length; i++) {
+          if (this.props.parking[i].parkingchrgeInfo == '무료') {
+            NewParking.push(this.props.parking[i]);
+          }
+        }
+        this.setState({filterdParkingData:NewParking})
+      }
+      else{
+        this.setState({filterdParkingData:[]})
+      }
       this.closeFilter();
     })
   }
@@ -100,25 +166,19 @@ export default class Main extends Component{
     this.region = {
       latitude: searchedPlace.latitude,
       longitude: searchedPlace.longitude,
-      latitudeDelta: 0.00522,
-      longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.00522
     }
     this.setState({
       currPos: {
-        latitudeDelta: this.region.latitudeDelta,
-        longitudeDelta: this.region.longitudeDelta,
         latitude: this.region.latitude,
         longitude: this.region.longitude
       },
+      zoom:15,
       searchedPlace:true,
       searchedPlaceData: {
         latitude: this.region.latitude,
         longitude: this.region.longitude
       }
     })
-  }
-  onRegionChange(region) {
-    this.setState({ currPos:region });
   }
   toggleModal(){
     this.setState({
@@ -132,71 +192,71 @@ export default class Main extends Component{
     });
   }
   setSelectedParking(parking){
+    this.setState({zoom:17},()=>{
+      this._map.animateToCoordinate(
+        {
+          latitude: parking.latitude,
+          longitude: parking.longitude,
+        },
+        1000
+      )
+    })
+
     this.setState({selectedParking:parking},()=>{
         this._panel.show(window.height * 0.38,1000);
       });
     }
       
   getCurrentPosition(){
-
-    mapView.current.animateToRegion(
+        this._map.animateToCoordinate(
           {
             latitude: this.props.currPos.latitude,
             longitude: this.props.currPos.longitude,
           },
           1000
         )
-    
   }
 
   render(){
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.map}>
-        {!this.state.isSearchVisible&&!this.state.isFilterVisible&&
-          <View style={styles.openSearch}>
-            <TouchableOpacity 
-              onPress={()=>{
-                this.setState({isSearchVisible:true});
-              }}>
-              <Text style={styles.openSearchText}>
-                <Icon name="location" size={24} color="gray"/>
-                장소를 입력해주세요.
-              </Text>
-            </TouchableOpacity>
-          </View>
-          }
-          {this.state.isSearchVisible&&
-            <Search 
-              closeSearch={this.closeSearch.bind(this)}
-              setSearchedPlace={this.setSearchedPlace.bind(this)}
-              isSearchVisible={this.state.isSearchVisible}
-              currPos={this.props.currPos}
-              history={this.state.history}
-              addHistory={this.addHistory.bind(this)}
-              HistoryRemove={this.HistoryRemove.bind(this)}
-            />
-          }
           {!this.state.isSearchVisible&&!this.state.isFilterVisible&&
             <View style={StyleSheet.absoluteFillObject}>
               <NaverMapView
+                ref={component => this._map = component}
                 style={{width: '100%', height: '100%'}}
-                showsMyLocationButton={true}
-                center={{...P0, zoom: 16}}
-                ref={mapView}
+                center={{...this.state.currPos, zoom: this.state.zoom}}
+              >
+                <Marker 
+                  coordinate={{ 
+                    latitude: this.props.currPos.latitude, 
+                    longitude: this.props.currPos.longitude}}
+                  width={96} 
+                  height={96}
                 >
-            
+                  <View>
+                    <ImageBackground
+                      resizeMode="contain"
+                      source={marker_png}
+                      style={styles.imageBackground}
+                      imageStyle={{tintColor:"#0067a3"}}/>
+                  </View>
+                </Marker> 
 
-                {this.props.parking.map((parking) => (
+                {this.state.filterdParkingData.map((parking) => (
                         <Marker 
                           key= {parking.prkplceNo} 
                           onClick={()=>{this.setSelectedParking(parking)}} 
-                          coordinate={{ latitude: parseFloat(parking.latitude), longitude: parseFloat(parking.longitude) }}
-                          width={96} height={96}
+                          coordinate={{ 
+                            latitude: parseFloat(parking.latitude), 
+                            longitude: parseFloat(parking.longitude)}}
+                          width={96} 
+                          height={96}
                         >
                             <ParkingMarker 
-                            price={parking.basicCharge}
-                            basicTime={parking.basicTime}
+                              price={parking.basicCharge}
+                              basicTime={parking.basicTime}
                             />
                         </Marker> 
                 ))}
@@ -210,9 +270,34 @@ export default class Main extends Component{
                 </Marker>
                 )} */}
               {this.state.searchedPlace&&
-                <Marker coordinate={{ latitude: this.state.searchedPlaceData.latitude, longitude:  this.state.searchedPlaceData.longitude}}/>
+                <Marker 
+                coordinate={{ 
+                  latitude:this.state.searchedPlaceData.latitude, 
+                  longitude:this.state.searchedPlaceData.longitude}}
+                width={96} 
+                height={96}
+                >
+                  <View>
+                    <ImageBackground
+                      resizeMode="contain"
+                      source={marker_png}
+                      style={styles.imageBackground}
+                      imageStyle={{tintColor:"#ff0000"}}/>
+                  </View>
+                </Marker>
               }
             </NaverMapView>
+            <View style={styles.openSearch}>
+                <TouchableOpacity 
+                  onPress={()=>{
+                    this.setState({isSearchVisible:true});
+                  }}>
+                  <Text style={styles.openSearchText}>
+                    <Icon name="location" size={24} color="gray"/>
+                    장소를 입력해주세요.
+                  </Text>
+                </TouchableOpacity>
+              </View>
                   <TouchableOpacity
                     style={styles.myLocation}
                     onPress={() => {
@@ -239,6 +324,17 @@ export default class Main extends Component{
               </TouchableOpacity>
               
             </View>
+          }
+          {this.state.isSearchVisible&&
+            <Search 
+              closeSearch={this.closeSearch.bind(this)}
+              setSearchedPlace={this.setSearchedPlace.bind(this)}
+              isSearchVisible={this.state.isSearchVisible}
+              currPos={this.props.currPos}
+              history={this.state.history}
+              addHistory={this.addHistory.bind(this)}
+              HistoryRemove={this.HistoryRemove.bind(this)}
+            />
           }
             <AnimatedHideView
               visible={this.state.isFilterVisible}
@@ -273,12 +369,15 @@ const styles = StyleSheet.create({
       flex: 1,      
     },
     map:{
-      flex: 1,
-      zIndex:1,
+      flex: 1,      
+    },
+    panel:{
+      position:'absolute',
+      zIndex:3,
     },
     openSearch:{
+      position:'absolute',
       zIndex:2,
-      position:"absolute",
       top:10,
       width:window.width-30,
       height:60,
@@ -317,5 +416,11 @@ const styles = StyleSheet.create({
       top:110,
       zIndex:2,
       left:window.width-50,
+    },
+    imageBackground:{
+      width:100,
+      height:55,
+      justifyContent: 'center',
+      alignItems: 'center',
     }
   });
