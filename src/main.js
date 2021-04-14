@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Filter from './Filter';
 import ParkingMarker from './parkingMarker';
-import cctvMarker from './cctvMarker';
 import marker_png from './images/marker.png';
 import { Overlay } from 'react-native-elements';
 import AreaMarkerDisplay from './areaMarkerDisplay';
@@ -50,6 +49,7 @@ export default class Main extends Component{
         areaAll:true,
         cctv:true,
         vehicle:true,
+        smart:true,
       },
     }
   }
@@ -79,6 +79,7 @@ export default class Main extends Component{
                     areaAll:filterOption.areaAll,
                     cctv:filterOption.cctv,
                     vehicle:filterOption.vehicle,
+                    smart:filterOption.smart,
     }},()=>{
       if(filterOption.parkingAll == true){
         this.setState({filterdParkingData:this.props.parking})
@@ -152,6 +153,7 @@ export default class Main extends Component{
       else{
         this.setState({filterdParkingData:[]})
       }
+      //여기 단속구역 관련 필터 if로
       this.closeFilter();
     })
   }
@@ -226,9 +228,9 @@ export default class Main extends Component{
                   pinColor='blue'
                 />
 
-                {this.state.filterdParkingData.map((parking) => (
+                {this.state.filterdParkingData.map((parking,index) => (
                         <Marker 
-                          key= {parking.prkplceNo} 
+                          key= {index} 
                           onClick={()=>{this.setSelectedParking(parking)}} 
                           coordinate={{ 
                             latitude: parseFloat(parking.latitude), 
@@ -237,8 +239,10 @@ export default class Main extends Component{
                           height={96}
                         >
                             <ParkingMarker 
-                              price={parking.basicCharge}
+                              basicCharge={parking.basicCharge}
                               basicTime={parking.basicTime}
+                              parkingchrgeInfo={parking.parkingchrgeInfo}
+                              monthCmmtkt={parking.monthCmmtkt}
                             />
                         </Marker> 
                 ))}
@@ -258,17 +262,10 @@ export default class Main extends Component{
                 coordinate={{ 
                   latitude:this.state.searchedPlaceData.latitude, 
                   longitude:this.state.searchedPlaceData.longitude}}
-                width={96} 
-                height={96}
-                >
-                  <View>
-                    <ImageBackground
-                      resizeMode="contain"
-                      source={marker_png}
-                      style={styles.imageBackground}
-                      imageStyle={{tintColor:"#ff0000"}}/>
-                  </View>
-                </Marker>
+                width={30} 
+                height={45}
+                pinColor='#ff0000'
+                />
               }
             </NaverMapView>
             <View style={styles.openSearch}>

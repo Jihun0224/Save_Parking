@@ -5,6 +5,7 @@ import Geolocation from 'react-native-geolocation-service';
 import Loading from './src/loading';
 import database from '@react-native-firebase/database';
 import SplashScreen from 'react-native-splash-screen'
+const API_KEY = "15a8140307ddfaab85f5e8d5cf7ac751";
 
 export default class App extends Component{
  
@@ -15,13 +16,13 @@ export default class App extends Component{
             isGetPositionLoading: true,
             isParkingDataLoading:true,
             parking:[],
+            area:[],
             Loading:true,
         }
     }
-    //DB 연동 
     getData = () => {
         database()
-        .ref(`/`)
+        .ref(`parking`)
         .on('value', (snapshot) => {
             this.setState({
                 parking: snapshot.val()
@@ -34,6 +35,7 @@ export default class App extends Component{
 }
 
     async componentDidMount(){
+
         await this.requestLocationPermission()
         this.getData()
      }

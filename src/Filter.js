@@ -23,6 +23,7 @@ export default class Filter extends Component{
         areaAll:this.props.filterOption.areaAll,
         cctv:this.props.filterOption.cctv,
         vehicle:this.props.filterOption.vehicle,
+        smart:this.props.filterOption.smart,
       }
     }
     parkingAllCheck(){
@@ -78,19 +79,19 @@ export default class Filter extends Component{
     }
   }
   areaAllCheck(){
-    if(this.state.cctv && this.state.vehicle){
+    if(this.state.cctv && this.state.vehicle && this.state.smart){
       this.setState({areaAll:true});
     }
-    if(!this.state.cctv || !this.state.vehicle){
+    if(!this.state.cctv || !this.state.vehicle || !this.state.smart){
       this.setState({areaAll:false});
     }
   }
   areaAllOnChenage(){
     if(this.state.areaAll == true){
-      this.setState({areaAll:false, cctv:false, vehicle:false})
+      this.setState({areaAll:false, cctv:false, vehicle:false, smart:false})
     }
     else{
-      this.setState({areaAll:true, cctv:true, vehicle:true})
+      this.setState({areaAll:true, cctv:true, vehicle:true, smart:true})
     }
   }
   cctvOnChenage(){
@@ -117,6 +118,18 @@ export default class Filter extends Component{
       })
     }
   }
+  smartOnChenage(){
+    if(this.state.smart == true){
+      this.setState({smart:false},()=>{
+        this.areaAllCheck();
+      })
+    }
+    else{
+      this.setState({smart:true},()=>{
+        this.areaAllCheck();
+      })
+    }
+  }
   saveFilterOption(){
     this.filterOption = {
       parkingAll:this.state.parkingAll,
@@ -126,6 +139,7 @@ export default class Filter extends Component{
       areaAll:this.state.areaAll,
       cctv:this.state.cctv,
       vehicle:this.state.vehicle,
+      smart:this.state.smart,
     }
     this.props.saveFilterOption(this.filterOption);
   }
@@ -202,7 +216,7 @@ export default class Filter extends Component{
               </View>
           </View>
           <Text style={styles.titleText}>
-            불법주차구역
+            불법주차단속
           </Text>
           <View style={styles.filterBox}>
             <View style={styles.filterBoxContents}>
@@ -219,7 +233,7 @@ export default class Filter extends Component{
               </View>
             <View style={styles.filterBoxContents}>
               <Text style={styles.filterDivision}>
-                단속차량
+                인력단속
               </Text>
               <ToggleSwitch
                 style={styles.filterSwitch}
@@ -231,7 +245,7 @@ export default class Filter extends Component{
             </View>
             <View style={styles.filterBoxContents}>
                 <Text style={styles.filterDivision}>
-                  CCTV
+                  CCTV단속
                 </Text>
                 <ToggleSwitch
                 style={styles.filterSwitch}
@@ -241,6 +255,18 @@ export default class Filter extends Component{
                 onToggle={()=>this.cctvOnChenage()}
                 />
               </View>
+              <View style={styles.filterBoxContents}>
+              <Text style={styles.filterDivision}>
+                스마트폰단속
+              </Text>
+              <ToggleSwitch
+                style={styles.filterSwitch}
+                isOn={this.state.smart}
+                onColor='#002166'
+                offColor='gray'
+                onToggle={()=>this.smartOnChenage()}
+              />
+            </View>
           </View>
         </ScrollView>
 

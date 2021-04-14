@@ -47,6 +47,14 @@ export default class AreaMarkerDisplay extends Component{
                 </Text>
             </View>
             <Text style={styles.titleText}>
+                최근 단속 시간
+            </Text>
+            <View style={styles.areaBox}>
+                <Text style={styles.areaBoxContent}>
+                    xxxx-xx-xx
+                </Text>
+            </View>
+            <Text style={styles.titleText}>
                 단속시간
             </Text>
             <View style={styles.areaBox}>
