@@ -73,7 +73,7 @@ class ParkingMarkerDisplay extends Component {
             {this.props.parking.phoneNumber ==''
             ?<Text style={styles.phoneNumber}>
               <Ionicons name="call-outline" size={24} color="gray"/>
-              "정보없음"
+              정보없음
              </Text>
             :<TouchableOpacity onPress={()=>Linking.openURL(`tel:${this.props.parking.phoneNumber}`)}>
               <Text style={styles.phoneNumber}>
@@ -92,7 +92,7 @@ class ParkingMarkerDisplay extends Component {
                   {this.props.parking.parkingchrgeInfo == '무료'
                   ?<Text style={styles.info_box_data}>-</Text>
                   :<Text style={styles.info_box_data}>
-                    {this.props.parking.metpay ==''
+                    {this.props.parking.metpay ==''|| this.props.parking.metpay ==undefined
                     ?"정보없음"
                     :this.props.parking.metpay
                     }
@@ -109,7 +109,7 @@ class ParkingMarkerDisplay extends Component {
                     <Text style={styles.info_box_text}/>
                     
                     <Text style={styles.info_box_data}>
-                      {this.props.parking.prkcmprt ==''
+                      {this.props.parking.prkcmprt ==''|| this.props.parking.prkcmprt ==undefined
                       ?"정보없음"
                       :this.props.parking.prkcmprt
                       }
@@ -129,7 +129,7 @@ class ParkingMarkerDisplay extends Component {
                     {this.props.parking.parkingchrgeInfo == '무료'
                     ?<Text style={styles.info_box_data}>-</Text>
                     :<Text style={styles.info_box_data}>
-                      {this.props.parking.basicTime ==''
+                      {this.props.parking.basicTime =='' || this.props.parking.basicTime ==undefined
                       ?"정보없음"
                       :this.props.parking.basicTime+"분/"+this.props.parking.basicCharge+"원"
                       }
@@ -146,7 +146,7 @@ class ParkingMarkerDisplay extends Component {
                     {this.props.parking.parkingchrgeInfo == '무료'
                     ?<Text style={styles.info_box_data}>-</Text>
                     :<Text style={styles.info_box_data}>
-                    {this.props.parking.addUnitTime ==''
+                    {this.props.parking.addUnitTime ==''|| this.props.parking.addUnitTime ==undefined
                       ?"정보없음"
                       :this.props.parking.addUnitTime+"분/"+this.props.parking.addUnitCharge+"원"
                       }
@@ -169,7 +169,7 @@ class ParkingMarkerDisplay extends Component {
                     {this.props.parking.parkingchrgeInfo == '무료'
                     ?<Text style={styles.info_box_data}>-</Text>
                     :<Text style={styles.info_box_data}>
-                    {this.props.parking.dayCmmtkt ==''
+                    {this.props.parking.dayCmmtkt ==''|| this.props.parking.dayCmmtkt ==undefined
                       ?"정보없음"
                       :this.props.parking.dayCmmtkt+"원"
                       }
@@ -186,9 +186,11 @@ class ParkingMarkerDisplay extends Component {
                     {this.props.parking.parkingchrgeInfo == '무료'
                     ?<Text style={styles.info_box_data}>-</Text>
                     :<Text style={styles.info_box_data}>
-                    {this.props.parking.dayCmmtktAdjTime ==''
+                    {this.props.parking.dayCmmtktAdjTime ==''|| this.props.parking.dayCmmtktAdjTime ==undefined
                       ?"정보없음"
-                      :this.props.parking.dayCmmtktAdjTime+"분"
+                      :this.props.parking.dayCmmtktAdjTime >24 
+                        ?this.props.parking.dayCmmtktAdjTime/60 +"시간"
+                        :this.props.parking.dayCmmtktAdjTime+"시간"
                       }
                     </Text>
                     }
@@ -208,7 +210,7 @@ class ParkingMarkerDisplay extends Component {
                     <Text style={styles.info_box_data}>
                     {this.props.parking.parkingchrgeInfo == '무료'
                     ?"-"
-                    :this.props.parking.monthCmmtkt ==''
+                    :this.props.parking.monthCmmtkt ==''|| this.props.parking.monthCmmtkt ==undefined
                       ?"정보없음"
                       :this.props.parking.monthCmmtkt+"원"
                     }
@@ -225,7 +227,7 @@ class ParkingMarkerDisplay extends Component {
                       평일
                     </Text>
                     <Text style={styles.info_box_data}>
-                    {this.props.parking.weekdayOperOpenHhmm==''
+                    {this.props.parking.weekdayOperOpenHhmm==''|| this.props.parking.weekdayOperOpenHhmm ==undefined
                       ?"정보없음"
                       :this.props.parking.weekdayOperOpenHhmm+"~"+this.props.parking.weekdayOperColseHhmm
                       }
@@ -237,7 +239,7 @@ class ParkingMarkerDisplay extends Component {
                       토요일
                     </Text>
                     <Text style={styles.info_box_data}>
-                      {this.props.parking.satOperOperOpenHhmm==''
+                      {this.props.parking.satOperOperOpenHhmm==''|| this.props.parking.satOperOperOpenHhmm ==undefined
                       ?"정보없음"
                       :this.props.parking.satOperOperOpenHhmm+"~"+this.props.parking.satOperCloseHhmm
                       }
@@ -250,7 +252,7 @@ class ParkingMarkerDisplay extends Component {
                       공휴일
                     </Text>
                     <Text style={styles.info_box_data}>
-                      {this.props.parking.holidayOperOpenHhmm==''
+                      {this.props.parking.holidayOperOpenHhmm==''|| this.props.parking.holidayOperOpenHhmm ==undefined
                       ?"정보없음"
                       :this.props.parking.holidayOperOpenHhmm+"~"+this.props.parking.holidayCloseOpenHhmm
                       }
@@ -266,7 +268,7 @@ class ParkingMarkerDisplay extends Component {
                 <View style={styles.info_box_contents}>
                     <Text style={styles.info_box_text}/>
                       <Text style={styles.info_box_data}>
-                        {this.props.parking.spcmnt ==''
+                        {this.props.parking.spcmnt ==''|| this.props.parking.spcmnt ==undefined
                         ?"없음"
                         :this.props.parking.spcmnt
                         }
@@ -281,7 +283,7 @@ class ParkingMarkerDisplay extends Component {
                     <Text style={styles.info_box_text}/>
                     
                     <Text style={styles.info_box_data}>
-                      {this.props.parking.enforceSe ==''
+                      {this.props.parking.enforceSe ==''|| this.props.parking.enforceSe ==undefined
                       ?"정보없음"
                       :this.props.parking.enforceSe
                       }

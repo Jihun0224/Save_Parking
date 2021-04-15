@@ -8,12 +8,17 @@ export default class ParkingMarker extends Component{
 
       let price = 60/this.props.basicTime * this.props.basicCharge
       if(price == 0 || price == '' || price == undefined){
-        price = this.props.monthCmmtkt
+        if(this.props.monthCmmtkt == 0 || this.props.monthCmmtkt == '' || this.props.monthCmmtkt == undefined){
+          price = "가격정보없음"
+        }
+        else{
+          price = this.props.monthCmmtkt
+        }
       }
         return (
         <View  style={styles.marker}>
             <ImageBackground
-                resizeMode="contain"
+                resizeMode="stretch"
                 source={Speech_Bubble}
                 style={styles.imageBackground}
                 imageStyle={{tintColor:"#002166"}}>
@@ -34,7 +39,7 @@ export default class ParkingMarker extends Component{
 }
   const styles = StyleSheet.create({
     imageBackground: {
-        width:100,
+        width:50,
         height:45,
         justifyContent: 'center',
         alignItems: 'center',

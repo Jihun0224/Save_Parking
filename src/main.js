@@ -7,11 +7,15 @@ import AnimatedHideView from 'react-native-animated-hide-view';
 import Search from './Search';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Filter from './Filter';
+import Filter from './filter';
 import ParkingMarker from './parkingMarker';
-import marker_png from './images/marker.png';
 import { Overlay } from 'react-native-elements';
 import AreaMarkerDisplay from './areaMarkerDisplay';
+import marker_png from './images/marker.png';
+import CctvMarker from './cctvMarker';
+import SmartPhoneMarker from './smartPhoneMarker';
+import CarMarker from './carMarker';
+
 window = Dimensions.get('window');
 
 export default class Main extends Component{
@@ -24,6 +28,7 @@ export default class Main extends Component{
       isListingSelected: false,
       overlayVisible:false,
       selectedParking:{},
+      selectedArea:{},
       searchedPlaceData:{
         latitude:0,
         longitude:0,
@@ -33,6 +38,10 @@ export default class Main extends Component{
         longitude:this.props.currPos.longitude,
      },
      filterdParkingData:this.props.parking,
+     filterdAreaData:this.props.area,
+     carData:[],
+     cctvData:[],
+     smartData:[],
      zoom:17,
       history:[{
         name:'',
@@ -48,7 +57,7 @@ export default class Main extends Component{
         free:true,
         areaAll:true,
         cctv:true,
-        vehicle:true,
+        car:true,
         smart:true,
       },
     }
@@ -78,7 +87,7 @@ export default class Main extends Component{
                     free:filterOption.free,
                     areaAll:filterOption.areaAll,
                     cctv:filterOption.cctv,
-                    vehicle:filterOption.vehicle,
+                    car:filterOption.car,
                     smart:filterOption.smart,
     }},()=>{
       if(filterOption.parkingAll == true){
@@ -86,74 +95,105 @@ export default class Main extends Component{
       }
       else if(filterOption.public == true && filterOption.private == false && filterOption.free == false){
         let NewParking = [];
-        for (let i = 0; i < this.props.parking.length; i++) {
-          if (this.props.parking[i].prkplceSe == '공영') {
-            NewParking.push(this.props.parking[i]);
+        this.props.parking.forEach(parking => {
+          if (parking.prkplceSe == '공영') {
+            NewParking.push(parking);
           }
-        }
+        });
         this.setState({filterdParkingData:NewParking})
       }
       else if(filterOption.public == true && filterOption.private == true && filterOption.free == false){
         let NewParking = [];
-        for (let i = 0; i < this.props.parking.length; i++) {
-          if (this.props.parking[i].parkingchrgeInfo != '무료') {
-            NewParking.push(this.props.parking[i]);
-          }
-        }
+          this.props.parking.forEach(parking => {
+            if (parking.parkingchrgeInfo != '무료') {
+              NewParking.push(parking);
+            }
+          })
         this.setState({filterdParkingData:NewParking})
       }
       else if(filterOption.public == true && filterOption.private == false && filterOption.free == true){
         let NewParking = [];
         let NewParking2 = [];
-        for (let i = 0; i < this.props.parking.length; i++) {
-          if (this.props.parking[i].parkingchrgeInfo == '무료') {
-            NewParking.push(this.props.parking[i]);
+          this.props.parking.forEach(parking => {
+            if (parking.parkingchrgeInfo == '무료') {
+              NewParking.push(parking);
+            }
+          })
+          NewParking.forforEach(parking => {
+          if (parking.prkplceSe == '공영') {
+            NewParking2.push(parking);
           }
-        }
-        for (let i = 0; i < NewParking.length; i++) {
-          if (NewParking[i].prkplceSe == '공영') {
-            NewParking2.push(NewParking[i]);
-          }
-        }
+        })
         this.setState({filterdParkingData:NewParking2})
       }
       else if(filterOption.public == false && filterOption.private == true && filterOption.free == false){
         let NewParking = [];
-        for (let i = 0; i < this.props.parking.length; i++) {
-          if (this.props.parking[i].prkplceSe != '공영') {
-            NewParking.push(this.props.parking[i]);
-          }
-        }
+          this.props.parking.forEach(parking => {
+            if (parking.prkplceSe != '공영') {
+              NewParking.push(parking);
+            }
+          })
         this.setState({filterdParkingData:NewParking})
       }
       else if(filterOption.public == false && filterOption.private == true && filterOption.free == true){
         let NewParking = [];
         let NewParking2 = [];
-        for (let i = 0; i < this.props.parking.length; i++) {
-          if (this.props.parking[i].parkingchrgeInfo == '무료') {
-            NewParking.push(this.props.parking[i]);
+          this.props.parking.forEach(parking => {
+            if (parking.parkingchrgeInfo == '무료') {
+              NewParking.push(parking);
+            }
+          })
+
+          NewParking.forEach(parking => {
+          if (parking.prkplceSe != '공영') {
+            NewParking2.push(parking);
           }
-        }
-        for (let i = 0; i < NewParking.length; i++) {
-          if (NewParking[i].prkplceSe != '공영') {
-            NewParking2.push(NewParking[i]);
-          }
-        }
+        })
         this.setState({filterdParkingData:NewParking2})
       }
       else if(filterOption.public == false && filterOption.private == false && filterOption.free == true){
         let NewParking = [];
-        for (let i = 0; i < this.props.parking.length; i++) {
-          if (this.props.parking[i].parkingchrgeInfo == '무료') {
-            NewParking.push(this.props.parking[i]);
-          }
-        }
+          this.props.parking.forEach(parking => {
+            if (parking.parkingchrgeInfo == '무료') {
+              NewParking.push(parking);
+            }
+          })
         this.setState({filterdParkingData:NewParking})
       }
       else{
         this.setState({filterdParkingData:[]})
       }
-      //여기 단속구역 관련 필터 if로
+
+      // if(filterOption.areaAll == true){
+      //   this.setState({filterdAreaData:this.props.area})
+      // }
+      // else if(filterOption.cctv == true && filterOption.car == false && filterOption.smart == false){
+      //   let NewArea = this.state.cctvData;
+      //   this.setState({filterdAreaData:NewArea})
+      // }
+      // else if(filterOption.cctv == true && filterOption.car == true && filterOption.smart == false){
+      //   let NewArea = [this.state.carData,this.state.cctvData]
+      //   this.setState({filterdAreaData:NewArea})
+      // }
+      // else if(filterOption.cctv == true && filterOption.car == false && filterOption.smart == true){
+      //   let NewArea = [this.state.smartData,this.state.cctvData];
+      //   this.setState({filterdAreaData:NewArea})
+      // }
+      // else if(filterOption.cctv == false && filterOption.car == true && filterOption.smart == false){
+      //   let NewArea = +this.state.carData;
+      //   this.setState({filterdAreaData:NewArea})
+      // }
+      // else if(filterOption.cctv == false && filterOption.car == true && filterOption.smart == true){
+      //   let NewArea = [this.state.smartData,this.state.carData];
+      //   this.setState({filterdAreaData:NewArea})
+      // }
+      // else if(filterOption.cctv == false && filterOption.car == false && filterOption.smart == true){
+      //   let NewArea = this.state.smartData;
+      //   this.setState({filterdAreaData:NewArea})
+      // }
+      // else{
+      //   this.setState({filterdAreaData:[]})
+      // }
       this.closeFilter();
     })
   }
@@ -196,8 +236,22 @@ export default class Main extends Component{
     this.setState({selectedParking:parking},()=>{
         this._panel.show(window.height * 0.38,1000);
       });
-    }
-      
+  }
+  setSelectedArea(area){
+    this.setState({zoom:17},()=>{
+      this._map.animateToCoordinate(
+        {
+          latitude: area.latitude,
+          longitude: area.longitude,
+        },
+        1000
+      )
+    })
+
+    this.setState({selectedArea:area},()=>{
+      this.setState({overlayVisible:true})
+      });
+  }      
   getCurrentPosition(){
         this._map.animateToCoordinate(
           {
@@ -246,26 +300,40 @@ export default class Main extends Component{
                             />
                         </Marker> 
                 ))}
-                {/* OverlayTest */}
-                <Marker 
-                  onClick={()=>{this.setState({overlayVisible:true})}} 
-                  coordinate={{ 
-                    latitude: this.props.currPos.latitude, 
-                    longitude: this.props.currPos.longitude+0.0005}}
-                  width={30} 
-                  height={40}
-                >
-                </Marker> 
-                {/* OverlayTest */}
+            {this.state.filterdAreaData.map((area,index) => (
+                        <Marker 
+                          key= {index} 
+                          onClick={()=>{this.setSelectedArea(area)}} 
+                          coordinate={{ 
+                            latitude: parseFloat(area.latitude), 
+                            longitude: parseFloat(area.longitude)}}
+                          width={96} 
+                          height={96}
+                        >
+                          {area.ctlType == '인력단속'
+                          ?<CarMarker/>
+                          :area.ctlType == '스마트폰단속'
+                            ?<SmartPhoneMarker/>
+                            :<CctvMarker/>
+                          }
+                        </Marker> 
+                ))}               
               {this.state.searchedPlace&&
                 <Marker 
                 coordinate={{ 
                   latitude:this.state.searchedPlaceData.latitude, 
                   longitude:this.state.searchedPlaceData.longitude}}
-                width={30} 
-                height={45}
-                pinColor='#ff0000'
-                />
+                width={96} 
+                height={96}
+                >
+                  <View>
+                    <ImageBackground
+                      resizeMode="contain"
+                      source={marker_png}
+                      style={styles.imageBackground}
+                      imageStyle={{tintColor:"#ff0000"}}/>
+                  </View>
+                </Marker>
               }
             </NaverMapView>
             <View style={styles.openSearch}>
@@ -344,11 +412,13 @@ export default class Main extends Component{
               visible={this.state.overlayVisible}
               overlayStyle={styles.overlay}
               backdropStyle={styles.overlaybackdrop}
+              area={this.state.selectedArea}
               onBackdropPress={()=>{
                 this.closeOverlay()
               }}
             >
               <AreaMarkerDisplay
+                area = {this.state.selectedArea}
                 closeOverlay={this.closeOverlay.bind(this)}
               />
             </Overlay>                  

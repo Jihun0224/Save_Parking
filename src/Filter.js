@@ -22,7 +22,7 @@ export default class Filter extends Component{
         free:this.props.filterOption.free,
         areaAll:this.props.filterOption.areaAll,
         cctv:this.props.filterOption.cctv,
-        vehicle:this.props.filterOption.vehicle,
+        car:this.props.filterOption.car,
         smart:this.props.filterOption.smart,
       }
     }
@@ -79,19 +79,19 @@ export default class Filter extends Component{
     }
   }
   areaAllCheck(){
-    if(this.state.cctv && this.state.vehicle && this.state.smart){
+    if(this.state.cctv && this.state.car && this.state.smart){
       this.setState({areaAll:true});
     }
-    if(!this.state.cctv || !this.state.vehicle || !this.state.smart){
+    if(!this.state.cctv || !this.state.car || !this.state.smart){
       this.setState({areaAll:false});
     }
   }
   areaAllOnChenage(){
     if(this.state.areaAll == true){
-      this.setState({areaAll:false, cctv:false, vehicle:false, smart:false})
+      this.setState({areaAll:false, cctv:false, car:false, smart:false})
     }
     else{
-      this.setState({areaAll:true, cctv:true, vehicle:true, smart:true})
+      this.setState({areaAll:true, cctv:true, car:true, smart:true})
     }
   }
   cctvOnChenage(){
@@ -106,14 +106,14 @@ export default class Filter extends Component{
       })
     }
   }
-  vehicleOnChenage(){
-    if(this.state.vehicle == true){
-      this.setState({vehicle:false},()=>{
+  carOnChenage(){
+    if(this.state.car == true){
+      this.setState({car:false},()=>{
         this.areaAllCheck();
       })
     }
     else{
-      this.setState({vehicle:true},()=>{
+      this.setState({car:true},()=>{
         this.areaAllCheck();
       })
     }
@@ -138,7 +138,7 @@ export default class Filter extends Component{
       free:this.state.free,
       areaAll:this.state.areaAll,
       cctv:this.state.cctv,
-      vehicle:this.state.vehicle,
+      car:this.state.car,
       smart:this.state.smart,
     }
     this.props.saveFilterOption(this.filterOption);
@@ -237,10 +237,10 @@ export default class Filter extends Component{
               </Text>
               <ToggleSwitch
                 style={styles.filterSwitch}
-                isOn={this.state.vehicle}
+                isOn={this.state.car}
                 onColor='#002166'
                 offColor='gray'
-                onToggle={()=>this.vehicleOnChenage()}
+                onToggle={()=>this.carOnChenage()}
               />
             </View>
             <View style={styles.filterBoxContents}>
