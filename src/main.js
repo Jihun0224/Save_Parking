@@ -307,15 +307,15 @@ export default class Main extends Component{
                           coordinate={{ 
                             latitude: parseFloat(area.latitude), 
                             longitude: parseFloat(area.longitude)}}
-                          width={96} 
-                          height={96}
+                          width={30} 
+                          height={30}
                         >
-                          {area.ctlType == '인력단속'
+                          {/* {area.ctlType == '인력단속'
                           ?<CarMarker/>
                           :area.ctlType == '스마트폰단속'
                             ?<SmartPhoneMarker/>
                             :<CctvMarker/>
-                          }
+                          } */}
                         </Marker> 
                 ))}               
               {this.state.searchedPlace&&

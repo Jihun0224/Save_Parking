@@ -5,16 +5,17 @@ import Speech_Bubble from './images/speech-bubble.png';
 export default class ParkingMarker extends Component{
 
     render(){
-
-      let price = 60/this.props.basicTime * this.props.basicCharge
-      if(price == 0 || price == '' || price == undefined){
-        if(this.props.monthCmmtkt == 0 || this.props.monthCmmtkt == '' || this.props.monthCmmtkt == undefined){
-          price = "가격정보없음"
-        }
-        else{
-          price = this.props.monthCmmtkt
-        }
+      let price;
+      if(this.props.basicTime !='' && this.props.basicCharge!=''){
+        price = '₩'+60/this.props.basicTime * this.props.basicCharge
       }
+      else if(this.props.monthCmmtkt == 0 || this.props.monthCmmtkt == '' || this.props.monthCmmtkt == Infinity|| this.props.monthCmmtkt == null){
+        price = "정보없음"
+        }
+      else{
+        price = '₩'+this.props.monthCmmtkt
+      }
+      
         return (
         <View  style={styles.marker}>
             <ImageBackground
@@ -27,7 +28,7 @@ export default class ParkingMarker extends Component{
                     무료
                   </Text>
                 : <Text style={{color:'white', bottom:5}}>
-                    ₩{price}
+                    {price}
                   </Text>
                 }
 
@@ -39,7 +40,7 @@ export default class ParkingMarker extends Component{
 }
   const styles = StyleSheet.create({
     imageBackground: {
-        width:50,
+        width:55,
         height:45,
         justifyContent: 'center',
         alignItems: 'center',
