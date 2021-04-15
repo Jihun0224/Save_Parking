@@ -35,12 +35,11 @@ getAreaData = () => {
     .ref(`area`)
     .on('value', (snapshot) => {
         this.setState({
-            area: snapshot.val()
+            area: snapshot.val(),
+            isParkingDataLoading:false
         },()=>{
-            this.setState({isParkingDataLoading:false},()=>{
-                SplashScreen.hide();
+            SplashScreen.hide();    
         })
-    })
 });
 }
     async componentDidMount(){

@@ -39,10 +39,7 @@ export default class Main extends Component{
      },
      filterdParkingData:this.props.parking,
      filterdAreaData:this.props.area,
-     carData:[],
-     cctvData:[],
-     smartData:[],
-     zoom:17,
+     zoom:18,
       history:[{
         name:'',
         id:'0',
@@ -94,106 +91,136 @@ export default class Main extends Component{
         this.setState({filterdParkingData:this.props.parking})
       }
       else if(filterOption.public == true && filterOption.private == false && filterOption.free == false){
-        let NewParking = [];
+        let NewData = [];
         this.props.parking.forEach(parking => {
           if (parking.prkplceSe == '공영') {
-            NewParking.push(parking);
+            NewData.push(parking);
           }
         });
-        this.setState({filterdParkingData:NewParking})
+        this.setState({filterdParkingData:NewData})
       }
       else if(filterOption.public == true && filterOption.private == true && filterOption.free == false){
-        let NewParking = [];
+        let NewData = [];
           this.props.parking.forEach(parking => {
             if (parking.parkingchrgeInfo != '무료') {
-              NewParking.push(parking);
+              NewData.push(parking);
             }
           })
-        this.setState({filterdParkingData:NewParking})
+        this.setState({filterdParkingData:NewData})
       }
       else if(filterOption.public == true && filterOption.private == false && filterOption.free == true){
-        let NewParking = [];
-        let NewParking2 = [];
+        let NewData = [];
+        let NewData2 = [];
           this.props.parking.forEach(parking => {
             if (parking.parkingchrgeInfo == '무료') {
-              NewParking.push(parking);
+              NewData.push(parking);
             }
           })
-          NewParking.forforEach(parking => {
+          NewData.forforEach(parking => {
           if (parking.prkplceSe == '공영') {
-            NewParking2.push(parking);
+            NewData2.push(parking);
           }
         })
-        this.setState({filterdParkingData:NewParking2})
+        this.setState({filterdParkingData:NewData2})
       }
       else if(filterOption.public == false && filterOption.private == true && filterOption.free == false){
-        let NewParking = [];
+        let NewData = [];
           this.props.parking.forEach(parking => {
             if (parking.prkplceSe != '공영') {
-              NewParking.push(parking);
+              NewData.push(parking);
             }
           })
-        this.setState({filterdParkingData:NewParking})
+        this.setState({filterdParkingData:NewData})
       }
       else if(filterOption.public == false && filterOption.private == true && filterOption.free == true){
-        let NewParking = [];
-        let NewParking2 = [];
+        let NewData = [];
+        let NewData2 = [];
           this.props.parking.forEach(parking => {
             if (parking.parkingchrgeInfo == '무료') {
-              NewParking.push(parking);
+              NewData.push(parking);
             }
           })
 
-          NewParking.forEach(parking => {
+          NewData.forEach(parking => {
           if (parking.prkplceSe != '공영') {
-            NewParking2.push(parking);
+            NewData2.push(parking);
           }
         })
-        this.setState({filterdParkingData:NewParking2})
+        this.setState({filterdParkingData:NewData2})
       }
       else if(filterOption.public == false && filterOption.private == false && filterOption.free == true){
-        let NewParking = [];
+        let NewData = [];
           this.props.parking.forEach(parking => {
             if (parking.parkingchrgeInfo == '무료') {
-              NewParking.push(parking);
+              NewData.push(parking);
             }
           })
-        this.setState({filterdParkingData:NewParking})
+        this.setState({filterdParkingData:NewData})
       }
       else{
         this.setState({filterdParkingData:[]})
       }
 
-      // if(filterOption.areaAll == true){
-      //   this.setState({filterdAreaData:this.props.area})
-      // }
-      // else if(filterOption.cctv == true && filterOption.car == false && filterOption.smart == false){
-      //   let NewArea = this.state.cctvData;
-      //   this.setState({filterdAreaData:NewArea})
-      // }
-      // else if(filterOption.cctv == true && filterOption.car == true && filterOption.smart == false){
-      //   let NewArea = [this.state.carData,this.state.cctvData]
-      //   this.setState({filterdAreaData:NewArea})
-      // }
-      // else if(filterOption.cctv == true && filterOption.car == false && filterOption.smart == true){
-      //   let NewArea = [this.state.smartData,this.state.cctvData];
-      //   this.setState({filterdAreaData:NewArea})
-      // }
-      // else if(filterOption.cctv == false && filterOption.car == true && filterOption.smart == false){
-      //   let NewArea = +this.state.carData;
-      //   this.setState({filterdAreaData:NewArea})
-      // }
-      // else if(filterOption.cctv == false && filterOption.car == true && filterOption.smart == true){
-      //   let NewArea = [this.state.smartData,this.state.carData];
-      //   this.setState({filterdAreaData:NewArea})
-      // }
-      // else if(filterOption.cctv == false && filterOption.car == false && filterOption.smart == true){
-      //   let NewArea = this.state.smartData;
-      //   this.setState({filterdAreaData:NewArea})
-      // }
-      // else{
-      //   this.setState({filterdAreaData:[]})
-      // }
+      if(filterOption.areaAll == true){
+        this.setState({filterdAreaData:this.props.area})
+      }
+      else if(filterOption.cctv == true && filterOption.car == false && filterOption.smart == false){
+        let NewData = [];
+        this.props.area.forEach(area => {
+          if (area.ctlType!= '스마트폰단속'&&area.ctlType!= '인력단속') {
+            NewData.push(area);
+          }
+        });
+        this.setState({filterdAreaData:NewData})
+      }
+      else if(filterOption.cctv == true && filterOption.car == true && filterOption.smart == false){
+        let NewData = [];
+        this.props.area.forEach(area => {
+          if (area.ctlType != '스마트폰단속') {
+            NewData.push(area);
+          }
+        });
+        this.setState({filterdAreaData:NewData})
+      }
+      else if(filterOption.cctv == true && filterOption.car == false && filterOption.smart == true){
+        let NewData = [];
+        this.props.area.forEach(area => {
+          if (area.ctlType != '인력단속') {
+            NewData.push(area);
+          }
+        });
+        this.setState({filterdAreaData:NewData})
+      }
+      else if(filterOption.cctv == false && filterOption.car == true && filterOption.smart == false){
+        let NewData = [];
+        this.props.area.forEach(area => {
+          if (area.ctlType == '인력단속') {
+            NewData.push(area);
+          }
+        });
+        this.setState({filterdAreaData:NewData})
+      }
+      else if(filterOption.cctv == false && filterOption.car == true && filterOption.smart == true){
+        let NewData = [];
+        this.props.area.forEach(area => {
+          if (area.ctlType == '인력단속'||area.ctlType == '스마트폰단속') {
+            NewData.push(area);
+          }
+        });
+        this.setState({filterdAreaData:NewData})
+      }
+      else if(filterOption.cctv == false && filterOption.car == false && filterOption.smart == true){
+        let NewData = [];
+        this.props.area.forEach(area => {
+          if (area.ctlType == '스마트폰단속') {
+            NewData.push(area);
+          }
+        });
+        this.setState({filterdAreaData:NewData})
+      }
+      else{
+        this.setState({filterdAreaData:[]})
+      }
       this.closeFilter();
     })
   }
@@ -238,7 +265,7 @@ export default class Main extends Component{
       });
   }
   setSelectedArea(area){
-    this.setState({zoom:17},()=>{
+    this.setState({zoom:18},()=>{
       this._map.animateToCoordinate(
         {
           latitude: area.latitude,
@@ -289,15 +316,15 @@ export default class Main extends Component{
                           coordinate={{ 
                             latitude: parseFloat(parking.latitude), 
                             longitude: parseFloat(parking.longitude)}}
-                          width={96} 
-                          height={96}
+                          width={30} 
+                          height={30}
                         >
-                            <ParkingMarker 
+                            {/* <ParkingMarker 
                               basicCharge={parking.basicCharge}
                               basicTime={parking.basicTime}
                               parkingchrgeInfo={parking.parkingchrgeInfo}
                               monthCmmtkt={parking.monthCmmtkt}
-                            />
+                            /> */}
                         </Marker> 
                 ))}
             {this.state.filterdAreaData.map((area,index) => (
@@ -493,6 +520,6 @@ const styles = StyleSheet.create({
       marginTop:window.height*0.2
     },
     overlaybackdrop:{
-      opacity:0.8
+      opacity:0.1
     }
   });
