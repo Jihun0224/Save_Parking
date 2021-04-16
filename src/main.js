@@ -7,7 +7,7 @@ import AnimatedHideView from 'react-native-animated-hide-view';
 import Search from './Search';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Filter from './filter';
+import Filter from './Filter';
 import ParkingMarker from './parkingMarker';
 import { Overlay } from 'react-native-elements';
 import AreaMarkerDisplay from './areaMarkerDisplay';
@@ -18,13 +18,17 @@ import CarMarker from './carMarker';
 import car from './images/car.png';
 import cctv from './images/cctv.png';
 import smartPhone from './images/smartPhone.png';
+import Circle_marker from './images/circle_marker.png';
 
 window = Dimensions.get('window');
-
+let data = [];
 export default class Main extends Component{
   constructor(props){
     super(props);
     this.state={
+      level_latitude:0.00015,
+      level_longitude:0.0001,
+      zoomlevel:0,
       isSearchVisible:false,
       isFilterVisible:false,
       searchedPlace:false,
@@ -40,7 +44,7 @@ export default class Main extends Component{
         latitude:this.props.currPos.latitude,
         longitude:this.props.currPos.longitude,
      },
-     filterdParkingData:this.props.parking,
+     filteredParkingData:this.props.parking,
      filterdAreaData:this.props.area,
      zoom:18,
       history:[{
@@ -292,6 +296,309 @@ export default class Main extends Component{
         )
   }
 
+  ConfirmZoom(current){
+    console.log(current.zoom)
+    let max_latitude = "";
+    let min_latitude = "";
+    let max_longitude = "";
+    let min_longitude = "";
+    let clustering_data = [];
+    data = []
+
+    if(current.zoom>=18){
+     max_latitude = current.latitude+this.state.level_latitude*4
+     min_latitude = current.latitude-this.state.level_latitude*4
+     max_longitude = current.longitude+this.state.level_longitude*4
+     min_longitude = current.longitude-this.state.level_longitude*4
+     
+     for(let i=0; i<this.state.filteredParkingData.length; i++){
+       if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
+          clustering_data.push(this.state.filteredParkingData[i])
+          
+       }
+       else{}
+     }
+     for(let i=0; i<clustering_data.length; i++){
+          data[i]= (<Marker 
+                        key= {i} 
+                        onClick={()=>{this.setSelectedParking(clustering_data)}} 
+                        coordinate={{ 
+                          latitude: clustering_data[i].latitude, 
+                          longitude: clustering_data[i].longitude}}
+                        width={60} 
+                        height={60}
+                        pinColor="#002166"
+                        image={require('./images/speech-bubble1.png')}
+                        caption={{text: "₩600",textSize:13,color:"#ffffff",haloColor:'none',align:Align.Center}}
+                      
+                      >
+                        {/* <ParkingMarker 
+                              basicCharge={parking.basicCharge}
+                              basicTime={parking.basicTime}
+                              parkingchrgeInfo={parking.parkingchrgeInfo}
+                              monthCmmtkt={parking.monthCmmtkt}
+                        /> */}
+                      </Marker>)
+      }
+    }
+    else if(current.zoom>=16){
+      
+     max_latitude = current.latitude+this.state.level_latitude*16
+     min_latitude = current.latitude-this.state.level_latitude*16
+     max_longitude = current.longitude+this.state.level_longitude*16
+     min_longitude = current.longitude-this.state.level_longitude*16
+     
+     for(let i=0; i<this.state.filteredParkingData.length; i++){
+       if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
+          clustering_data.push(this.state.filteredParkingData[i])
+          
+       }
+       else{}
+     }
+     this.Clustering(300, clustering_data)
+    }
+    else if(current.zoom>=15){
+      
+      max_latitude = current.latitude+this.state.level_latitude*32
+      min_latitude = current.latitude-this.state.level_latitude*32
+      max_longitude = current.longitude+this.state.level_longitude*32
+      min_longitude = current.longitude-this.state.level_longitude*32
+      
+      for(let i=0; i<this.state.filteredParkingData.length; i++){
+        if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
+           clustering_data.push(this.state.filteredParkingData[i])
+           
+        }
+        else{}
+      }
+       this.Clustering(200, clustering_data)
+      
+     }
+     else if(current.zoom>=14){
+      
+      max_latitude = current.latitude+this.state.level_latitude*64
+      min_latitude = current.latitude-this.state.level_latitude*64
+      max_longitude = current.longitude+this.state.level_longitude*64
+      min_longitude = current.longitude-this.state.level_longitude*64
+      
+      for(let i=0; i<this.state.filteredParkingData.length; i++){
+        if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
+           clustering_data.push(this.state.filteredParkingData[i])
+           
+        }
+        else{}
+      }
+      this.Clustering(100, clustering_data)
+      
+     }
+    else if(current.zoom>=13)
+    {
+      max_latitude = current.latitude+this.state.level_latitude*128
+      min_latitude = current.latitude-this.state.level_latitude*128
+      max_longitude = current.longitude+this.state.level_longitude*128
+      min_longitude = current.longitude-this.state.level_longitude*128
+      
+      for(let i=0; i<this.state.filteredParkingData.length; i++){
+        if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
+           clustering_data.push(this.state.filteredParkingData[i])
+           
+        }
+        else{}
+      }
+      this.Clustering(80, clustering_data)
+    }
+    else if(current.zoom>=12){
+      
+      max_latitude = current.latitude+this.state.level_latitude*256
+      min_latitude = current.latitude-this.state.level_latitude*256
+      max_longitude = current.longitude+this.state.level_longitude*256
+      min_longitude = current.longitude-this.state.level_longitude*256
+      
+      for(let i=0; i<this.state.filteredParkingData.length; i++){
+        if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
+           clustering_data.push(this.state.filteredParkingData[i])
+           
+        }
+        else{}
+      }
+      this.Clustering(60, clustering_data)
+     }
+     else if(current.zoom>=16){
+      
+      max_latitude = current.latitude+this.state.level_latitude*512
+      min_latitude = current.latitude-this.state.level_latitude*512
+      max_longitude = current.longitude+this.state.level_longitude*512
+      min_longitude = current.longitude-this.state.level_longitude*512
+      
+      for(let i=0; i<this.state.filteredParkingData.length; i++){
+        if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
+           clustering_data.push(this.state.filteredParkingData[i])
+           
+        }
+        else{}
+      }
+      this.Clustering(40, clustering_data)
+     }
+    else if(current.zoom>=10){
+      
+     max_latitude = current.latitude+this.state.level_latitude*1024
+     min_latitude = current.latitude-this.state.level_latitude*1024
+     max_longitude = current.longitude+this.state.level_longitude*1024
+     min_longitude = current.longitude-this.state.level_longitude*1024
+
+     for(let i=0; i<this.state.filteredParkingData.length; i++){
+       if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
+          clustering_data.push(this.state.filteredParkingData[i])
+          
+       }
+       else{}
+     }
+     this.Clustering(30, clustering_data)
+    }
+    else if (current.zoom>=8){
+      
+     max_latitude = current.latitude+this.state.level_latitude*4096
+     min_latitude = current.latitude-this.state.level_latitude*4096
+     max_longitude = current.longitude+this.state.level_longitude*4096
+     min_longitude = current.longitude-this.state.level_longitude*4096
+     
+     for(let i=0; i<this.state.filteredParkingData.length; i++){
+       if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
+          clustering_data.push(this.state.filteredParkingData[i])
+          
+       }
+       else{}
+     }
+     this.Clustering(2, clustering_data)
+    }
+    else{
+      
+     max_latitude = current.latitude+this.state.level_latitude*30000
+     min_latitude = current.latitude-this.state.level_latitude*30000
+     max_longitude = current.longitude+this.state.level_longitude*30000
+     min_longitude = current.longitude-this.state.level_longitude*30000
+     
+
+     for(let i=0; i<this.state.filteredParkingData.length; i++){
+       if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
+          clustering_data.push(this.state.filteredParkingData[i])
+          
+       }
+       else{}
+     }
+     this.Clustering(1, clustering_data)
+    }
+  }  
+
+  Clustering(k, clustering_data){ //마커를 몇개로 할 건지의 
+    let centroid_lat = [];
+    let centroid_lon = []; 
+    let distance = [];
+    let label = [];
+    let lat_avg = [];
+    let lon_avg = [];
+    let num =[];
+    let lab = 0;
+    let min = 0;
+    
+
+    for(let i=0; i<k; i++){ //초기화
+        centroid_lat[i] = Math.random()*0.3 + 35.0 //임의의 중심점
+        centroid_lon[i] = Math.random()*0.2 + 128.9
+        num[i] = 0
+        lon_avg[i] = 0
+        lat_avg[i] = 0
+    }
+    for(let p=0; p<7; p++){
+      for(let i=0; i<clustering_data.length; i++){ //군집 나눠주는 구간
+        for(let j=0; j<k; j++){
+          distance[j] = Math.sqrt(Math.pow((centroid_lat[j]-Number(clustering_data[i].latitude)),2) + Math.pow((centroid_lon[j]-Number(clustering_data[i].longitude)),2))
+        }
+        
+        min = Math.min.apply(null,distance) //중심점과 최소거리
+        lab = distance.indexOf(min)
+        label [i] = lab //군집선택
+      }
+
+      for(let i=0; i<k; i++){
+        centroid_lat[i] = 0 //중심점 초기화
+        centroid_lon[i] = 0
+      }
+
+      for(let i=0; i<clustering_data.length; i++){
+        for(let j=0; j<k; j++){
+          if(j==label[i] && centroid_lat[j] != 0 && centroid_lon[j] != 0){ //군집마다 평균 중심점 새로 설정
+            centroid_lat[j] = (centroid_lat[j] + Number(clustering_data[i].latitude))/2
+            centroid_lon[j] = (centroid_lon[j] + Number(clustering_data[i].longitude))/2
+          }
+          else if(j==label[i] && centroid_lat[j] == 0 && centroid_lon[j] == 0){ //중심점 없으면 그냥 넣어주기
+            centroid_lat[j] = Number(clustering_data[i].latitude)
+            centroid_lon[j] = Number(clustering_data[i].longitude)
+          }
+        }
+      }
+    }
+
+    for(let i = 0; i<clustering_data.length; i++){
+      for(let j = 0; j<k; j++){
+        if(label[i]==j){
+          num[j]++; //마커개수
+          if(lat_avg[j] == 0 && lon_avg[j] == 0){
+            lat_avg[j] = Number(clustering_data[i].latitude) 
+            lon_avg[j] = Number(clustering_data[i].longitude)
+          }
+          else{
+            lat_avg[j] = (lat_avg[j] + Number(clustering_data[i].latitude))/2 //마커위치 평균
+            lon_avg[j] = (lon_avg[j] + Number(clustering_data[i].longitude))/2
+          }
+        }
+        else{}
+      }
+    }
+
+    for(let j=0; j<k; j++){
+       if(num[j] == 1){ //기본 마커 출력
+            data[j]= (<Marker 
+                        key= {j} 
+                        onClick={()=>{this.setSelectedParking(clustering_data)}} 
+                        coordinate={{ 
+                          latitude: lat_avg[j], 
+                          longitude: lon_avg[j]}}
+                        width={35} 
+                        height={35}
+                        pinColor="#002166"
+                        image={require('./images/speech-bubble1.png')}
+                        caption={{text: "₩600",textSize:13,color:"#ffffff",haloColor:'none',align:Align.Center}}
+                      
+                      >
+                        {/* <ParkingMarker 
+                              basicCharge={parking.basicCharge}
+                              basicTime={parking.basicTime}
+                              parkingchrgeInfo={parking.parkingchrgeInfo}
+                              monthCmmtkt={parking.monthCmmtkt}
+                        /> */}
+                      </Marker>)
+          
+       }
+       else if(num[j] > 1){
+                        //마커 합계 출력
+            data[j]=(<Marker key={j} coordinate={{latitude: lat_avg[j], longitude: lon_avg[j]}} width={80} height={80}>
+                      <View>
+                          <ImageBackground
+                            source={Circle_marker}
+                            style={styles.avg_marker}
+                            resizeMode="contain"
+                            imageStyle={{tintColor:"#002166"}}> 
+                            <Text style={{color: 'black'}}>{num[j]}</Text>
+                          </ImageBackground>
+                        </View>
+                    </Marker>)
+        }
+       else{}
+    }
+    
+  }
+
   render(){
     return (
       <SafeAreaView style={styles.container}>
@@ -302,6 +609,7 @@ export default class Main extends Component{
                 ref={component => this._map = component}
                 style={{width: '100%', height: '100%'}}
                 center={{...this.state.currPos, zoom: this.state.zoom}}
+                onCameraChange={e => this.setState({zoomlevel:e})}
               >
                 <Marker 
                   coordinate={{ 
@@ -312,7 +620,9 @@ export default class Main extends Component{
                   pinColor='blue'
                 />
 
-                {this.state.filterdParkingData.map((parking,index) => (
+                {this.ConfirmZoom(this.state.zoomlevel)}
+                {data.map((marker) =>(marker) )}
+                {/* {this.state.filterdParkingData.map((parking,index) => (
                         <Marker 
                           key= {index} 
                           onClick={()=>{this.setSelectedParking(parking)}} 
@@ -326,15 +636,15 @@ export default class Main extends Component{
                           image={require('./images/speech-bubble1.png')}
                           caption={{text: "₩600",textSize:13,color:"#ffffff",haloColor:'none',align:Align.Center}}
                         >
-                            {/* <ParkingMarker 
+                            <ParkingMarker 
                               basicCharge={parking.basicCharge}
                               basicTime={parking.basicTime}
                               parkingchrgeInfo={parking.parkingchrgeInfo}
                               monthCmmtkt={parking.monthCmmtkt}
-                            /> */}
+                            />
                         </Marker> 
-                ))}
-            {this.state.filterdAreaData.map((area,index) => (
+                ))} */}
+            {/* {this.state.filterdAreaData.map((area,index) => (
               area.ctlType == '인력단속'?
                         <Marker 
                           key= {index} 
@@ -367,7 +677,7 @@ export default class Main extends Component{
                             height={50}
                             image={require('./images/cctv1.png')}
                           />
-                ))}               
+                ))}                */}
               {this.state.searchedPlace&&
                 <Marker 
                 coordinate={{ 
@@ -548,5 +858,11 @@ const styles = StyleSheet.create({
     cpation:{
       position:'absolute',
       top:10
+    },
+    avg_marker:{
+      width:70,
+      height: 50,
+      justifyContent: 'center',
+      alignItems: 'center'
     }
   });
