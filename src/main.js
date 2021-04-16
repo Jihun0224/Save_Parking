@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions,ImageBackground } from 'react-native';
-import NaverMapView, {Marker} from "react-native-nmap";
+import NaverMapView, {Align, Marker} from "react-native-nmap";
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import ParkingMarkerDisplay from './parkingMarkerDisplay';
 import AnimatedHideView from 'react-native-animated-hide-view';
@@ -15,6 +15,9 @@ import marker_png from './images/marker.png';
 import CctvMarker from './cctvMarker';
 import SmartPhoneMarker from './smartPhoneMarker';
 import CarMarker from './carMarker';
+import car from './images/car.png';
+import cctv from './images/cctv.png';
+import smartPhone from './images/smartPhone.png';
 
 window = Dimensions.get('window');
 
@@ -316,8 +319,12 @@ export default class Main extends Component{
                           coordinate={{ 
                             latitude: parseFloat(parking.latitude), 
                             longitude: parseFloat(parking.longitude)}}
-                          width={30} 
-                          height={30}
+                          width={55} 
+                          height={40}
+
+                          pinColor="#002166"
+                          image={require('./images/speech-bubble1.png')}
+                          caption={{text: "₩600",textSize:13,color:"#ffffff",haloColor:'none',align:Align.Center}}
                         >
                             {/* <ParkingMarker 
                               basicCharge={parking.basicCharge}
@@ -328,30 +335,46 @@ export default class Main extends Component{
                         </Marker> 
                 ))}
             {this.state.filterdAreaData.map((area,index) => (
+              area.ctlType == '인력단속'?
                         <Marker 
                           key= {index} 
                           onClick={()=>{this.setSelectedArea(area)}} 
                           coordinate={{ 
                             latitude: parseFloat(area.latitude), 
                             longitude: parseFloat(area.longitude)}}
-                          width={30} 
-                          height={30}
-                        >
-                          {/* {area.ctlType == '인력단속'
-                          ?<CarMarker/>
+                          width={50} 
+                          height={50}
+                          image={require('./images/car1.png')}
+                        />
                           :area.ctlType == '스마트폰단속'
-                            ?<SmartPhoneMarker/>
-                            :<CctvMarker/>
-                          } */}
-                        </Marker> 
+                            ?<Marker 
+                            key= {index} 
+                            onClick={()=>{this.setSelectedArea(area)}} 
+                            coordinate={{ 
+                              latitude: parseFloat(area.latitude), 
+                              longitude: parseFloat(area.longitude)}}
+                            width={50} 
+                            height={50}
+                            image={require('./images/smartphone1.png')}
+                          />
+                            :<Marker 
+                            key= {index} 
+                            onClick={()=>{this.setSelectedArea(area)}} 
+                            coordinate={{ 
+                              latitude: parseFloat(area.latitude), 
+                              longitude: parseFloat(area.longitude)}}
+                            width={50} 
+                            height={50}
+                            image={require('./images/cctv1.png')}
+                          />
                 ))}               
               {this.state.searchedPlace&&
                 <Marker 
                 coordinate={{ 
                   latitude:this.state.searchedPlaceData.latitude, 
                   longitude:this.state.searchedPlaceData.longitude}}
-                width={96} 
-                height={96}
+                width={80} 
+                height={50}
                 >
                   <View>
                     <ImageBackground
@@ -521,5 +544,9 @@ const styles = StyleSheet.create({
     },
     overlaybackdrop:{
       opacity:0.1
+    },
+    cpation:{
+      position:'absolute',
+      top:10
     }
   });

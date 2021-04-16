@@ -18,11 +18,7 @@ export default class ParkingMarker extends Component{
       
         return (
         <View  style={styles.marker}>
-            <ImageBackground
-                resizeMode="stretch"
-                source={Speech_Bubble}
-                style={styles.imageBackground}
-                imageStyle={{tintColor:"#002166"}}>
+
                 {this.props.parkingchrgeInfo=='무료'
                 ? <Text style={{color:'white', bottom:5}}>
                     무료
@@ -32,7 +28,6 @@ export default class ParkingMarker extends Component{
                   </Text>
                 }
 
-            </ImageBackground>
       </View>
 
     )
