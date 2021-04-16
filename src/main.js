@@ -18,7 +18,6 @@ import CarMarker from './carMarker';
 import car from './images/car.png';
 import cctv from './images/cctv.png';
 import smartPhone from './images/smartPhone.png';
-import Circle_marker from './images/circle_marker.png';
 
 window = Dimensions.get('window');
 let data = [];
@@ -26,8 +25,8 @@ export default class Main extends Component{
   constructor(props){
     super(props);
     this.state={
-      level_latitude:0.00015,
-      level_longitude:0.0001,
+      level_latitude:0.0002,
+      level_longitude:0.00013,
       zoomlevel:0,
       isSearchVisible:false,
       isFilterVisible:false,
@@ -256,9 +255,10 @@ export default class Main extends Component{
   closeOverlay(){
     this.setState({overlayVisible:false})
   }
+  
   setSelectedParking(parking){
     this.setState({zoom:17},()=>{
-      this._map.animateToCoordinate(
+      this._map.animateToCoordinat(
         {
           latitude: parking.latitude,
           longitude: parking.longitude,
@@ -305,11 +305,11 @@ export default class Main extends Component{
     let clustering_data = [];
     data = []
 
-    if(current.zoom>=18){
-     max_latitude = current.latitude+this.state.level_latitude*4
-     min_latitude = current.latitude-this.state.level_latitude*4
-     max_longitude = current.longitude+this.state.level_longitude*4
-     min_longitude = current.longitude-this.state.level_longitude*4
+    if(current.zoom>=16){
+     max_latitude = current.latitude+this.state.level_latitude*16
+     min_latitude = current.latitude-this.state.level_latitude*16
+     max_longitude = current.longitude+this.state.level_longitude*16
+     min_longitude = current.longitude-this.state.level_longitude*16
      
      for(let i=0; i<this.state.filteredParkingData.length; i++){
        if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
@@ -321,12 +321,12 @@ export default class Main extends Component{
      for(let i=0; i<clustering_data.length; i++){
           data[i]= (<Marker 
                         key= {i} 
-                        onClick={()=>{this.setSelectedParking(clustering_data)}} 
+                        onClick={()=>{this.setSelectedParking(clustering_data[i])}} 
                         coordinate={{ 
                           latitude: clustering_data[i].latitude, 
                           longitude: clustering_data[i].longitude}}
-                        width={60} 
-                        height={60}
+                        width={35} 
+                        height={35}
                         pinColor="#002166"
                         image={require('./images/speech-bubble1.png')}
                         caption={{text: "₩600",textSize:13,color:"#ffffff",haloColor:'none',align:Align.Center}}
@@ -341,22 +341,7 @@ export default class Main extends Component{
                       </Marker>)
       }
     }
-    else if(current.zoom>=16){
-      
-     max_latitude = current.latitude+this.state.level_latitude*16
-     min_latitude = current.latitude-this.state.level_latitude*16
-     max_longitude = current.longitude+this.state.level_longitude*16
-     min_longitude = current.longitude-this.state.level_longitude*16
-     
-     for(let i=0; i<this.state.filteredParkingData.length; i++){
-       if(this.state.filteredParkingData[i].latitude<=max_latitude&&this.state.filteredParkingData[i].latitude>=min_latitude&&this.state.filteredParkingData[i].longitude<=max_longitude&&this.state.filteredParkingData[i].longitude>=min_longitude){
-          clustering_data.push(this.state.filteredParkingData[i])
-          
-       }
-       else{}
-     }
-     this.Clustering(300, clustering_data)
-    }
+    
     else if(current.zoom>=15){
       
       max_latitude = current.latitude+this.state.level_latitude*32
@@ -371,7 +356,7 @@ export default class Main extends Component{
         }
         else{}
       }
-       this.Clustering(200, clustering_data)
+       this.Clustering(1600, clustering_data)
       
      }
      else if(current.zoom>=14){
@@ -388,7 +373,7 @@ export default class Main extends Component{
         }
         else{}
       }
-      this.Clustering(100, clustering_data)
+      this.Clustering(1225, clustering_data)
       
      }
     else if(current.zoom>=13)
@@ -405,7 +390,7 @@ export default class Main extends Component{
         }
         else{}
       }
-      this.Clustering(80, clustering_data)
+      this.Clustering(900, clustering_data)
     }
     else if(current.zoom>=12){
       
@@ -421,9 +406,9 @@ export default class Main extends Component{
         }
         else{}
       }
-      this.Clustering(60, clustering_data)
+      this.Clustering(400, clustering_data)
      }
-     else if(current.zoom>=16){
+     else if(current.zoom>=11){
       
       max_latitude = current.latitude+this.state.level_latitude*512
       min_latitude = current.latitude-this.state.level_latitude*512
@@ -437,7 +422,7 @@ export default class Main extends Component{
         }
         else{}
       }
-      this.Clustering(40, clustering_data)
+      this.Clustering(100, clustering_data)
      }
     else if(current.zoom>=10){
       
@@ -453,9 +438,9 @@ export default class Main extends Component{
        }
        else{}
      }
-     this.Clustering(30, clustering_data)
+     this.Clustering(25, clustering_data)
     }
-    else if (current.zoom>=8){
+    else if (current.zoom>=9){
       
      max_latitude = current.latitude+this.state.level_latitude*4096
      min_latitude = current.latitude-this.state.level_latitude*4096
@@ -469,7 +454,7 @@ export default class Main extends Component{
        }
        else{}
      }
-     this.Clustering(2, clustering_data)
+     this.Clustering(9, clustering_data)
     }
     else{
       
@@ -500,16 +485,34 @@ export default class Main extends Component{
     let num =[];
     let lab = 0;
     let min = 0;
-    
+    let lat = 0;
+    let lon = 0;
+    let plus = 0;
 
+    if(k!=1){
+      for(let i=0;i<Math.sqrt(k); i++){
+        lat += 0.23/(Math.sqrt(k)-1)
+        lon = 0
+
+        for(let j=0; j<Math.sqrt(k); j++){
+          centroid_lat[plus] = 35.03+lat //초기 중심점
+          centroid_lon[plus] = 128.94+lon
+          lon += 0.32/(Math.sqrt(k)-1)
+          plus++
+        }
+      }
+      
+    }
+    else{
+      centroid_lat[k] = 35.03;
+      centroid_lon[k] = 128.94;
+    }
     for(let i=0; i<k; i++){ //초기화
-        centroid_lat[i] = Math.random()*0.3 + 35.0 //임의의 중심점
-        centroid_lon[i] = Math.random()*0.2 + 128.9
         num[i] = 0
         lon_avg[i] = 0
         lat_avg[i] = 0
     }
-    for(let p=0; p<7; p++){
+    for(let p=0; p<4; p++){
       for(let i=0; i<clustering_data.length; i++){ //군집 나눠주는 구간
         for(let j=0; j<k; j++){
           distance[j] = Math.sqrt(Math.pow((centroid_lat[j]-Number(clustering_data[i].latitude)),2) + Math.pow((centroid_lon[j]-Number(clustering_data[i].longitude)),2))
@@ -560,7 +563,7 @@ export default class Main extends Component{
        if(num[j] == 1){ //기본 마커 출력
             data[j]= (<Marker 
                         key= {j} 
-                        onClick={()=>{this.setSelectedParking(clustering_data)}} 
+                        onClick={()=>{this.setSelectedParking({latitude:lat_avg[j], longitude:lon_avg[j]})}} 
                         coordinate={{ 
                           latitude: lat_avg[j], 
                           longitude: lon_avg[j]}}
@@ -582,17 +585,18 @@ export default class Main extends Component{
        }
        else if(num[j] > 1){
                         //마커 합계 출력
-            data[j]=(<Marker key={j} coordinate={{latitude: lat_avg[j], longitude: lon_avg[j]}} width={80} height={80}>
-                      <View>
-                          <ImageBackground
-                            source={Circle_marker}
-                            style={styles.avg_marker}
-                            resizeMode="contain"
-                            imageStyle={{tintColor:"#002166"}}> 
-                            <Text style={{color: 'black'}}>{num[j]}</Text>
-                          </ImageBackground>
-                        </View>
-                    </Marker>)
+            data[j]=(<Marker 
+                      key={j}
+                      coordinate={{latitude: lat_avg[j], longitude: lon_avg[j]}}
+                      width={50}
+                      height={50}
+                      pinColor="#002166"
+                      image={require('./images/circle.png')}
+                      caption={{text: String(num[j]) ,textSize:14,color:"#000000",haloColor:'none',align:Align.Center}}
+                      //onClick={()=> {this.setCurrentMarker(lat_avg[j], lon_avg[j])}}
+                      >
+                      </Marker>
+                    )
         }
        else{}
     }
@@ -611,6 +615,7 @@ export default class Main extends Component{
                 center={{...this.state.currPos, zoom: this.state.zoom}}
                 onCameraChange={e => this.setState({zoomlevel:e})}
               >
+                {console.log(this.state.zoom+"줌")}
                 <Marker 
                   coordinate={{ 
                     latitude: this.props.currPos.latitude, 
