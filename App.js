@@ -81,7 +81,6 @@ getAreaData = () => {
                 this.setState({isGetPositionLoading:false},()=>{
                     this.getParkingData()
                 });
-
             }
         }catch(err){alert('퍼미션 작업 에러');}
     }

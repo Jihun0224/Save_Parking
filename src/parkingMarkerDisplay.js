@@ -15,7 +15,7 @@ class ParkingMarkerDisplay extends Component {
     Linking.canOpenURL(url)
     .then(supported => {
       if (!supported) {
-        console.log('Unsupported URL: ' + url)
+        alert('Unsupported URL: ' + url)
       } else {
         return Linking.openURL(url)
       }
