@@ -142,21 +142,23 @@ export default class AreaMarkerDisplay extends Component{
 }
 const styles = StyleSheet.create({
   container:{
-    width:window.width,
-    height:window.height*0.8,
+        width:window.width,
+        height:window.height*0.8,
+        marginTop:window.height*0.2,
  },
   header: {
     height: 60,
     borderBottomWidth: 1,
     borderBottomColor: '#dee2e6',
-    paddingTop:5,
-    paddingLeft:10
+    paddingTop:10,
+    paddingLeft:10,
+    backgroundColor:'#ffffff'
   },
   headerText:{
     fontSize:25,
     position:'absolute',
     alignSelf:'center',
-    top:5,
+    top:10,
   },
   firstTitleText:{
     fontSize:20,

@@ -5,6 +5,43 @@ import Geolocation from 'react-native-geolocation-service';
 import Loading from './src/loading';
 import database from '@react-native-firebase/database';
 import SplashScreen from 'react-native-splash-screen'
+import messaging from '@react-native-firebase/messaging';
+
+export const sendPushNotifications = async (fcmToken) => {
+    const FIREBASE_API_KEY = "";
+    const message = {
+        to: fcmToken,
+  
+      notification: {
+        title: "This is a Notification",
+        boby: "This is the body of the Notification",
+        vibrate: 1,
+        sound: 1,
+        show_in_foreground: true,
+        priority: "high",
+        content_available: true,
+      },
+      data: {
+        title: "This is a Notification",
+        boby: "This is the body of the Notification",
+        score: 50,
+        wicket: 1,
+  
+      },
+    }
+    let headers = new Headers({
+      "Content-Type" : "application/json",
+      Authorization: "key=" + FIREBASE_API_KEY,
+    })
+  
+    let response = await fetch ("https://fcm.googleapis.com/fcm/send",{
+      method: "POST",
+      headers,
+      body: JSON.stringify(message),
+    })
+    response = await response.json();
+    console.log(response);
+  }
 
 export default class App extends Component{
  
@@ -19,7 +56,30 @@ export default class App extends Component{
             Loading:true,
         }
     }
+    getFcmToken = async () => {
+        const fcmToken = await messaging().getToken();
+        if (fcmToken) {
+            console.log("Your Firebase Token is:", fcmToken);
+        } else {
+            console.log("Failed", "No Token Recived");
+        }
+      };
+    requestUserPermission = async () => {
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+          if (enabled) {
+            this.getFcmToken();
+            console.log('Authorization status:', authStatus);
+          }
+        };
+
     getParkingData = () => {
+
+        messaging().setBackgroundMessageHandler(async remoteMessage => {
+            console.log('Message handled in the background!'+remoteMessage);
+          });
         database()
         .ref(`parking`)
         .on('value', (snapshot) => {
@@ -43,6 +103,25 @@ getAreaData = () => {
 });
 }
     async componentDidMount(){
+        await this.requestUserPermission();
+            messaging().onNotificationOpenedApp(remoteMessage => {
+            console.log(
+                'background state:',
+                remoteMessage.notification,
+            );
+            });
+            messaging()
+            .getInitialNotification()
+            .then(remoteMessage => {
+                if (remoteMessage) {
+                console.log(
+                    'quit state:',
+                    remoteMessage.notification,
+                );
+                }
+            });
+
+            sendPushNotifications(fcmToken)
 
         await this.requestLocationPermission()
         

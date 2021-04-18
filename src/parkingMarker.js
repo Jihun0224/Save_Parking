@@ -9,7 +9,12 @@ export default class ParkingMarker extends Component{
         price = this.props.parking.parkingchrgeInfo
       }
       else if(this.props.parking.basicTime !='' && this.props.parking.basicCharge!=''){
-        price = '₩'+Math.round(60/this.props.parking.basicTime * this.props.parking.basicCharge)
+        if(this.props.parking.basicTime > 60){
+          price = '₩'+this.props.parking.basicCharge
+        }
+        else{
+          price = '₩'+Math.round(60/this.props.parking.basicTime * this.props.parking.basicCharge)
+        }
       }
       else if(this.props.parking.monthCmmtkt == 0 || 
               this.props.parking.monthCmmtkt == '' || 

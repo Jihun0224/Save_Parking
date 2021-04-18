@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import { StyleSheet, SafeAreaView,View, TouchableOpacity, Text, Dimensions,ImageBackground } from 'react-native';
-import NaverMapView, {Align, Marker} from "react-native-nmap";
+import { StyleSheet, Modal, SafeAreaView,View, TouchableOpacity, Text, Dimensions,ImageBackground } from 'react-native';
+import NaverMapView, {Marker} from "react-native-nmap";
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import ParkingMarkerDisplay from './parkingMarkerDisplay';
 import AnimatedHideView from 'react-native-animated-hide-view';
@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Filter from './filter';
 import ParkingMarker from './parkingMarker';
-import { Overlay } from 'react-native-elements';
 import AreaMarkerDisplay from './areaMarkerDisplay';
 import AreaMarker from './areaMarker';
 window = Dimensions.get('window');
@@ -597,21 +596,6 @@ export default class Main extends Component{
   // }
 
   render(){
-    const parkingPrice = ({parking}) => {
-      let price;
-      if(parking.parkingchrgeInfo=='무료'){
-        return '무료'
-      }
-      else if(parking.basicTime !='' && parking.basicCharge!=''){
-        return price = '₩'+toString(60/parking.basicTime * parking.basicCharge)
-      }
-      else if(parking.monthCmmtkt == 0 || parking.monthCmmtkt == '' || parking.monthCmmtkt == Infinity|| parking.monthCmmtkt == null){
-        return price = "정보없음"
-        }
-      else{
-        return price = '₩'+toString(parking.monthCmmtkt)
-      }
-    }
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.map}>
@@ -739,10 +723,11 @@ export default class Main extends Component{
                 parking={this.state.selectedParking}
               />
             </SlidingUpPanel>
-            <Overlay 
+            <Modal 
+              animationType="slide"
               visible={this.state.overlayVisible}
-              overlayStyle={styles.overlay}
-              backdropStyle={styles.overlaybackdrop}
+              style={styles.overlay}
+              transparent={true}
               area={this.state.selectedArea}
               onBackdropPress={()=>{
                 this.closeOverlay()
@@ -752,7 +737,7 @@ export default class Main extends Component{
                 area = {this.state.selectedArea}
                 closeOverlay={this.closeOverlay.bind(this)}
               />
-            </Overlay>                  
+            </Modal>                  
         </View>
       </SafeAreaView>
     )}
@@ -819,16 +804,6 @@ const styles = StyleSheet.create({
     overlay:{
       borderTopLeftRadius:20,
       borderTopRightRadius:20,
-      paddingLeft:0,
-      paddingRight:0,
-      marginTop:window.height*0.2
-    },
-    overlaybackdrop:{
-      opacity:0.1
-    },
-    cpation:{
-      position:'absolute',
-      top:10
     },
     avg_marker:{
       width:70,
