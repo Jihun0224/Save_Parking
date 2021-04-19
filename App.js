@@ -45,13 +45,13 @@ getAreaData = () => {
 }
     async componentDidMount(){
             
-        // LocalNotification.register();
+        LocalNotification.register();
         await this.requestLocationPermission()
         
      }
-    //  componentWillUnmount() {
-    //     LocalNotification.unregister();
-    // }
+     componentWillUnmount = () => {
+        LocalNotification.unregister();
+      };
     render(){
         return(
           this.state.isGetPositionLoading == false&&this.state.isParkingDataLoading == false

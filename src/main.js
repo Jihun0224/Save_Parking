@@ -12,7 +12,6 @@ import ParkingMarker from './parkingMarker';
 import AreaMarkerDisplay from './areaMarkerDisplay';
 import AreaMarker from './areaMarker';
 window = Dimensions.get('window');
-let data = [];
 export default class Main extends Component{
   constructor(props){
     super(props);

@@ -21,17 +21,7 @@ class ParkingMarkerDisplay extends Component {
       }
     }).catch(err => console.error('An error occurred ', err))
     }
-    componentDidMount(){
-      fetch(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=ATtYBwKnIoAzhj_WBZ3fjXeDM6QQDAPabhSCezaka4ImcB3CvjV4ys4wIRlJ3OyHIHglyjaB7EraKDeAhg8O2-FGSe12-V0zsdP-t7J5DossPWKXllZpOhoXRhdTNiaF8K8kyfCbUXd0gkz3tZgQUKx-GqnKdWqf8eoqvoEa80-r-GAygKNv&key=AIzaSyDWjcA3SMCy8RhIc6TK_OUYKGi6WkA7-Ts`, {
-      })
-      .then(response => response.text())
-      .then(response=>{
-        console.log(response);
-      })
-    }
-    getPhoto(){
 
-    }
   render() {
     return (
       <SafeAreaView style={styles.container}>

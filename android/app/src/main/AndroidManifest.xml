@@ -17,7 +17,9 @@
                   android:value="com.saveparking"/>
       <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_description"
                   android:value="com.saveparking"/>
-
+        <meta-data  android:name="com.google.firebase.messaging.default_notification_icon" 
+                    android:resource="@mipmap/ic_launcher" 
+                    android:roundIcon="@mipmap/ic_launcher_round"/>
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationActions" />
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
