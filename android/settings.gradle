@@ -1,4 +1,6 @@
 rootProject.name = 'SaveParking'
+include ':react-native-push-notification'
+project(':react-native-push-notification').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-push-notification/android')
 include ':react-native-nmap'
 project(':react-native-nmap').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-nmap/android')
 include ':react-native-splash-screen'

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.github.quadflask.react.navermap.RNNaverMapPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import io.invertase.firebase.database.ReactNativeFirebaseDatabasePackage;
