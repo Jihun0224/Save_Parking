@@ -26,7 +26,7 @@ export default class AreaMarker extends Component{
                   longitude: parseFloat(this.props.area.longitude)}}
                 width={50} 
                 height={50}
-                image={require('./images/smartphone.png')}
+                image={require('./images/smartPhone.png')}
               />
                 :<Marker 
                 key= {this.props.index} 

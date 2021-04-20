@@ -4,7 +4,7 @@ import Main from "./src/main";
 import Geolocation from 'react-native-geolocation-service';
 import Loading from './src/loading';
 import database from '@react-native-firebase/database';
-import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen';
 import LocalNotification from './src/LocalNotification';
 export default class App extends Component{
  
