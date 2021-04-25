@@ -328,7 +328,7 @@ export default class Main extends Component{
                    key={i}
                    index={i}
                    parking={clustering_data[i]}
-                   onPress={()=>{this.setSelectedParking(clustering_data[i])}} 
+                   setSelectedParking={this.setSelectedParking.bind(this)} 
                 />)
                 
         }
@@ -338,7 +338,7 @@ export default class Main extends Component{
                 key={i}
                 index={i}
                 area={clustering_data[i]}
-                onClick={()=>{this.setSelectedParking(clustering_data[i])}} 
+                setSelectedArea={this.setSelectedArea.bind(this)} 
             />
           )
         }
@@ -571,7 +571,7 @@ export default class Main extends Component{
                         key={j}
                         index={j}
                         parking={information[j]}
-                        onClick={()=>{this.setSelectedParking(information[j])}} 
+                        setSelectedParking={this.setSelectedParking.bind(this)} 
                         />)
         }
         else if(num[j] > 1){
@@ -583,7 +583,7 @@ export default class Main extends Component{
                         height={50}
                         pinColor="#002166"
                         image={require('./images/parking_marker.png')}
-                        caption={{text: String(num[j]) ,textSize:14,color:"#000000",haloColor:'none',align:Align.Center}}
+                        caption={{text: String(num[j]) ,textSize:14,color:"#ffffff",haloColor:'none',align:Align.Center}}
                         onClick={()=> {this.setCurrentMarker(lat_avg[j], lon_avg[j])}}
                         >
                         </Marker>
@@ -598,7 +598,7 @@ export default class Main extends Component{
                 key={j}
                 index={j}
                 area={information[j]}
-                onClick={()=>{this.setSelectedParking(information[i])}} 
+                setSelectedArea={this.setSelectedArea.bind(this)} 
             />
           )
         }
@@ -612,7 +612,7 @@ export default class Main extends Component{
                         height={50}
                         pinColor="#002166"
                         image={require('./images/area_marker.png')}
-                        caption={{text: String(num[j]) ,textSize:14,color:"#000000",haloColor:'none',align:Align.Center}}
+                        caption={{text: String(num[j]) ,textSize:14,color:"#ffffff",haloColor:'none',align:Align.Center}}
                         onClick={()=> {this.setCurrentMarker(lat_avg[j], lon_avg[j])}}
                         >
                       </Marker>
@@ -649,23 +649,25 @@ export default class Main extends Component{
                 {data_parking.map((parking) =>(parking) )}
                 {this.ConfirmZoom(this.state.zoomlevel, this.state.filteredAreaData)}
                 {data_area.map((area) => (area))}
+                
+                
                                
               {this.state.searchedPlace&&
                 <Marker 
                 coordinate={{ 
                   latitude:this.state.searchedPlaceData.latitude, 
                   longitude:this.state.searchedPlaceData.longitude}}
-                width={80} 
+                width={50} 
                 height={50}
                 image={require('./images/marker.png')}
                 >
-                  <View>
+                  {/* <View>
                     <ImageBackground
                       resizeMode="contain"
-                      source={marker_png}
+                      source={marker.png}
                       style={styles.imageBackground}
                       imageStyle={{tintColor:"#ff0000"}}/>
-                  </View>
+                  </View> */}
                 </Marker>
               }
             </NaverMapView>

@@ -19,6 +19,7 @@
     "react": "16.13.1",
     "react-native": "0.63.4",
     "react-native-animated-hide-view": "1.0.0",
+    "react-native-car-connect": "1.1.7",
     "react-native-elements": "3.3.0",
     "react-native-geolocation-service": "5.2.0",
     "react-native-gesture-handler": "1.10.3",

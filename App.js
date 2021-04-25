@@ -6,12 +6,15 @@ import Loading from './src/loading';
 import database from '@react-native-firebase/database';
 import SplashScreen from 'react-native-splash-screen';
 import LocalNotification from './src/LocalNotification';
+import Bluetooth from './src/bluetooth';
 export default class App extends Component{
  
     constructor(props){
         super(props);
         this.state={
-            currPos:{latitude:35.2538433 , longitude:128.6402609}, //최초 좌표객체[위도,경도]
+            currPos:{latitude: 35.213820//35.2538433 
+                    , longitude:129.027534 //128.6402609
+                    }, //최초 좌표객체[위도,경도]
             isGetPositionLoading: true,
             isParkingDataLoading:true,
             parking:[],
@@ -46,6 +49,7 @@ getAreaData = () => {
     async componentDidMount(){
             
         LocalNotification.register();
+        //<Bluetooth currPos={this.state.currPos} filteredAreaData={this.state.area}></Bluetooth>
         await this.requestLocationPermission()
         
      }

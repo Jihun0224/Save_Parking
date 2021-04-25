@@ -33,10 +33,10 @@ export default class ParkingMarker extends Component{
           coordinate={{ 
             latitude: parseFloat(this.props.parking.latitude), 
             longitude: parseFloat(this.props.parking.longitude)}}
-          width={55} 
-          height={50}
+          width={45} 
+          height={35}
           pinColor="#002166"
-          image={require('./images/speech-bubble.png')}
+          image={require('./images/speech_bubble.png')}
           caption={{text: price,textSize:13,color:"#ffffff",haloColor:'none',align:Align.Center}}
         />
 
