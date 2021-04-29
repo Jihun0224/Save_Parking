@@ -2,11 +2,11 @@
 
  **거기 멈춰**은 사용자가 주·정차한 위치의 정보를 알려준다. 여기서 정보란 현 위치가 시에서 지정한 주·정차 금지구역인지, 불법 주정차 단속을 어떤 방법으로 어느 시간대에 주로 하는지에 대한 정보이다. 또한, 사용자와 가까운 위치에 있는 주차장의 위치, 요금, 운영시간 등의 정보를 제공하는 안드로이드 앱이다.   
  
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ &nbsp;&nbsp;&nbsp;
 ![image](https://user-images.githubusercontent.com/59672592/116570687-6c50bc00-a945-11eb-9396-cdd7dd0c7434.png)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![image](https://user-images.githubusercontent.com/59672592/116570517-4a573980-a945-11eb-90c3-6a282bbb91f0.png)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![image](https://user-images.githubusercontent.com/59672592/116571064-b89bfc00-a945-11eb-9d65-449f2f53d68c.png)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![image](https://user-images.githubusercontent.com/59672592/116572071-9a82cb80-a946-11eb-97d9-54ea3dd0db1d.png)
+
 ## 주요기능  
 + 장소 검색
 + 주차장 정보 제공
