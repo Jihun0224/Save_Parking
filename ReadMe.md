@@ -21,28 +21,56 @@
 ## 사용 API
 + 카카오 장소 API  
 + 네이버맵 API
-## 사용 라이브러리
-+ @react-native-firebase/app: 11.2.0,
-+ @react-native-firebase/database: 11.2.0,
-+ @react-native-firebase/messaging: 11.2.0,
-+ lodash: 4.17.21,
-+ patch-package: 6.4.7,
-+ react: 16.13.1,
-+ react-native: 0.63.4,
-+ react-native-animated-hide-view: 1.0.0,
-+ react-native-elements: 3.3.0,
-+ react-native-geolocation-service: 5.2.0,
-+ react-native-gesture-handler: 1.10.3,
-+ react-native-nmap: 0.0.59,
-+ react-native-push-notification: 7.2.3,
-+ react-native-reanimated: 2.0.0,
-+ react-native-safe-area-context: 3.2.0,
-+ react-native-splash-screen: 3.2.0,
-+ react-native-vector-icons: 8.1.0,
-+ rn-sliding-up-panel: 2.4.5,
-+ toggle-switch-react-native: 3.2.0
 ## Install
- -
+**1. 초기 설정**
+ ```
+ #소스 코드 내려받기 
+ git clone https://github.com/Jihun0224/Save_Parking.git  
+ #소스 코드 디렉토리에 엑세스
+ cd Save_Parking
+ #node_modules 설치
+ npm install
+ ```
+**2. API KEY 설정**  
+**2-1.[Kakao Developers](https://developers.kakao.com)에서 카카오 맵 API를 발급 받기**
+```JavaScript
+#./src/Search.js
+...
+const API_KEY = "YOUR_KEY";
+...
+```
+YOUR_KEY에 본인 키값 입력  
+**2-2.[네이버 클라우드 플랫폼](https://www.ncloud.com/product/applicationService/maps)에서 네이버 맵 API를 발급 받기**
+
+```JavaScript
+#./android/app/src/main/AndroidManifest.xml
+...
+    <application>
+        ...
+        <meta-data android:name="com.naver.maps.map.CLIENT_ID"
+        android:value="YOUR_KEY" />
+    </application>
+ ...
+```
+YOUR_KEY에 본인 키값 입력  
+
+**3. DB 설정(본인의 DB를 사용하고 싶을 경우)**  
+거기 멈춰는 [firebase](https://firebase.google.com/) realtime database 사용([참고](https://velog.io/@jinsunee/react-native-firebase-%EC%84%A4%EC%A0%95))  
+```JavaScript
+#데이터 조회
+import database from '@react-native-firebase/database';
+...
+    database()
+    .ref(`YOUR_TABLE_NAME`)
+    .on('value', (snapshot) => {
+          console.log(snapshot);
+        });
+ ...
+```
+**4.실행**  
+```
+react-native run-android
+```
 ## 사용 데이터
 전국주차장정보표준데이터: https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15012896  
 부산광역시_불법주정차단속 데이터: https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15034087
