@@ -37,7 +37,7 @@
  npm install
  ```
 **2. API KEY 설정**  
-**2-1.[Kakao Developers](https://developers.kakao.com)에서 카카오 맵 API를 발급 받기**
+**2-1.[Kakao Developers](https://developers.kakao.com)에서 카카오 맵 API를 발급 받기**([참고](https://imweb.me/faq?mode=view&category=29&category2=47&idx=71441))
 ```JavaScript
 #./src/Search.js
 ...
@@ -46,7 +46,7 @@ const API_KEY = "YOUR_KEY";
 ```
 YOUR_KEY에 본인 키값 입력  
 
-**2-2.[네이버 클라우드 플랫폼](https://www.ncloud.com/product/applicationService/maps)에서 네이버 맵 API를 발급 받기**
+**2-2.[네이버 클라우드 플랫폼](https://www.ncloud.com/product/applicationService/maps)에서 네이버 맵 API를 발급 받기**([참고](https://blog.naver.com/occidere/220988092267))
 
 ```JavaScript
 #./android/app/src/main/AndroidManifest.xml
