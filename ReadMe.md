@@ -26,8 +26,10 @@
 ## 사용 API
 + 카카오 장소 API  
 + 네이버맵 API
-## Install
-**1. 초기 설정**
+## 설치
+**1. React Native 개발환경 구축**([참고](https://dev-yakuza.posstree.com/ko/react-native/install-on-windows/)) 
+
+**2. 초기 설정**
  ```
  #소스 코드 내려받기 
  git clone https://github.com/Jihun0224/Save_Parking.git  
@@ -36,8 +38,8 @@
  #node_modules 설치
  npm install
  ```
-**2. API KEY 설정**  
-**2-1.[Kakao Developers](https://developers.kakao.com)에서 카카오 맵 API를 발급 받기**([참고](https://imweb.me/faq?mode=view&category=29&category2=47&idx=71441))
+**3. API KEY 설정**  
+**3-1. [Kakao Developers](https://developers.kakao.com)에서 카카오 맵 API를 발급 받기**([참고](https://imweb.me/faq?mode=view&category=29&category2=47&idx=71441))
 ```JavaScript
 #./src/Search.js
 ...
@@ -46,7 +48,7 @@ const API_KEY = "YOUR_KEY";
 ```
 YOUR_KEY에 본인 키값 입력  
 
-**2-2.[네이버 클라우드 플랫폼](https://www.ncloud.com/product/applicationService/maps)에서 네이버 맵 API를 발급 받기**([참고](https://blog.naver.com/occidere/220988092267))
+**3-2. [네이버 클라우드 플랫폼](https://www.ncloud.com/product/applicationService/maps)에서 네이버 맵 API를 발급 받기**([참고](https://blog.naver.com/occidere/220988092267))
 
 ```JavaScript
 #./android/app/src/main/AndroidManifest.xml
@@ -60,7 +62,7 @@ YOUR_KEY에 본인 키값 입력
 ```
 YOUR_KEY에 본인 키값 입력  
 
-**3. DB 설정(본인의 DB를 사용하고 싶을 경우)**  
+**4. DB 설정(본인의 DB를 사용하고 싶을 경우)**  
 거기 멈춰는 [firebase](https://firebase.google.com/) realtime database 사용([참고](https://velog.io/@jinsunee/react-native-firebase-%EC%84%A4%EC%A0%95))  
 ```JavaScript
 #데이터 조회
@@ -73,7 +75,13 @@ import database from '@react-native-firebase/database';
         });
  ...
 ```
-**4.실행**  
+**5. 디바이스 연결**  
+
+**5-1. Android Studio Emulator 연결**([참고](https://simple-code.tistory.com/3))  
+
+**5-2. Android 실제 단말기 연결**  ([참고](https://velog.io/@dody_/React-Native-%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EB%94%94%EB%B0%94%EC%9D%B4%EC%8A%A4-%EA%B8%B0%EA%B8%B0-%ED%85%8C%EC%8A%A4%ED%8A%B8)) 
+
+**6. 실행**  
 ```
 react-native run-android
 ```
