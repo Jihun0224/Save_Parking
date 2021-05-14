@@ -3,6 +3,7 @@ import CarConnect from "react-native-car-connect";
 import {View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import LocalNotification from './LocalNotification';
+import BackgroundFetch from 'react-native-background-fetch';
  
 export default class Bluetooth extends Component{
     constructor(props){
@@ -14,6 +15,23 @@ export default class Bluetooth extends Component{
              },
              filteredAreaData: this.props.filteredAreaData,
         }
+    }
+    componentDidMount() {
+        this.configureBackgroundFetch();
+    }
+    
+    configureBackgroundFetch() {
+        // Configure BackgroundFetch.
+        BackgroundFetch.configure({
+          minimumFetchInterval: 15, // <-- minutes (15 is minimum allowed)
+          
+        }, async () => {
+          console.log('BackgroundFetch has started');
+          BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
+          this.ConfirmPosition();
+        }, (error) => {
+          console.log('RNBackgroundFetch failed to start')
+        });
     }
 
     ConnectFunctionalComponent() {
@@ -73,7 +91,7 @@ export default class Bluetooth extends Component{
                 +Math.pow(((cur_lon-area_lon)*Math.cos(cur_lon-area_lon)*88.9)+((cur_lon_minute-area_lon_minute)*Math.cos(cur_lon-area_lon)*1.48)+((cur_lon_seconds-area_lon_seconds)*Math.cos(cur_lon-area_lon)*0.025),2))
                 
                 if(distance*1000<=150){
-                    return //금지구역 알람 푸쉬
+                    return LocalNotification.register()
                 }
                 else{}
                 
@@ -128,12 +146,10 @@ export default class Bluetooth extends Component{
     }
 
     render(){
-        return(
-            <View>
+                {this.configureBackgroundFetch()}
                 {this.ConfirmPosition_test()}
                 {this.ConnectFunctionalComponent()}
                 {console.log(CarConnect.connected+"확인")}
-            </View>
-        )
+        
     }
 }
