@@ -216,7 +216,7 @@ export default class Filter extends Component{
               </View>
           </View>
           <Text style={styles.titleText}>
-            불법주차단속
+          불법 주·정차 단속 구역
           </Text>
           <View style={styles.filterBox}>
             <View style={styles.filterBoxContents}>

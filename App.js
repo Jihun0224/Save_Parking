@@ -48,14 +48,10 @@ getAreaData = () => {
 }
     async componentDidMount(){
             
-        LocalNotification.register();
-        //<Bluetooth currPos={this.state.currPos} filteredAreaData={this.state.area}></Bluetooth>
+        //LocalNotification.register();
         await this.requestLocationPermission()
         
      }
-     componentWillUnmount = () => {
-        LocalNotification.unregister();
-      };
     render(){
         return(
           this.state.isGetPositionLoading == false&&this.state.isParkingDataLoading == false
@@ -65,6 +61,7 @@ getAreaData = () => {
             area={this.state.area}
            />
           :<Loading/>
+          //<Bluetooth currPos={this.state.currPos} filteredAreaData={this.state.area}></Bluetooth>
         );         
     }
 

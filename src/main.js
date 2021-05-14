@@ -299,7 +299,6 @@ export default class Main extends Component{
 }
 
   ConfirmZoom(current, filteredData){
-    console.log(current.zoom+"new")
     let max_latitude = "";
     let min_latitude = "";
     let max_longitude = "";
@@ -651,26 +650,20 @@ export default class Main extends Component{
                 {data_area.map((area) => (area))}
                 
                 
-                               
-              {this.state.searchedPlace&&
-                <Marker 
-                coordinate={{ 
-                  latitude:this.state.searchedPlaceData.latitude, 
-                  longitude:this.state.searchedPlaceData.longitude}}
-                width={50} 
-                height={50}
-                image={require('./images/marker.png')}
-                >
-                  {/* <View>
-                    <ImageBackground
-                      resizeMode="contain"
-                      source={marker.png}
-                      style={styles.imageBackground}
-                      imageStyle={{tintColor:"#ff0000"}}/>
-                  </View> */}
-                </Marker>
-              }
-            </NaverMapView>
+                              
+                {this.state.searchedPlace&&
+                  <Marker 
+                  coordinate={{ 
+                    latitude:this.state.searchedPlaceData.latitude, 
+                    longitude:this.state.searchedPlaceData.longitude}}
+                  width={50} 
+                  height={50}
+                  image={require('./images/marker.png')}
+                  pinColor="#ff0000"
+                  />
+  
+                }
+                          </NaverMapView>
             <View style={styles.openSearch}>
                 <TouchableOpacity 
                   onPress={()=>{

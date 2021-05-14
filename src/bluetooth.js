@@ -93,7 +93,6 @@ export default class Bluetooth extends Component{
                 if(distance*1000<=150){
                     return LocalNotification.register()
                 }
-                else{}
                 
             }
             
@@ -138,7 +137,6 @@ export default class Bluetooth extends Component{
                     console.log(distance*100000)
                     return LocalNotification.register()
                 }
-                else{}
                 
             }
            
@@ -149,7 +147,6 @@ export default class Bluetooth extends Component{
                 {this.configureBackgroundFetch()}
                 {this.ConfirmPosition_test()}
                 {this.ConnectFunctionalComponent()}
-                {console.log(CarConnect.connected+"확인")}
-        
+        return <></>
     }
 }

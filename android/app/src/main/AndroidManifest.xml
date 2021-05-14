@@ -51,7 +51,7 @@
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="axyr28tjse" />
+            android:value="YOUR_KEY" />
 
    <!-- You will also only need to add this uses-library tag -->
    <uses-library android:name="org.apache.http.legacy" android:required="false"/>
