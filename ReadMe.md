@@ -26,6 +26,10 @@
 ## 사용 API
 + 카카오 장소 API  
 + 네이버맵 API
+## 사용 데이터
+전국주차장정보표준데이터: https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15012896  
+부산광역시_불법주정차단속 데이터: https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15034087
+
 ## 설치
 **1. React Native 개발환경 구축**([참고](https://dev-yakuza.posstree.com/ko/react-native/install-on-windows/)) 
 
@@ -85,7 +89,5 @@ import database from '@react-native-firebase/database';
 ```
 react-native run-android
 ```
-## 사용 데이터
-전국주차장정보표준데이터: https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15012896  
-부산광역시_불법주정차단속 데이터: https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15034087
+
 
